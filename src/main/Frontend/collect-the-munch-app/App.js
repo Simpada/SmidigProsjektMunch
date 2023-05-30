@@ -1,8 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import Navigation from './components/Navigation';
 
-const Tab = createBottomTabNavigator();
 
 
 export default function App() {
@@ -15,7 +14,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 0,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',

@@ -1,8 +1,16 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+
+// Import your screens
+import LoginScreen from '../screens/LoginScreen';
+import HomeScreen from '../screens/HomeScreen';
+import PlayGameScreen from '../screens/PlayGameScreen';
+import EventsScreen from '../screens/EventsScreen';
+import LeaderboardScreen from '../screens/LeaderboardScreen';
+
 
 const Tab = createBottomTabNavigator();
-
 
 const Navigation = () => {
   return (
