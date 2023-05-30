@@ -91,11 +91,4 @@ public class CollectTheMunchServer {
         logger.warn("Server starting at {}", getURL());
     }
 
-    public static void main(String[] args) throws Exception {
-        //Let azure choose port if exists.
-        int port = Optional.ofNullable(System.getenv("HTTP_PLATFORM_PORT"))
-                .map(Integer::parseInt)
-                .orElse(8080);
-
-        new CollectTheMunchServer(port, DatabaseDataSource.getDatasource()).start();
-    }}
+}
