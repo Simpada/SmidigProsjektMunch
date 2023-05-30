@@ -1,12 +1,10 @@
 import { Text, View, StyleSheet } from 'react-native'
-import CameraApp from '../components/CameraApp';
 
 const PlayGameScreen = () => {
 
     return (
       <View style={styles.container}>
         <Text style={styles.text}>Game Screen</Text>
-        <CameraApp />
       </View>
     )
 }
