@@ -10,12 +10,10 @@ public class Program {
 
     public static void main(String[] args) throws Exception {
 
-        DataSource dataSource = Database.getDataSource();
-
         var port = Optional.ofNullable(System.getenv("HTTP_PLATFORM_PORT"))
                 .map(Integer::parseInt)
                 .orElse(8080);
 
-        new CollectTheMunchServer(port, DatabaseDataSource.getDatasource()).start();
+        new CollectTheMunchServer(port, Database.getDataSource()).start();
     }
 }
