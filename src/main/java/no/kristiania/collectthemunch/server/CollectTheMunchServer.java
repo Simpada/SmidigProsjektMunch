@@ -1,7 +1,6 @@
 package no.kristiania.collectthemunch.server;
 
 import jakarta.servlet.DispatcherType;
-import no.kristiania.collectthemunch.DatabaseDataSource;
 import no.kristiania.collectthemunch.ResourceConfig;
 import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.Server;
@@ -22,7 +21,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.EnumSet;
-import java.util.Optional;
 
 public class CollectTheMunchServer {
 
@@ -44,7 +42,7 @@ public class CollectTheMunchServer {
         setSourceDirectory(webContext);
 
         //Where to locate files
-        webContext.setInitParameter("jersey.config.server.provider.packages", "no.kristiania.collect-the-munch");
+        webContext.setInitParameter("jersey.config.server.provider.packages", "no.kristiania.collectthemunch");
 
         //Filter
         webContext.addFilter(new FilterHolder(new CollectTheMunchServerFilter()), "/", EnumSet.of(DispatcherType.REQUEST));
