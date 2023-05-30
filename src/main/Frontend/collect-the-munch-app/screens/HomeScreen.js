@@ -1,7 +1,8 @@
-import { Text, View, StyleSheet } from 'react-native'
 
+import { useState } from 'react';
+import { Text, View, StyleSheet, Touchable, TouchableOpacity } from 'react-native'
+import Review from '../components/Review';
 const HomeScreen = () => {
-
 
     return (
       <View style={styles.container}>
@@ -11,6 +12,7 @@ const HomeScreen = () => {
         <View>
           <Text style={styles.text}>Home Screen</Text>
         </View>
+        <Review />
       </View>
     )
 }
@@ -33,6 +35,9 @@ const styles = StyleSheet.create({
   munchContainer: {
     backgroundColor: "#FE390F",
     width: "100%",
+  },
+  stars: {
+    flexDirection: "row"
   }
 });
 export default HomeScreen
