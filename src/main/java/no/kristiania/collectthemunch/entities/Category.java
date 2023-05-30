@@ -1,5 +1,5 @@
 package no.kristiania.collectthemunch.entities;
 
-enum Categories {
+public enum Category {
     PARTY, EXHIBITION, KIDS, FAMILY, NEW, GAMES
 }

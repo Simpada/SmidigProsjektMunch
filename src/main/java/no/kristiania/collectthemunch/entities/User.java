@@ -1,25 +1,24 @@
 package no.kristiania.collectthemunch.entities;
 
 import java.util.List;
-import java.util.Locale;
 
 public class User {
 
-    private int id;
+    private int userId;
     private String userName;
     private String password;
     private String dateOfBirth;
     private String email;
-    private List<Locale.Category> preferences;
+    private List<Category> preferences;
+    private List<Event> events;
     private String profilePicture;  //temp datatype until we know how to parse
 
-
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
@@ -54,12 +53,20 @@ public class User {
         this.email = email;
     }
 
-    public List<Locale.Category> getPreferences() {
+    public List<Category> getPreferences() {
         return preferences;
     }
 
-    public void setPreferences(List<Locale.Category> preferences) {
+    public void setPreferences(List<Category> preferences) {
         this.preferences = preferences;
+    }
+
+    public List<Event> getEvents() {
+        return events;
+    }
+
+    public void setEvents(List<Event> events) {
+        this.events = events;
     }
 
     public String getProfilePicture() {
