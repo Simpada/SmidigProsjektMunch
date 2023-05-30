@@ -3,7 +3,7 @@ CREATE TABLE Users
     user_id         INT IDENTITY PRIMARY KEY,
     username        VARCHAR(15)        NOT NULL,
     password        VARCHAR(30)        NOT NULL,
-    date_of_birth   date               NOT NULL,
+    date_of_birth   CHAR(8)            NOT NULL,
     email           VARCHAR(50) UNIQUE NOT NULL,
     preferences     VARCHAR(100),
     profile_picture varchar(1000)
