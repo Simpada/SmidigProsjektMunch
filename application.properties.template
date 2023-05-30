@@ -1,0 +1,3 @@
+jdbc.url=jdbc:sqlserver://munchbudapest.database.windows.net:1433;database=munchbudapestdb;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;
+jdbc.username=munchadmin
+jdbc.password=Munchbudapest123!

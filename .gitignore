@@ -1,6 +1,7 @@
 /.idea/
 node_modules/
 /target/
+application.properties
 .expo/
 dist/
 npm-debug.*
