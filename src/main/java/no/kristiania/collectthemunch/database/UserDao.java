@@ -13,6 +13,8 @@ import java.util.List;
 
 public class UserDao extends AbstractDao {
 
+    private List<Category> preferences = new ArrayList<>();
+
     @Inject
     public UserDao(DataSource dataSource) {
         super(dataSource);
@@ -71,10 +73,8 @@ public class UserDao extends AbstractDao {
                 statement.setInt(1, userId);
 
                 try (var resultSet = statement.executeQuery()) {
-                    List<Category> preferences = new ArrayList<>();
-
                     while (resultSet.next()) {
-                        preferences.add(Category.valueOf(resultSet.getString("preferences")));
+                        preferences.add(Category.valueOf(resultSet.getString("preference")));
                     }
                     return preferences;
                 }
@@ -83,6 +83,14 @@ public class UserDao extends AbstractDao {
     }
 
     private List<Event> retrieveUserEvents(int userId) {
+        /*
+            Check how many entries in preferences array to know how many times to loop
+            Search the userid again to find what events to show based on the preferences
+         */
+
+
+
+
         return null;
     }
 
