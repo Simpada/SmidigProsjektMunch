@@ -14,6 +14,6 @@ public class Program {
                 .map(Integer::parseInt)
                 .orElse(8080);
 
-        new CollectTheMunchServer(port, Database.getDataSource()).start();
+        new CollectTheMunchServer(port, Database.getDataSource(System.getenv())).start();
     }
 }
