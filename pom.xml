@@ -23,7 +23,6 @@
                 <version>2.22.2</version>
             </plugin>
         </plugins>
-
     </build>
 
     <dependencies>
@@ -84,6 +83,7 @@
             <version>9.5.1</version>
         </dependency>
 
+        <!-- Server and Misc. -->
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
@@ -120,7 +120,5 @@
             <artifactId>hk2-api</artifactId>
             <version>3.0.3</version>
         </dependency>
-
     </dependencies>
 </project>
-
