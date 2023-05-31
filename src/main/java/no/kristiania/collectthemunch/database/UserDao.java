@@ -17,9 +17,33 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
-    public Boolean save(User user) {
-        return false;
+    public Boolean save(User user) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
+
+            try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, user.getUserName());
+                statement.setString(2, user.getPassword());
+                statement.setString(3, user.getDateOfBirth());
+                statement.setString(4, user.getEmail());
+                statement.setString(5, user.getProfilePicture());
+
+                statement.executeUpdate();
+                try (var generatedKeys = statement.getGeneratedKeys()) {
+                    generatedKeys.next();
+                    user.setUserId(generatedKeys.getInt(1));
+                }
+                return true;
+            }
+        }
     }
+
+    public void saveUserPreferences(int userId, ArrayList<Category> preferences) {
+
+    }
+
+
+
 
     public User retrieve(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
