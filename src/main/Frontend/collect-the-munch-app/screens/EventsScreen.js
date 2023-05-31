@@ -34,6 +34,7 @@ const EventsScreen = () => {
       <Filter style={styles.filter} onSearch={handleSearch} />
       <View style={styles.eventTitleContainer}>
         <Text style={styles.eventTitle}>New Events</Text>
+        <Text style={{fontFamily: "GirottMunch-BoldBackslant"}}>New Events</Text>
       </View>
       <EventList style={styles.list} events={filteredEvents} />
     </View>
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
   eventTitle: {
     fontSize: 20, 
     fontWeight: 800,
-    color: colors.red
+    color: colors.red, 
   }
  
 });

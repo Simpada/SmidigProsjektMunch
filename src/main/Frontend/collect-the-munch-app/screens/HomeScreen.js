@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Touchable, TouchableOpacity } from 'react-native'
 import Review from '../components/Review';
 import * as Font from 'expo-font';
@@ -11,7 +11,7 @@ const HomeScreen = () => {
 
   const loadFonts = async () => {
     await Font.loadAsync({
-      'GirottMunch-BoldBackslant': require('../Fonts/GirottMunch-BoldBackslant.ttf'),
+      'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.ttf'),
     });
   };
     return (
@@ -19,7 +19,8 @@ const HomeScreen = () => {
       <View style={styles.container}>
       <View style={styles.background} />
       <View style={styles.content}>
-        <Text style={styles.headline}>'MUNCH</Text>
+        <Text style={{fontFamily: "GirottMunch-BoldBackslant"}}>Hello</Text>
+        <Text style={{fontFamily: "GirottMunch-BoldBackslant"}}>MUNCH</Text>
       </View>
     </View>
 
