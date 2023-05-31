@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Touchable, TouchableOpacity } from 'react-native'
 import Review from '../components/Review';
 import * as Font from 'expo-font';
+import { fonts } from 'react-native-elements/dist/config';
+import { colors } from '../Styles/theme';
 
 const HomeScreen = () => {
   useEffect(() => {
@@ -16,28 +18,24 @@ const HomeScreen = () => {
   };
     return (
       <View style={styles.container}>
-      <View style={styles.container}>
       <View style={styles.background} />
       <View style={styles.content}>
-        <Text style={{fontFamily: "GirottMunch-BoldBackslant"}}>Hello</Text>
-        <Text style={{fontFamily: "GirottMunch-BoldBackslant"}}>MUNCH</Text>
-      </View>
+        <Text style={styles.text}>MUNCH</Text>
     </View>
-
-        <Review />
-      </View>
+    </View>
     )
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'space-evenly',
+    backgroundColor: colors.navy,
+    alignItems: 'center'
   },
   text: {
-    fontSize: 30
+    color: colors.red,
+    fontSize: 100,
+    fontFamily: "GirottMunch-BoldBackslant"
   },
   munchtext: {
     fontSize: 100,
@@ -51,5 +49,7 @@ const styles = StyleSheet.create({
   stars: {
     flexDirection: "row"
   }
+
+
 });
 export default HomeScreen
