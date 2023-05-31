@@ -20,17 +20,17 @@ CREATE TABLE Event_Reviews
 (
     review_id   INT IDENTITY PRIMARY KEY,
     user_id     INT,
+    event_id INT,
     review_text VARCHAR(1000),
     num_stars   INT,
-    CONSTRAINT fk_userid_to_review FOREIGN KEY (user_id) REFERENCES Users (user_id)
+    CONSTRAINT fk_userid_to_review FOREIGN KEY (user_id) REFERENCES Users (user_id),
+    CONSTRAINT fk_event_review FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 CREATE TABLE Events
 (
     event_id    INT IDENTITY PRIMARY KEY,
-    review_id INT,
     description VARCHAR(1000) NOT NULL,
-    CONSTRAINT fk_event_review FOREIGN KEY (review_id) REFERENCES Event_Reviews(review_id)
 );
 
 CREATE TABLE Categories
