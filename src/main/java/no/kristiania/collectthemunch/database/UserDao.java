@@ -52,14 +52,15 @@ public class UserDao extends AbstractDao {
         user.setPassword(resultSet.getString("password"));
         user.setDateOfBirth(resultSet.getString("date_of_birth"));
         user.setEmail(resultSet.getString("email"));
-
-//        user.setPreferences();
-//        user.setEvents();
         user.setProfilePicture(resultSet.getString("profile_picture"));
         return user;
     }
 
-    private List<Category> retrieveUserPreferences(int userId) {
+    private List<Category> retrieveUserPreferences(int userId) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = ""
+        }
+
         return null;
     }
 
