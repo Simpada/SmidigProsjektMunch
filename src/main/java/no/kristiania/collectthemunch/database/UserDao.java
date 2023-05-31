@@ -2,7 +2,6 @@ package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
 import no.kristiania.collectthemunch.entities.Category;
-import no.kristiania.collectthemunch.entities.Event;
 import no.kristiania.collectthemunch.entities.User;
 
 import javax.sql.DataSource;
@@ -12,8 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao extends AbstractDao {
-
-    private List<Category> preferences = new ArrayList<>();
 
     @Inject
     public UserDao(DataSource dataSource) {
@@ -37,7 +34,6 @@ public class UserDao extends AbstractDao {
 
                         user = mapFromResultSet(resultSet);
                         user.setPreferences(retrieveUserPreferences(user.getUserId()));
-                        user.setEvents(retrieveUserEvents(user.getUserId()));
 
                         return user;
                     } else {
@@ -73,6 +69,8 @@ public class UserDao extends AbstractDao {
                 statement.setInt(1, userId);
 
                 try (var resultSet = statement.executeQuery()) {
+                    List<Category> preferences = new ArrayList<>();
+
                     while (resultSet.next()) {
                         preferences.add(Category.valueOf(resultSet.getString("preference")));
                     }
@@ -81,19 +79,6 @@ public class UserDao extends AbstractDao {
             }
         }
     }
-
-    private List<Event> retrieveUserEvents(int userId) {
-        /*
-            Check how many entries in preferences array to know how many times to loop
-            Search the userid again to find what events to show based on the preferences
-         */
-
-
-
-
-        return null;
-    }
-
 
 }
 
