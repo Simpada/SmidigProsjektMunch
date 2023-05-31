@@ -5,7 +5,6 @@ CREATE TABLE Users
     password        VARCHAR(30)        NOT NULL,
     date_of_birth   CHAR(8)            NOT NULL,
     email           VARCHAR(50) UNIQUE NOT NULL,
-    preferences     VARCHAR(100),
     profile_picture varchar(1000)
 );
 
@@ -30,7 +29,14 @@ CREATE TABLE Events
 (
     event_id    INT IDENTITY PRIMARY KEY,
     description VARCHAR(1000) NOT NULL,
-    categories  VARCHAR(200)
+);
+
+CREATE TABLE Categories
+(
+    event_id INT IDENTITY,
+    category VARCHAR(100),
+    PRIMARY KEY (event_id, category),
+    CONSTRAINT FK_event_id_for_category FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
 CREATE TABLE Event_Reviews
@@ -40,6 +46,13 @@ CREATE TABLE Event_Reviews
     PRIMARY KEY (event_id, review_id),
     CONSTRAINT fk_event FOREIGN KEY (event_id) REFERENCES Events (event_id),
     CONSTRAINT fk_review_event FOREIGN KEY (review_id) REFERENCES Reviews (review_id)
+);
+
+CREATE TABLE Preferences (
+    user_id INT IDENTITY,
+    preferences VARCHAR(100),
+    PRIMARY KEY (user_id, preferences),
+    CONSTRAINT fk_preferences_for_user FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
 CREATE TABLE Points
