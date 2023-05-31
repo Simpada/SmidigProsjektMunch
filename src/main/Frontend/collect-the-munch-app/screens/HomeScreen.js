@@ -1,11 +1,11 @@
 
 import { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Touchable, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, Touchable, TouchableOpacity, Image } from 'react-native'
 import Review from '../components/Review';
 import * as Font from 'expo-font';
 import { fonts } from 'react-native-elements/dist/config';
 import { colors } from '../Styles/theme';
-
+import HeaderImg from '../assets/Images/munch-museet.avif'
 const HomeScreen = () => {
   useEffect(() => {
     loadFonts();
@@ -18,11 +18,13 @@ const HomeScreen = () => {
   };
     return (
       <View style={styles.container}>
-      <View style={styles.background} />
-      <View style={styles.content}>
-        <Text style={styles.text}>MUNCH</Text>
-    </View>
-    </View>
+        <View>
+          <Image source={HeaderImg} />
+            <Text>MUNCH</Text>
+        </View>
+
+
+      </View>
     )
 }
 
