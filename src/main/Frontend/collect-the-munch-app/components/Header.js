@@ -21,9 +21,11 @@ const styles = StyleSheet.create({
         paddingTop: 20,
     },
     headerText: {
-        fontSize: 18, // Adjust the font size as needed
+        fontSize: 20, // Adjust the font size as needed
         fontWeight: 'bold', // Adjust the font weight as needed
         textAlign: 'center',
-        color: "white"
+        color: "white",
+        paddingHorizontal:10,
+        fontFamily: "GirottMunch-BoldBackslant"
     }
 })

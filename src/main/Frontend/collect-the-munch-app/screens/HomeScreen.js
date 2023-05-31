@@ -18,12 +18,16 @@ const HomeScreen = () => {
   };
     return (
       <View style={styles.container}>
+<<<<<<< Updated upstream
         <View>
           <Image source={HeaderImg} />
             <Text>MUNCH</Text>
         </View>
 
 
+=======
+        
+>>>>>>> Stashed changes
       </View>
     )
 }
