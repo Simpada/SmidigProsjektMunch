@@ -16,7 +16,7 @@ CREATE TABLE App_Reviews
     CONSTRAINT fk_userid_to_app_review FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
 
-CREATE TABLE Reviews
+CREATE TABLE Event_Reviews
 (
     review_id   INT IDENTITY PRIMARY KEY,
     user_id     INT,
@@ -28,7 +28,9 @@ CREATE TABLE Reviews
 CREATE TABLE Events
 (
     event_id    INT IDENTITY PRIMARY KEY,
+    review_id INT,
     description VARCHAR(1000) NOT NULL,
+    CONSTRAINT fk_event_review FOREIGN KEY (review_id) REFERENCES Event_Reviews(review_id)
 );
 
 CREATE TABLE Categories
@@ -39,19 +41,10 @@ CREATE TABLE Categories
     CONSTRAINT FK_event_id_for_category FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
 
-CREATE TABLE Event_Reviews
-(
-    event_id  INT,
-    review_id INT,
-    PRIMARY KEY (event_id, review_id),
-    CONSTRAINT fk_event FOREIGN KEY (event_id) REFERENCES Events (event_id),
-    CONSTRAINT fk_review_event FOREIGN KEY (review_id) REFERENCES Reviews (review_id)
-);
-
 CREATE TABLE Preferences (
     user_id INT IDENTITY,
-    preferences VARCHAR(100) NOT NULL CHECK (preferences IN('PARTY', 'EXHIBITION', 'KIDS', 'FAMILY', 'NEW', 'GAMES')),
-    PRIMARY KEY (user_id, preferences),
+    preference VARCHAR(100) NOT NULL CHECK (preference IN('PARTY', 'EXHIBITION', 'KIDS', 'FAMILY', 'NEW', 'GAMES')),
+    PRIMARY KEY (user_id, preference),
     CONSTRAINT fk_preferences_for_user FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
 
