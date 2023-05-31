@@ -57,6 +57,7 @@ CREATE TABLE Paintings
     painting_id     INT IDENTITY PRIMARY KEY,
     name            VARCHAR(100),
     author          VARCHAR(100),
+    painting_image  VARCHAR(100),
     rarity          VARCHAR(50),
     points          INT,
     art_information VARCHAR(1000)
