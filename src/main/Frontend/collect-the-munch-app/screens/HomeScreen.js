@@ -7,6 +7,13 @@ const HomeScreen = () => {
 
     return (
       <View style={styles.container}>
+      <View style={styles.container}>
+      <View style={styles.background} />
+      <View style={styles.content}>
+        <Text style={styles.headline}>'MUNCH</Text>
+      </View>
+    </View>
+
         <Review />
       </View>
     )
