@@ -34,7 +34,7 @@ CREATE TABLE Events
 CREATE TABLE Categories
 (
     event_id INT IDENTITY,
-    category VARCHAR(100),
+    category VARCHAR(100) NOT NULL CHECK (category IN('PARTY', 'EXHIBITION', 'KIDS', 'FAMILY', 'NEW', 'GAMES')),
     PRIMARY KEY (event_id, category),
     CONSTRAINT FK_event_id_for_category FOREIGN KEY (event_id) REFERENCES Events(event_id)
 );
@@ -50,7 +50,7 @@ CREATE TABLE Event_Reviews
 
 CREATE TABLE Preferences (
     user_id INT IDENTITY,
-    preferences VARCHAR(100),
+    preferences VARCHAR(100) NOT NULL CHECK (preferences IN('PARTY', 'EXHIBITION', 'KIDS', 'FAMILY', 'NEW', 'GAMES')),
     PRIMARY KEY (user_id, preferences),
     CONSTRAINT fk_preferences_for_user FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
