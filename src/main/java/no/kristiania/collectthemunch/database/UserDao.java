@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static no.kristiania.collectthemunch.entities.Category.*;
+
 public class UserDao extends AbstractDao {
 
     @Inject
@@ -17,7 +19,12 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
-    public Boolean save(User user) throws SQLException {
+    public void save(User user, ArrayList<String> preferences) throws SQLException {
+        saveUser(user);
+        saveUserPreferences(user, preferences);
+    }
+
+    private void saveUser(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
 
@@ -33,16 +40,51 @@ public class UserDao extends AbstractDao {
                     generatedKeys.next();
                     user.setUserId(generatedKeys.getInt(1));
                 }
-                return true;
             }
         }
     }
 
-    public void saveUserPreferences(int userId, ArrayList<Category> preferences) {
+    public void saveUserPreferences(User user, ArrayList<String> preferences) throws SQLException {
+        user.setPreferences(parseCategory(preferences));
 
+        if (user.getPreferences() == null || user.getPreferences().size() == 0) {
+            return;
+        }
+
+        try (var connection = dataSource.getConnection()) {
+            String query = "INSERT INTO Preferences (user_id, preferences) VALUES ?, ?";
+
+            for (Category c : user.getPreferences()) {
+                try (var statement = connection.prepareStatement(query)) {
+                    statement.setInt(1, user.getUserId());
+                    statement.setString(2, String.valueOf(c));
+                }
+            }
+        }
     }
 
+    //Parse Category as string from frontend to Category enums.
+    private static ArrayList<Category> parseCategory(ArrayList<String> preferences) {
+        preferences.replaceAll(String::toUpperCase);
 
+
+        ArrayList<Category> convertedPreferences = new ArrayList<>();
+        for (String s : preferences) {
+            switch (s) {
+                case "PARTY" -> convertedPreferences.add(PARTY);
+                case "EXHIBITION" -> convertedPreferences.add(EXHIBITION);
+                case "KIDS" -> convertedPreferences.add(KIDS);
+                case "FAMILY" -> convertedPreferences.add(FAMILY);
+                case "NEW" -> convertedPreferences.add(NEW);
+                case "GAMES" -> convertedPreferences.add(GAMES);
+            }
+        }
+
+        if (preferences.size() == convertedPreferences.size()) {
+            return convertedPreferences;
+        }
+        return null;
+    }
 
 
     public User retrieve(int userId) throws SQLException {
