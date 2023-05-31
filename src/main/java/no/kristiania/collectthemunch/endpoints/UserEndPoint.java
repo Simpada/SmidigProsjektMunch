@@ -21,4 +21,5 @@ public class UserEndPoint extends ApiEndPoint {
     public void addUser(User user) throws SQLException {
         userDao.save(user);
     }
+
 }

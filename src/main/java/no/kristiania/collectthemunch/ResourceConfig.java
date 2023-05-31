@@ -1,7 +1,6 @@
 package no.kristiania.collectthemunch;
 
 import jakarta.inject.Singleton;
-import jdk.jfr.Event;
 import no.kristiania.collectthemunch.database.*;
 import no.kristiania.collectthemunch.endpoints.*;
 import org.glassfish.jersey.internal.inject.AbstractBinder;
