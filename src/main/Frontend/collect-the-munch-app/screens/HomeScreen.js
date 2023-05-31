@@ -2,9 +2,18 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet, Touchable, TouchableOpacity } from 'react-native'
 import Review from '../components/Review';
+import * as Font from 'expo-font';
 
 const HomeScreen = () => {
+  useEffect(() => {
+    loadFonts();
+  }, []);
 
+  const loadFonts = async () => {
+    await Font.loadAsync({
+      'GirottMunch-BoldBackslant': require('../Fonts/GirottMunch-BoldBackslant.ttf'),
+    });
+  };
     return (
       <View style={styles.container}>
       <View style={styles.container}>
