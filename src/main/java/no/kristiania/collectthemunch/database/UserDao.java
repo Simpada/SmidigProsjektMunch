@@ -67,7 +67,6 @@ public class UserDao extends AbstractDao {
     private static ArrayList<Category> parseCategory(ArrayList<String> preferences) {
         preferences.replaceAll(String::toUpperCase);
 
-
         ArrayList<Category> convertedPreferences = new ArrayList<>();
         for (String s : preferences) {
             switch (s) {
@@ -85,7 +84,6 @@ public class UserDao extends AbstractDao {
         }
         return null;
     }
-
 
     public User retrieve(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
