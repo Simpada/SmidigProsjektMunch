@@ -13,6 +13,18 @@ public class User {
     private List<Event> events;
     private String profilePicture;  //temp datatype until we know how to parse
 
+    public User() {
+
+    }
+
+    public User(int userId, String userName, String password, String dateOfBirth, String email) {
+        this.userId = userId;
+        this.userName = userName;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+    }
+
     public int getUserId() {
         return userId;
     }
