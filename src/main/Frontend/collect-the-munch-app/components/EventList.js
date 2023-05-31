@@ -1,26 +1,28 @@
-import React from 'react'
-import { FlatList, View, StyleSheet } from 'react-native'
-import EventItem from './EventItem'
+import React from 'react';
+import { FlatList, View, StyleSheet } from 'react-native';
+import EventItem from './EventItem';
 
-const EventList = ({events}) => {
+const EventList = ({ events }) => {
   return (
     <View style={styles.container}>
-        <FlatList 
-            data={events}
-            alwaysBounceVertical={false}
-            renderItem={itemData => (
-                <EventItem 
-                    id={itemData.item.id} 
-                    description={itemData.item.description}
-                    title={itemData.item.title}
-                    category={itemData.item.category}
-                />
-            )}/>
+      <FlatList
+        data={events}
+        alwaysBounceVertical={false}
+        renderItem={({ item }) => (
+          <EventItem
+            id={item.id}
+            description={item.description}
+            title={item.title}
+            category={item.category}
+          />
+        )}
+        keyExtractor={(itemData) => itemData.id.toString()}
+      />
     </View>
-  )
-}
+  );
+};
 
-export default EventList
+export default EventList;
 
 const styles = StyleSheet.create({
     container: {

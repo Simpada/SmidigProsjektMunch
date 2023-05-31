@@ -1,27 +1,21 @@
-import React from 'react'
-import { Text, View, StyleSheet, Image, SafeAreaView } from 'react-native'
-import PlaceholderImg from '../assets/PlaceholderImage.jpg'
-export const EventItem = (props) => {
+import React from 'react';
+import { Text, View, StyleSheet, Image } from 'react-native';
+import PlaceholderImg from '../assets/Images/PlaceholderImage.jpg';
 
-
-
+const EventItem = (props) => {
   return (
     <View style={styles.card}>
-        <Image
-            style={styles.image}
-            source={PlaceholderImg} 
-            resizeMode="cover"
-            />
-        <View style={styles.contentContainer}>
-            <Text style={styles.eventTitle}>{props.title}</Text>
-            <Text style={styles.eventDesc}>{props.description}</Text>
-            <Text style={styles.eventCat}>{props.category}</Text>
-        </View>
+      <Image style={styles.image} source={PlaceholderImg} resizeMode="cover" />
+      <View style={styles.contentContainer}>
+        <Text style={styles.eventTitle}>{props.title}</Text>
+        <Text style={styles.eventDesc}>{props.description}</Text>
+        <Text style={styles.eventCat}>{props.category}</Text>
+      </View>
     </View>
-  )
-}
+  );
+};
 
-export default EventItem
+export default EventItem;
 
 const styles = StyleSheet.create({
     card: {

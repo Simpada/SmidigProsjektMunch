@@ -2,16 +2,11 @@
 import { useState } from 'react';
 import { Text, View, StyleSheet, Touchable, TouchableOpacity } from 'react-native'
 import Review from '../components/Review';
+
 const HomeScreen = () => {
 
     return (
       <View style={styles.container}>
-        <View style={styles.munchContainer}>
-          <Text style={styles.munchtext}>MUNCH</Text>
-        </View>
-        <View>
-          <Text style={styles.text}>Home Screen</Text>
-        </View>
         <Review />
       </View>
     )

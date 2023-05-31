@@ -1,91 +1,105 @@
-import React, {useState} from 'react';
-import { StyleSheet, Text, TouchableOpacity, View, TextInput, Button, Alert} from 'react-native';
-import {Rating, AirbnbRating } from 'react-native-elements';
-
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Button, TextInput, Pressable } from 'react-native';
+import { Rating, AirbnbRating } from 'react-native-elements';
+import {colors} from '../Styles/theme';
 const Review = () => {
-    
-    // States
-    const [message, setMessage] = useState('');
-    const [rating, setRating] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState('');
 
-
-  
-    // Functions
-    const handleRatingChange = (newRating) => {
-      setRating(newRating);
-      console.log(rating)
-      handleSendMessage()
-    };
-    
-    const handleSendMessage = () => {
-      setMessage('');
-      console.log(message)
-    };
-
-    return (
-      <View style={styles.Container}>
-        <Rating
-          showRating
-          onFinishRating={handleRatingChange}
-          style={styles.Rating}
-        />
-
-        <View>
-          <TextInput
-          onSubmitEditing={handleRatingChange}
-            maxLength={250}
-            style={styles.TextInput}
-            multiline
-            numberOfLines={4}
-            placeholder="Enter your message"
-            value={message}
-            onChangeText={setMessage}
-            placeholderTextColor="white"
-          />
-        </View>
-
-        <TouchableOpacity title="Send" onPress={handleRatingChange}>
-            <Text style={styles.submitBtn} >
-                Submit
-            </Text>
-        </TouchableOpacity>
-      </View>
-    );
+  const handleRatingChange = (newRating) => {
+    setRating(newRating);
   };
 
-  export default Review;
+  const handleCommentChange = (text) => {
+    setComment(text);
+  };
 
+    //POST functionality
+  const handleSubmit = () => {
+    const endpoint = 'Paste the API endpoint u want to POST to.';
+    const payload = { rating, comment };
 
-  const styles = StyleSheet.create({
-    Container: {
-      width: "100%",
-      padding: 20,
-      gap: 10,
-      backgroundColor:"#0F2335",
-    },
-    Rating: {
-      paddingVertical: 10,
-      backgroundColor: "white"
+    fetch(endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Review submitted:', data);
+      })
+      .catch((error) => {
+        console.error('Error submitting review:', error);
+      });
+  };
 
-    },
-    submitBtn: {
-        backgroundColor: "#FE390F",
-        color: "white",
-        paddingVertical: 10,
-        fontSize: 20,
-        textAlign: "center",
-        borderRadius:40,
-        marginBottom: 250,
-    },
-    TextInput: {
-      borderWidth: 1,
-      borderColor: "#eeee",
-      padding:10,
-      width: "100%", 
-      minHeight: 100,
-      maxHeight: 100,
-      color: "white",
-      fontSize:20
-    }
+  return (
+    //Rating System Code
+    <View style={styles.container}>
+      <Text style={styles.reviewText}>Leave your thoughts on the game!</Text>
+      <Rating
+        showRating
+        onFinishRating={handleRatingChange}
+        style={{ paddingVertical: 10 }}
+      />
+      <TextInput
+        style={styles.input}
+        multiline
+        value={comment}
+        onChangeText={handleCommentChange}
+        placeholder="Write a comment..."
+      />
+      <Pressable onPress={handleSubmit} style={styles.button}> 
+        <Text style={styles.btnText}>Submit</Text>
+      </Pressable>
+    </View>
+  );
+};
+//Styles
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+    width: "100%",
+    gap: 10,
+    height: 300,
+    alignItems: "center",
+  },
+  reviewText: {
+    fontSize: 20,
+    color: "white"
+  },
 
-  })
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  input: {
+    height: 40,
+    width: '100%',
+    borderColor: colors.red,
+    borderWidth: 2,
+    minHeight: 100,
+    maxHeight: 100,
+    marginBottom: 10,
+    paddingTop: 20,
+    paddingHorizontal: 20,
+    borderRadius: 20
+  },
+  button: {
+    width: "100%",
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.red,
+    borderRadius: 20,
+  },
+  btnText: {
+    color: colors.white,
+    fontSize: 20,
+  }
+});
+
+export default Review;
