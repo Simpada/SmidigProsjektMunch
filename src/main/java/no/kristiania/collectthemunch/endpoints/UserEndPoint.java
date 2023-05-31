@@ -2,8 +2,10 @@ package no.kristiania.collectthemunch.endpoints;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import no.kristiania.collectthemunch.entities.User;
 
 import java.sql.SQLException;
+import java.util.List;
 
 @Path("/users")
 public class UserEndPoint extends ApiEndPoint {
@@ -19,5 +21,4 @@ public class UserEndPoint extends ApiEndPoint {
     public void addUser(User user) throws SQLException {
         userDao.save(user);
     }
-
 }
