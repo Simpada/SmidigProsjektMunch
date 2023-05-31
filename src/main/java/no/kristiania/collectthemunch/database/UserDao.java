@@ -8,6 +8,7 @@ import no.kristiania.collectthemunch.entities.User;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserDao extends AbstractDao {
@@ -58,10 +59,27 @@ public class UserDao extends AbstractDao {
 
     private List<Category> retrieveUserPreferences(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = ""
-        }
+            String query = """
+                    SELECT *
+                    FROM Preferences.preferences
+                    JOIN Users
+                        ON Users.user_id = Preferences.user_id
+                    WHERE user_id = ?
+                    """;
 
-        return null;
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, userId);
+
+                try (var resultSet = statement.executeQuery()) {
+                    List<Category> preferences = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        preferences.add(Category.valueOf(resultSet.getString("preferences")));
+                    }
+                    return preferences;
+                }
+            }
+        }
     }
 
     private List<Event> retrieveUserEvents(int userId) {
@@ -70,3 +88,20 @@ public class UserDao extends AbstractDao {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
