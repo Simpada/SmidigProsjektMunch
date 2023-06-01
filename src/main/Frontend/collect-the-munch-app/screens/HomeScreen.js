@@ -13,6 +13,7 @@ const HomeScreen = () => {
   const loadFonts = async () => {
     await Font.loadAsync({
       'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.ttf'),
+      'GirottMunch-Bold': require('../assets/fonts/GirottMunch-Bold.ttf'),
     });
   };
 
@@ -179,7 +180,7 @@ const styles = StyleSheet.create({
   textBoxText: {
     color: colors.white,
     fontSize: 20,
-    fontFamily: 'Sans-serif',
+    fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',
   },
 });
