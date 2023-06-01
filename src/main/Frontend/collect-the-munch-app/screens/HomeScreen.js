@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import * as Font from 'expo-font';
 import { colors } from '../Styles/theme';
 import HeaderImg from '../assets/Images/munch-museet.avif';
 import { Entypo, Feather, FontAwesome5, AntDesign } from '@expo/vector-icons';
+import reviewicon1 from "../assets/Images/samuel.png"
 
 const HomeScreen = () => {
   useEffect(() => {
@@ -48,6 +49,57 @@ const HomeScreen = () => {
 
   const menuItems = ['User', 'The Collection', 'Inventory', 'Leaderboards', 'Settings'];
 
+  const reviews = [
+    {
+      id: '1',
+      user: 'Jenni',
+      rating: 5,
+      text: 'Great app! I love collecting Munch artworks.',
+    },
+    {
+      id: '2',
+      user: 'Rafael',
+      rating: 5,
+      text: 'The best art collection game out there. Highly recommended!',
+    },
+    {
+      id: '3',
+      user: 'Mathias',
+      rating: 5,
+      text: 'Good concept, I want to bring all my friends!',
+    },
+    {
+      id: '4',
+      user: 'Jens',
+      rating: 5,
+      text: "Addictive and fun. Can't stop playing!",
+    },
+  ];
+
+  const ReviewItem = ({ item }) => (
+    <View style={styles.reviewContainer}>
+      <View style={styles.profilePicture} >
+        <Image style={styles.reviewImage} source={reviewicon1}/>
+      </View>
+      <View style={styles.reviewTextContainer}>
+        <Text style={styles.reviewName}>{item.user}</Text>
+        <Text style={styles.reviewText}>{item.text}</Text>
+        <View style={styles.reviewRatingContainer}>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <FontAwesome5
+              key={star}
+              name="star"
+              size={12}
+              color={colors.yellow}
+              solid yellow
+              style={styles.starIcon}
+            />
+          ))}
+        </View>
+      </View>
+    </View>
+  );
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.dropdownContainer}>
@@ -87,12 +139,29 @@ const HomeScreen = () => {
       </View>
       <View style={styles.PlayDescription}>
         <Text style={styles.PlayDescriptionText}>
-        "Collect the Munch" er en unik måte å oppleve kunstverdenen på, hvor du får både underholdning, kunnskap og sjansen til å vinne flotte premier. Bli med på dette eventyret og la Munchs mesterverker inspirere deg!
+          "Collect the Munch" er en unik måte å oppleve kunstverdenen på, hvor du får både underholdning, kunnskap og sjansen til å vinne flotte premier. Bli med på dette eventyret og la Munchs mesterverker inspirere deg!
         </Text>
       </View>
       <TouchableOpacity style={styles.PlayButton}>
         <Text style={styles.PlayButtonText}>Play Collect the Munch</Text>
       </TouchableOpacity>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.reviewsScrollView}
+      >
+        <View style={styles.reviewsContainer}>
+          <Text style={styles.reviewsTitle}>Reviews</Text>
+          <FlatList
+            data={reviews}
+            renderItem={({ item }) => <ReviewItem item={item} />}
+            keyExtractor={(item) => item.id}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.reviewsContentContainer}
+          />
+        </View>
+      </ScrollView>
     </ScrollView>
   );
 };
@@ -217,6 +286,64 @@ const styles = StyleSheet.create({
     fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',
   },
+  reviewsScrollView: {
+    paddingHorizontal: 20,
+  },
+  reviewsContainer: {
+    backgroundColor: colors.red,
+    borderRadius: 20,
+    padding: 10,
+    marginRight: 10,
+  },
+  reviewsTitle: {
+    color: colors.white,
+    fontSize: 20,
+    fontFamily: 'GirottMunch-Bold',
+    marginBottom: 10,
+  },
+  reviewsContentContainer: {
+    alignItems: 'center',
+  },
+  reviewContainer: {
+    backgroundColor: colors.grey,
+    width: 200,
+    padding: 10,
+    borderRadius: 20,
+    marginRight: 10,
+  },
+  profilePicture: {
+    backgroundColor: colors.white,
+    overflow: 'hidden',
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginBottom: 10,
+  },
+  reviewTextContainer: {
+    flex: 1,
+  },
+  reviewName: {
+    color: colors.white,
+    fontSize: 16,
+    fontFamily: 'GirottMunch-Bold',
+    marginBottom: 5,
+  },
+  reviewText: {
+    color: colors.white,
+    fontSize: 14,
+    fontFamily: 'GirottMunch-Bold',
+  },
+  reviewRatingContainer: {
+    flexDirection: 'row',
+    marginTop: 5,
+  },
+  starIcon: {
+    marginRight: 2,
+  },
+  reviewImage: {
+    height: 50,
+    width: 50,
+  }
 });
 
 export default HomeScreen;
