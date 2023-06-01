@@ -145,6 +145,9 @@ const HomeScreen = () => {
       <TouchableOpacity style={styles.PlayButton}>
         <Text style={styles.PlayButtonText}>Play Collect the Munch</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.reviewButton}>
+        <Text style={styles.reviewButtonText}>Review the app!</Text>
+      </TouchableOpacity>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -286,6 +289,21 @@ const styles = StyleSheet.create({
     fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',
   },
+  reviewButton: {
+    backgroundColor: colors.green,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 50,
+    marginBottom: 10,
+    alignSelf: 'flex-start',
+  },
+  
+  reviewButtonText: {
+    color: colors.white,
+    fontSize: 16,
+    fontFamily: 'GirottMunch-BoldBackslant',
+    textAlign: 'center',
+  },
   reviewsScrollView: {
     paddingHorizontal: 20,
   },
@@ -312,38 +330,38 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   profilePicture: {
-    backgroundColor: colors.white,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     overflow: 'hidden',
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginBottom: 10,
+  },
+  reviewImage: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
   },
   reviewTextContainer: {
+    marginLeft: 10,
     flex: 1,
   },
   reviewName: {
     color: colors.white,
-    fontSize: 16,
+    fontSize: 14,
     fontFamily: 'GirottMunch-Bold',
-    marginBottom: 5,
   },
   reviewText: {
     color: colors.white,
-    fontSize: 14,
+    fontSize: 12,
     fontFamily: 'GirottMunch-Bold',
+    marginTop: 5,
   },
   reviewRatingContainer: {
     flexDirection: 'row',
     marginTop: 5,
   },
-  starIcon: {
-    marginRight: 2,
+  star: {
+    marginHorizontal: 1,
   },
-  reviewImage: {
-    height: 50,
-    width: 50,
-  }
 });
 
 export default HomeScreen;
