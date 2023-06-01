@@ -1,47 +1,82 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { login } from './api' // Imports the login API function
 
 const LoginScreen = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    // Perform login authentication logic here
-    if (username === 'example' && password === 'password') {
-      // Successful login
-      Alert.alert('Login', 'Login successful!');
-    } else {
-      // Failed login
-      Alert.alert('Login', 'Invalid username or password');
-    }
+    const userData = {
+      email,
+      password,
+    };
+
+    login(userData)
+      .then((response) => {
+        // Handle successful login
+        console.log(response.data);
+      })
+      .catch((error) => {
+        // Handle login error
+        console.log(error.response.data);
+      });
   };
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={{ fontSize: 24, marginBottom: 20 }}>Login Page</Text>
-        <TextInput
-            style={{ width: '80%', height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 10, paddingHorizontal: 10 }}
-            placeholder="Username"
-            onChangeText={text => setUsername(text)}
-            value={username}
-            />
-        <TextInput
-            style={{ width: '80%', height: 40, borderColor: 'gray', borderWidth: 1, marginBottom: 20, paddingHorizontal: 10 }}
-            placeholder="Password"
-            secureTextEntry
-            onChangeText={text => setPassword(text)}
-            value={password}
-            />
-        <TouchableOpacity
-            style={{ backgroundColor: 'blue', padding: 10 }}
-            onPress={handleLogin}
-            >
-            <Text style={{ color: 'white', fontSize: 18 }}>Login</Text>
-        </TouchableOpacity>
-        
-    </View> 
-
+    <View style={styles.container}>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+    </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  input: {
+    width: '90%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  button: {
+    width: '80%',
+    height: 35,
+    backgroundColor: 'red',
+    borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+});
+
 export default LoginScreen;
+
+
+
+

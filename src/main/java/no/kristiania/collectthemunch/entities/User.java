@@ -10,7 +10,6 @@ public class User {
     private String dateOfBirth;
     private String email;
     private List<Category> preferences;
-    private List<Event> events;
     private String profilePicture;  //temp datatype until we know how to parse
 
     public User() {
@@ -23,6 +22,7 @@ public class User {
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
+        this.profilePicture = "an image";
     }
 
     public int getUserId() {
@@ -73,13 +73,6 @@ public class User {
         this.preferences = preferences;
     }
 
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(List<Event> events) {
-        this.events = events;
-    }
 
     public String getProfilePicture() {
         return profilePicture;
