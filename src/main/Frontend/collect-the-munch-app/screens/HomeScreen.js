@@ -30,20 +30,22 @@ const HomeScreen = () => {
 
   const renderIcon = (option) => {
     switch (option) {
-      case 'Option 1':
+      case 'User':
         return <AntDesign name="user" size={16} color={colors.black} />;
-      case 'Option 2':
+      case 'The Collection':
         return <Feather name="archive" size={16} color={colors.black} />;
-      case 'Option 3':
+      case 'Inventory':
         return <FontAwesome5 name="box-open" size={16} color={colors.black} />;
-      case 'Option 4':
+      case 'Leaderboards':
         return <FontAwesome5 name="trophy" size={16} color={colors.black} />;
-      case 'Option 5':
+      case 'Settings':
         return <AntDesign name="setting" size={16} color={colors.black} />;
       default:
         return null;
     }
   };
+
+  const menuItems = ['User', 'The Collection', 'Inventory', 'Leaderboards', 'Settings'];
 
   return (
     <View style={styles.container}>
@@ -53,31 +55,19 @@ const HomeScreen = () => {
         </TouchableOpacity>
         {isMenuOpen && (
           <View style={styles.menu}>
-            <TouchableOpacity onPress={() => handleOptionChange('Option 1')} style={styles.menuItem}>
-              <Text style={styles.menuItemText}>
-                {renderIcon('Option 1')} Profile
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleOptionChange('Option 2')} style={styles.menuItem}>
-              <Text style={styles.menuItemText}>
-                {renderIcon('Option 2')} The Collection
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleOptionChange('Option 3')} style={styles.menuItem}>
-              <Text style={styles.menuItemText}>
-                {renderIcon('Option 3')} Inventory
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleOptionChange('Option 4')} style={styles.menuItem}>
-              <Text style={styles.menuItemText}>
-                {renderIcon('Option 4')} Leaderboard
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleOptionChange('Option 5')} style={styles.menuItem}>
-              <Text style={styles.menuItemText}>
-                {renderIcon('Option 5')} Settings
-              </Text>
-            </TouchableOpacity>
+            {menuItems.map((item, index) => (
+              <React.Fragment key={item}>
+                <TouchableOpacity
+                  onPress={() => handleOptionChange(item)}
+                  style={[styles.menuItem, index !== 0 && styles.menuItemWithBorder]}
+                >
+                  <Text style={[styles.menuItemText, selectedOption === item && styles.selectedMenuItemText]}>
+                    {renderIcon(item)} {item}
+                  </Text>
+                </TouchableOpacity>
+                {index !== menuItems.length - 1 && <View style={styles.menuItemSeparator} />}
+              </React.Fragment>
+            ))}
           </View>
         )}
       </View>
@@ -121,10 +111,22 @@ const styles = StyleSheet.create({
   menuItem: {
     paddingVertical: 8,
   },
+  menuItemWithBorder: {
+    borderTopColor: colors.lightGray,
+    borderTopWidth: 1,
+  },
+  menuItemSeparator: {
+    height: 1,
+    backgroundColor: colors.lightGray,
+  },
   menuItemText: {
     fontSize: 16,
     color: colors.black,
     marginLeft: 5,
+    fontFamily: 'GirottMunch-Bold',
+  },
+  selectedMenuItemText: {
+    fontWeight: 'bold',
   },
   imageContainer: {
     width: '100%',
