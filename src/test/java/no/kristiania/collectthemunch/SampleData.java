@@ -13,7 +13,7 @@ public class SampleData {
     public static User sampleUser() {
 
         var name = (pickOne(
-                "Meme_guy_420",
+                "Meme_guy",
                 "MUNCHmaster",
                 "Screamy",
                 "OlaNordmann",

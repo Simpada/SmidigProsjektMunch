@@ -16,7 +16,7 @@ public class ReviewEventDao extends AbstractDao {
 
     public void save(Review review, int eventId, int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            var query = "INSERT INTO Event_Reviews(user_id, event_id, review_text, num_stars) VALUES (?,?,?)";
+            var query = "INSERT INTO Event_Reviews(user_id, event_id, review_text, num_stars) VALUES (?,?,?,?)";
             try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setInt(1, userId);
                 statement.setInt(2, eventId);
@@ -37,10 +37,10 @@ public class ReviewEventDao extends AbstractDao {
         Review review = new Review();
 
         try (var connection = dataSource.getConnection()) {
-            var query = "SELECT * FROM Event_Reviews ER JOIN Users on Users.user_id = ER.user_id JOIN Events on Events.event_id = ER.event_id";
+            var query = "SELECT * FROM Event_Reviews JOIN Users on Users.user_id = Event_Reviews.user_id JOIN Events on Events.event_id = Event_Reviews.event_id";
             try (var statement = connection.prepareStatement(query))  {
-                statement.setInt(2, eventId);
-                statement.setInt(3, userId);
+                statement.setInt(2, userId);
+                statement.setInt(3, eventId);
                 try (var response = statement.executeQuery()) {
                     while (response.next()) {
                         review.setId(response.getInt("review_id"));
