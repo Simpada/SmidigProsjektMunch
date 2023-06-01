@@ -19,9 +19,9 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
-    public void save(User user, ArrayList<String> preferences) throws SQLException {
+    public void save(User user) throws SQLException {
         saveUser(user);
-        saveUserPreferences(user, preferences);
+        saveUserPreferences(user);
     }
 
     private void saveUser(User user) throws SQLException {
@@ -44,46 +44,26 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public void saveUserPreferences(User user, ArrayList<String> preferences) throws SQLException {
-        user.setPreferences(parseCategory(preferences));
-
-        if (user.getPreferences() == null || user.getPreferences().size() == 0) {
-            return;
-        }
-
+    public void saveUserPreferences(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Preferences (user_id, preferences) VALUES ?, ?";
+            String query = "INSERT INTO Preferences (user_id, preference) VALUES (?, ?)";
 
             for (Category c : user.getPreferences()) {
                 try (var statement = connection.prepareStatement(query)) {
                     statement.setInt(1, user.getUserId());
                     statement.setString(2, String.valueOf(c));
+                    statement.executeUpdate();
                 }
             }
         }
     }
 
-    //Parse Category as string from frontend to Category enums.
-    private static ArrayList<Category> parseCategory(ArrayList<String> preferences) {
-        preferences.replaceAll(String::toUpperCase);
-
-        ArrayList<Category> convertedPreferences = new ArrayList<>();
-        for (String s : preferences) {
-            switch (s) {
-                case "PARTY" -> convertedPreferences.add(PARTY);
-                case "EXHIBITION" -> convertedPreferences.add(EXHIBITION);
-                case "KIDS" -> convertedPreferences.add(KIDS);
-                case "FAMILY" -> convertedPreferences.add(FAMILY);
-                case "NEW" -> convertedPreferences.add(NEW);
-                case "GAMES" -> convertedPreferences.add(GAMES);
-            }
+    public void updatePreferences(int userId) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "";
         }
-
-        if (preferences.size() == convertedPreferences.size()) {
-            return convertedPreferences;
-        }
-        return null;
     }
+
 
     public User retrieve(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
@@ -123,10 +103,10 @@ public class UserDao extends AbstractDao {
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT *
-                    FROM Preferences.preferences
+                    FROM preferences
                     JOIN Users
                         ON Users.user_id = Preferences.user_id
-                    WHERE user_id = ?
+                    WHERE preferences.user_id = ?
                     """;
 
             try (var statement = connection.prepareStatement(query)) {
@@ -143,22 +123,6 @@ public class UserDao extends AbstractDao {
             }
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
