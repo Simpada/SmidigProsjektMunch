@@ -1,26 +1,21 @@
 import React from 'react';
 import { Text, View, StyleSheet, Image, Touchable, TouchableOpacity } from 'react-native';
 import PlaceholderImg from '../assets/Images/PlaceholderImage.jpg';
+import { NavigationContainer } from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack'
+
+const Stack = createStackNavigator();
 
 const EventItem = (props) => {
 
-  const handleEventClick = () => {
-
-  }
-
-
-
-
   return (
     <View style={styles.card}>
-      <TouchableOpacity onPress={handleEventClick}>
         <Image style={styles.image} source={PlaceholderImg} />
         <View style={styles.contentContainer}>
           <Text style={styles.eventTitle}>{props.title}</Text>
           <Text style={styles.eventDesc}>{props.description}</Text>
           <Text style={styles.eventCat}>{props.category}</Text>
         </View>
-      </TouchableOpacity>
     </View>
   );
 };

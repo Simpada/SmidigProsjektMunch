@@ -9,13 +9,16 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/webpack-config": "^18.0.1",
     "@react-native-picker/picker": "2.4.8",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
+    "@react-navigation/stack": "^6.3.16",
     "@reacticons/ionicons": "^7.1.0",
     "expo": "~48.0.15",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
+    "react-dom": "18.2.0",
     "react-native": "0.71.8",
     "react-native-camera": "^4.2.1",
     "react-native-dropdown-picker": "^5.4.6",
@@ -23,9 +26,7 @@
     "react-native-elements": "^3.4.3",
     "react-native-permissions": "^3.8.0",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-web": "~0.18.10",
-    "react-dom": "18.2.0",
-    "@expo/webpack-config": "^18.0.1"
+    "react-native-web": "~0.18.10"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
