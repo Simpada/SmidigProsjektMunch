@@ -1,16 +1,26 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, Touchable, TouchableOpacity } from 'react-native';
 import PlaceholderImg from '../assets/Images/PlaceholderImage.jpg';
 
 const EventItem = (props) => {
+
+  const handleEventClick = () => {
+
+  }
+
+
+
+
   return (
     <View style={styles.card}>
-      <Image style={styles.image} source={PlaceholderImg} resizeMode="cover" />
-      <View style={styles.contentContainer}>
-        <Text style={styles.eventTitle}>{props.title}</Text>
-        <Text style={styles.eventDesc}>{props.description}</Text>
-        <Text style={styles.eventCat}>{props.category}</Text>
-      </View>
+      <TouchableOpacity onPress={handleEventClick}>
+        <Image style={styles.image} source={PlaceholderImg} />
+        <View style={styles.contentContainer}>
+          <Text style={styles.eventTitle}>{props.title}</Text>
+          <Text style={styles.eventDesc}>{props.description}</Text>
+          <Text style={styles.eventCat}>{props.category}</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -35,6 +45,7 @@ const styles = StyleSheet.create({
     image: {
         width: "100%", 
         height: 100,  
+        resizeMode: "cover"
     },
     eventTitle: {
         fontSize: 23, 
