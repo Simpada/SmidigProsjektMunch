@@ -19,9 +19,9 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
-    public void save(User user, ArrayList<String> preferences) throws SQLException {
+    public void save(User user) throws SQLException {
         saveUser(user);
-        saveUserPreferences(user, preferences);
+        saveUserPreferences(user);
     }
 
     private void saveUser(User user) throws SQLException {
@@ -44,13 +44,7 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public void saveUserPreferences(User user, ArrayList<String> preferences) throws SQLException {
-        user.setPreferences(parseCategory(preferences));
-
-        if (user.getPreferences() == null || user.getPreferences().size() == 0) {
-            return;
-        }
-
+    public void saveUserPreferences(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Preferences (user_id, preferences) VALUES ?, ?";
 
@@ -63,27 +57,6 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    //Parse Category as string from frontend to Category enums.
-    private static ArrayList<Category> parseCategory(ArrayList<String> preferences) {
-        preferences.replaceAll(String::toUpperCase);
-
-        ArrayList<Category> convertedPreferences = new ArrayList<>();
-        for (String s : preferences) {
-            switch (s) {
-                case "PARTY" -> convertedPreferences.add(PARTY);
-                case "EXHIBITION" -> convertedPreferences.add(EXHIBITION);
-                case "KIDS" -> convertedPreferences.add(KIDS);
-                case "FAMILY" -> convertedPreferences.add(FAMILY);
-                case "NEW" -> convertedPreferences.add(NEW);
-                case "GAMES" -> convertedPreferences.add(GAMES);
-            }
-        }
-
-        if (preferences.size() == convertedPreferences.size()) {
-            return convertedPreferences;
-        }
-        return null;
-    }
 
     public User retrieve(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
