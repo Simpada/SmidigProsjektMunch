@@ -46,7 +46,7 @@ public class UserEndPoint extends ApiEndPoint {
         }
 
         if (preferences.size() == convertedPreferences.size()) {
-            System.out.println("Should be parsed correctly");
+            System.out.println("Correct size, should be right");
             return convertedPreferences;
         }
 
