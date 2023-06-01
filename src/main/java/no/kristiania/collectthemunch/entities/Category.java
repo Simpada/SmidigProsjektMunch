@@ -32,6 +32,19 @@ public enum Category {
         return null;    //Should not happen
     }
 
+    public static Category parse(String s) {
+        s = s.toUpperCase();
+        return switch (s) {
+            case "PARTY" -> PARTY;
+            case "EXHIBITION" -> EXHIBITION;
+            case "KIDS" -> KIDS;
+            case "FAMILY" -> FAMILY;
+            case "NEW" -> NEW;
+            case "GAMES" -> GAMES;
+            default -> null;
+        };
+    }
+
 
     public static List<Category> getAllValues() {
         return Arrays.asList(Category.values());

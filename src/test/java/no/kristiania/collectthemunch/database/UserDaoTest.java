@@ -50,5 +50,4 @@ public class UserDaoTest {
             assertEquals(user1.getPreferences().get(i), user2.getPreferences().get(i));
         }
     }
-
 }
