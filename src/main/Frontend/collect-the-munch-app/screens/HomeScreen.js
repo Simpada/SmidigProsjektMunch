@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import * as Font from 'expo-font';
 import { colors } from '../Styles/theme';
 import HeaderImg from '../assets/Images/munch-museet.avif';
@@ -48,7 +48,7 @@ const HomeScreen = () => {
   const menuItems = ['User', 'The Collection', 'Inventory', 'Leaderboards', 'Settings'];
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.dropdownContainer}>
         <TouchableOpacity onPress={toggleMenu} style={styles.dropdownButton}>
           <Entypo name="menu" size={24} color={colors.white} />
@@ -73,15 +73,19 @@ const HomeScreen = () => {
       </View>
       <View style={styles.imageContainer}>
         <Image style={styles.image} source={HeaderImg} resizeMode="cover" />
+        <View style={styles.headerContainer}>
+          <View style={styles.textContainer}>
+            <Text style={styles.text}>MUNCH</Text>
+          </View>
+        </View>
       </View>
-      <Text style={styles.text}>MUNCH</Text>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexGrow: 1,
     backgroundColor: colors.navy,
     alignItems: 'center',
   },
@@ -131,19 +135,35 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: '100%',
     height: 400,
+    position: 'relative',
   },
   image: {
     flex: 1,
     width: undefined,
     height: undefined,
   },
+  headerContainer: {
+    position: 'absolute',
+    top: '50%',
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  textContainer: {
+    backgroundColor: colors.red,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 5,
+    alignSelf: 'flex-start',
+    width: '100%',
+  },
+  
   text: {
-    position: '',
-    top: 20,
-    color: colors.red,
+    color: colors.black,
     fontSize: 100,
     fontFamily: 'GirottMunch-BoldBackslant',
-    zIndex: 1,
+    textAlign: 'center',
   },
 });
 
