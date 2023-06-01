@@ -79,6 +79,11 @@ const HomeScreen = () => {
           </View>
         </View>
       </View>
+      <View style={styles.textBox}>
+        <Text style={styles.textBoxText}>
+          I dette spillet får du muligheten til å samle ulike kunstverk. Jo flere verk du samler, desto bedre sjanser har du til å klatre til toppen av poengtavlen og vinne unike premier. Bli den ultimate Munch-samleren og opplev spenningen ved å konkurrere mot andre kunstinteresserte.
+        </Text>
+      </View>
     </ScrollView>
   );
 };
@@ -158,11 +163,23 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     width: '100%',
   },
-  
   text: {
     color: colors.black,
     fontSize: 100,
     fontFamily: 'GirottMunch-BoldBackslant',
+    textAlign: 'center',
+  },
+  textBox: {
+    backgroundColor: colors.green,
+    padding: 35,
+    marginVertical: 20,
+    marginHorizontal: 20,
+    borderRadius: 25,
+  },
+  textBoxText: {
+    color: colors.white,
+    fontSize: 20,
+    fontFamily: 'Sans-serif',
     textAlign: 'center',
   },
 });
