@@ -10,8 +10,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static no.kristiania.collectthemunch.entities.Category.*;
-
 public class UserDao extends AbstractDao {
 
     @Inject
@@ -64,7 +62,6 @@ public class UserDao extends AbstractDao {
         }
     }
 
-
     public User retrieve(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Users WHERE user_id = ?";
@@ -83,6 +80,26 @@ public class UserDao extends AbstractDao {
                     } else {
                         return null;
                     }
+                }
+            }
+        }
+    }
+
+    public List<User> retrieveAll() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Users";
+
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<User> users = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        var user = new User();
+                        user = mapFromResultSet(resultSet);
+                        user.setPreferences(retrieveUserPreferences(user.getUserId()));
+                        users.add(user);
+                    }
+                    return users;
                 }
             }
         }
