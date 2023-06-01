@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import * as Font from 'expo-font';
 import { colors } from '../Styles/theme';
 import HeaderImg from '../assets/Images/munch-museet.avif';
-import { AntDesign, Entypo, Feather, FontAwesome5 } from '@expo/vector-icons';
+import { Entypo, Feather, FontAwesome5, AntDesign } from '@expo/vector-icons';
 
 const HomeScreen = () => {
   useEffect(() => {
@@ -31,15 +31,15 @@ const HomeScreen = () => {
   const renderIcon = (option) => {
     switch (option) {
       case 'User':
-        return <AntDesign name="user" size={16} color={colors.black} />;
+        return <AntDesign name="user" size={16} color={colors.white} />;
       case 'The Collection':
-        return <Feather name="archive" size={16} color={colors.black} />;
+        return <Feather name="archive" size={16} color={colors.white} />;
       case 'Inventory':
-        return <FontAwesome5 name="box-open" size={16} color={colors.black} />;
+        return <FontAwesome5 name="box-open" size={16} color={colors.white} />;
       case 'Leaderboards':
-        return <FontAwesome5 name="trophy" size={16} color={colors.black} />;
+        return <FontAwesome5 name="trophy" size={16} color={colors.white} />;
       case 'Settings':
-        return <AntDesign name="setting" size={16} color={colors.black} />;
+        return <AntDesign name="setting" size={16} color={colors.white} />;
       default:
         return null;
     }
@@ -51,7 +51,7 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <View style={styles.dropdownContainer}>
         <TouchableOpacity onPress={toggleMenu} style={styles.dropdownButton}>
-          <AntDesign name={isMenuOpen ? 'caretup' : 'caretdown'} size={24} color={colors.black} />
+          <Entypo name="menu" size={24} color={colors.white} />
         </TouchableOpacity>
         {isMenuOpen && (
           <View style={styles.menu}>
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   dropdownButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.white,
+    backgroundColor: colors.navy,
     width: 30,
     height: 30,
     borderRadius: 5,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   menu: {
     marginTop: 5,
-    backgroundColor: colors.white,
+    backgroundColor: colors.navy,
     borderRadius: 5,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -112,16 +112,16 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   menuItemWithBorder: {
-    borderTopColor: colors.lightGray,
+    borderTopColor: colors.white,
     borderTopWidth: 1,
   },
   menuItemSeparator: {
     height: 1,
-    backgroundColor: colors.lightGray,
+    backgroundColor: colors.white,
   },
   menuItemText: {
     fontSize: 16,
-    color: colors.black,
+    color: colors.white,
     marginLeft: 5,
     fontFamily: 'GirottMunch-Bold',
   },
