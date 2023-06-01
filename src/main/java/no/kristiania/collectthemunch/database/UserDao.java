@@ -46,7 +46,7 @@ public class UserDao extends AbstractDao {
 
     public void saveUserPreferences(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Preferences (user_id, preferences) VALUES ?, ?";
+            String query = "INSERT INTO Preferences (user_id, preference) VALUES (?, ?)";
 
             for (Category c : user.getPreferences()) {
                 try (var statement = connection.prepareStatement(query)) {
@@ -54,6 +54,12 @@ public class UserDao extends AbstractDao {
                     statement.setString(2, String.valueOf(c));
                 }
             }
+        }
+    }
+
+    public void updatePreferences(int userId) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "";
         }
     }
 
@@ -96,10 +102,10 @@ public class UserDao extends AbstractDao {
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT *
-                    FROM Preferences.preference
+                    FROM preferences
                     JOIN Users
                         ON Users.user_id = Preferences.user_id
-                    WHERE user_id = ?
+                    WHERE preferences.user_id = ?
                     """;
 
             try (var statement = connection.prepareStatement(query)) {
@@ -116,22 +122,6 @@ public class UserDao extends AbstractDao {
             }
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -10,7 +10,7 @@ public class User {
     private String dateOfBirth;
     private String email;
     private List<Category> preferences;
-    private String profilePicture;  //temp datatype until we know how to parse
+    private String profilePicture = "an image";  //temp datatype until we know how to parse
 
     public User() {
 
@@ -22,7 +22,6 @@ public class User {
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
-        this.profilePicture = "an image";
     }
 
     @Override

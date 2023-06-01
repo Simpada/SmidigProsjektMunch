@@ -13,7 +13,7 @@ public class SampleData {
     public static User sampleUser() {
 
         var name = (pickOne(
-                "Meme_guy_420",
+                "Meme_guy",
                 "MUNCHmaster",
                 "Screamy",
                 "OlaNordmann",
@@ -45,7 +45,8 @@ public class SampleData {
                 "Brrrgrrr",
                 "ILikeMunch",
                 "fdawdngoe"
-        )) + "@munch.com";
+        ))  + random.nextInt(10000000)
+            + "@munch.com";
 
         List<Category> preferences = new ArrayList<>();
         int preferenceCount = random.nextInt(4) + 1;
