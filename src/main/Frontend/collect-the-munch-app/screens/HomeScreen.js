@@ -1,11 +1,9 @@
-
-import { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Touchable, TouchableOpacity, Image } from 'react-native'
-import Review from '../components/Review';
+import React, { useEffect } from 'react';
+import { Text, View, StyleSheet, Image } from 'react-native';
 import * as Font from 'expo-font';
-import { fonts } from 'react-native-elements/dist/config';
 import { colors } from '../Styles/theme';
-import HeaderImg from '../assets/Images/munch-museet.avif'
+import HeaderImg from '../assets/Images/munch-museet.avif';
+
 const HomeScreen = () => {
   useEffect(() => {
     loadFonts();
@@ -16,47 +14,40 @@ const HomeScreen = () => {
       'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.ttf'),
     });
   };
-    return (
-      <View style={styles.container}>
-        <View>
-          <View>
-            <Image style={styles.image} source={HeaderImg} resizeMode="cover"/>
-          </View>
-            <Text>MUNCH</Text>
-        </View>
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image style={styles.image} source={HeaderImg} resizeMode="cover" />
       </View>
-    )
-}
+      <Text style={styles.text}>MUNCH</Text>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.navy,
     alignItems: 'center',
-    justifyContent: "center"
   },
-  text: {
-    color: colors.red,
-    fontSize: 100,
-    fontFamily: "GirottMunch-BoldBackslant"
-  },
-  munchtext: {
-    fontSize: 100,
-    textAlign:"center",
-    color: "black",
+  imageContainer: {
+    width: "100%",
+    height: 400,
   },
   image: {
-    width: 100, 
-    height: 100
+    flex: 1,
+    width: undefined,
+    height: undefined,
   },
-  munchContainer: {
-    backgroundColor: "#FE390F",
-    width: "100%",
+  text: {
+    position: 'absolute',
+    top: 20,
+    color: colors.red,
+    fontSize: 100,
+    fontFamily: 'GirottMunch-BoldBackslant',
+    zIndex: 1,
   },
-  stars: {
-    flexDirection: "row"
-  }
-
-
 });
-export default HomeScreen
+
+export default HomeScreen;
