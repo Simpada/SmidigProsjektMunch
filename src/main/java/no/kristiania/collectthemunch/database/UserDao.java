@@ -52,6 +52,7 @@ public class UserDao extends AbstractDao {
                 try (var statement = connection.prepareStatement(query)) {
                     statement.setInt(1, user.getUserId());
                     statement.setString(2, String.valueOf(c));
+                    statement.executeUpdate();
                 }
             }
         }

@@ -5,6 +5,7 @@ import jakarta.ws.rs.core.MediaType;
 import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.User;
 
+import javax.swing.text.IconView;
 import java.sql.SQLException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class UserEndPoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() {
         return null;
     }
 
@@ -30,5 +31,11 @@ public class UserEndPoint extends ApiEndPoint {
     }
 
 
+    //Parse Category as string from frontend to Category enums.
+    public static List<Category> parseCategory(ArrayList<String> preferences) {
+        preferences.replaceAll(String::toUpperCase);
 
+        return preferences.stream()
+                .map(Category::valueOf).toList();
+    }
 }
