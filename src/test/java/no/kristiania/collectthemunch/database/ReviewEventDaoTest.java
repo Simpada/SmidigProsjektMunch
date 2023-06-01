@@ -35,8 +35,8 @@ public class ReviewEventDaoTest {
         assertThat(reviewEventDao.getReviewFromUserOnEvent(event.getId(), user.getUserId()))
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
-                .isEqualTo(event)
-                .isNotSameAs(event);
+                .isEqualTo(eventReview)
+                .isNotSameAs(eventReview);
 
     }
 }
