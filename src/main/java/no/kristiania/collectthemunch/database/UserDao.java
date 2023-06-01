@@ -96,7 +96,7 @@ public class UserDao extends AbstractDao {
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT *
-                    FROM Preferences.preferences
+                    FROM Preferences.preference
                     JOIN Users
                         ON Users.user_id = Preferences.user_id
                     WHERE user_id = ?

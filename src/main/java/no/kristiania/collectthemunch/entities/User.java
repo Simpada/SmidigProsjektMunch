@@ -25,6 +25,26 @@ public class User {
         this.profilePicture = "an image";
     }
 
+    @Override
+    public String toString() {
+        return "ID: " + this.userId + "\n" +
+                "Name: " + this.userName + "\n" +
+                "password: " + this.password + "\n" +
+                "Date of birth: " + this.dateOfBirth + "\n" +
+                "Mail: " + this.email + "\n" +
+                "Profile picture: " + this.profilePicture;
+    }
+
+    public void printPreferences() {
+        System.out.println("Preferences: ");
+
+        for (Category c : this.preferences) {
+            System.out.println(c + " ");
+        }
+    }
+
+
+
     public int getUserId() {
         return userId;
     }
