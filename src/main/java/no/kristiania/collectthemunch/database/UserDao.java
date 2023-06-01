@@ -46,7 +46,7 @@ public class UserDao extends AbstractDao {
 
     public void saveUserPreferences(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Preferences (user_id, preferences) VALUES ?, ?";
+            String query = "INSERT INTO Preferences (user_id, preference) VALUES (?, ?)";
 
             for (Category c : user.getPreferences()) {
                 try (var statement = connection.prepareStatement(query)) {
@@ -116,22 +116,6 @@ public class UserDao extends AbstractDao {
             }
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
