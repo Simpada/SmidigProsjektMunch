@@ -77,7 +77,7 @@ public class EventDao extends AbstractDao{
                         // Event not found, throw a not found exception with eventid
                         throw new NotFoundException("No categories found for event with ID: " + eventId);
                     }
-                    return
+                    return eventCategories;
                 }
             }
         }
