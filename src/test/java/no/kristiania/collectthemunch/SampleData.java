@@ -18,7 +18,7 @@ public class SampleData {
                 "Screamy",
                 "OlaNordmann",
                 "EventGoer"
-        )) + random.nextInt(10000000);
+        )) + random.nextInt(10000);
 
         var password = (pickOne(
                 "1234",
@@ -158,7 +158,7 @@ public class SampleData {
 
         var event = new Event();
 
-        //event.setName(name);
+        event.setName(name);
         event.setDescription(description);
         event.setCategories(categories);
 

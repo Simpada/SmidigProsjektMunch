@@ -22,7 +22,7 @@ CREATE TABLE Paintings
 CREATE TABLE Events
 (
     event_id    INT IDENTITY PRIMARY KEY,
-    description VARCHAR(1000) NOT NULL,
+    description VARCHAR(1000) NOT NULL
 );
 
 CREATE TABLE App_Reviews
@@ -76,5 +76,5 @@ CREATE TABLE Paintings_Collected
     painting_id INT,
     PRIMARY KEY (user_id, painting_id),
     CONSTRAINT fk_users_painting FOREIGN KEY (user_id) REFERENCES Users (user_id),
-    CONSTRAINT fk_painting FOREIGN KEY (painting_id) REFERENCES Paintings (painting_id),
+    CONSTRAINT fk_painting FOREIGN KEY (painting_id) REFERENCES Paintings (painting_id)
 );
