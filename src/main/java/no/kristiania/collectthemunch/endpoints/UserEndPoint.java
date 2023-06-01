@@ -5,22 +5,30 @@ import jakarta.ws.rs.core.MediaType;
 import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.User;
 
-import javax.swing.text.IconView;
 import java.sql.SQLException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
-import static no.kristiania.collectthemunch.entities.Category.*;
-import static no.kristiania.collectthemunch.entities.Category.GAMES;
 
 @Path("/users")
 public class UserEndPoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllUsers() {
-        return null;
+    public List<User> getAllUsers() throws SQLException {
+        return userDao.retrieveAll();
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public User retrieveUserById(int userId) throws SQLException {
+        return userDao.retrieve(userId);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public User retrieveUserByUsername(String username) throws SQLException {
+        return userDao.retrieve(username);
     }
 
     @POST
@@ -28,6 +36,12 @@ public class UserEndPoint extends ApiEndPoint {
     public void addUser(User user, ArrayList<String> preferences) throws SQLException {
         user.setPreferences(parseCategory(preferences));
         userDao.save(user);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateUserPreferences(User user) throws SQLException {
+        userDao.updatePreferences(user);
     }
 
 
