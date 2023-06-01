@@ -85,6 +85,14 @@ const HomeScreen = () => {
           I dette spillet får du muligheten til å samle ulike kunstverk. Jo flere verk du samler, desto bedre sjanser har du til å klatre til toppen av poengtavlen og vinne unike premier. Bli den ultimate Munch-samleren og opplev spenningen ved å konkurrere mot andre kunstinteresserte.
         </Text>
       </View>
+      <View style={styles.PlayDescription}>
+        <Text style={styles.PlayDescriptionText}>
+        "Collect the Munch" er en unik måte å oppleve kunstverdenen på, hvor du får både underholdning, kunnskap og sjansen til å vinne flotte premier. Bli med på dette eventyret og la Munchs mesterverker inspirere deg!
+        </Text>
+      </View>
+      <TouchableOpacity style={styles.PlayButton}>
+        <Text style={styles.PlayButtonText}>Play Collect the Munch</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -178,6 +186,32 @@ const styles = StyleSheet.create({
     borderRadius: 25,
   },
   textBoxText: {
+    color: colors.white,
+    fontSize: 20,
+    fontFamily: 'GirottMunch-Bold',
+    textAlign: 'center',
+  },
+  PlayDescription: {
+    backgroundColor: colors.navy,
+    padding: 35,
+    marginVertical: 10,
+    marginHorizontal: 20,
+    borderRadius: 25,
+  },
+  PlayDescriptionText: {
+    color: colors.white,
+    fontSize: 20,
+    fontFamily: 'GirottMunch-Bold',
+    textAlign: 'center',
+  },
+  PlayButton: {
+    backgroundColor: colors.red,
+    paddingHorizontal: 40,
+    paddingVertical: 25,
+    borderRadius: 10,
+    marginVertical: 30,
+  },
+  PlayButtonText: {
     color: colors.white,
     fontSize: 20,
     fontFamily: 'GirottMunch-Bold',
