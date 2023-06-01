@@ -15,7 +15,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
         <Tab.Navigator
-          initialRouteName="home"
+          initialRouteName="Events"
           screenOptions={({ route }) => ({
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => {
