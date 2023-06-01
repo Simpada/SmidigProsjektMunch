@@ -13,8 +13,8 @@ public class ResourceConfig extends org.glassfish.jersey.server.ResourceConfig {
     public ResourceConfig(DataSource dataSource) {
         super(EventEndPoint.class,
                 PaintingEndPoint.class,
-                ReviewAppEndPoint.class,
-                ReviewEventEndPoint.class,
+                ReviewAppEndpoint.class,
+                ReviewEventEndpoint.class,
                 UserEndPoint.class);
 
         register(new AbstractBinder() {
