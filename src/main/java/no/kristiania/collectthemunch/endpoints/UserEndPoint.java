@@ -30,6 +30,12 @@ public class UserEndPoint extends ApiEndPoint {
         userDao.save(user);
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void updateUserPreferences(int userId) throws SQLException {
+        userDao.updatePreferences(userId);
+    }
+
 
     //Parse Category as string from frontend to Category enums.
     public static List<Category> parseCategory(ArrayList<String> preferences) {
