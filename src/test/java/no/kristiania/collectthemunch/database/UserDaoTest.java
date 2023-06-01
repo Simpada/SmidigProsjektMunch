@@ -28,6 +28,8 @@ public class UserDaoTest {
         System.out.println(user);
         user.printPreferences();
 
+
+
         assertThat(userDao.retrieve(user.getUserId()))
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
