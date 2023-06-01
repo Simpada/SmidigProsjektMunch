@@ -22,6 +22,7 @@ public class User {
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
+        this.profilePicture = "an image";
     }
 
     public int getUserId() {
