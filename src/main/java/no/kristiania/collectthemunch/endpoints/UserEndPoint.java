@@ -6,6 +6,7 @@ import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.User;
 
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +46,11 @@ public class UserEndPoint extends ApiEndPoint {
         }
 
         if (preferences.size() == convertedPreferences.size()) {
+            System.out.println("Should be parsed correctly");
             return convertedPreferences;
         }
+
+        System.out.println("Array did not parse correctly or is null");
         return null;    //Should not happen
     }
 
