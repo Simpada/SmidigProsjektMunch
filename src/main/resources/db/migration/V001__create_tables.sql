@@ -1,11 +1,11 @@
 CREATE TABLE Users
 (
     user_id         INT IDENTITY PRIMARY KEY,
-    username        VARCHAR(15)        NOT NULL,
+    username        VARCHAR(20) UNIQUE NOT NULL,
     password        VARCHAR(30)        NOT NULL,
     date_of_birth   CHAR(8)            NOT NULL,
     email           VARCHAR(50) UNIQUE NOT NULL,
-    profile_picture varchar(1000)
+    profile_picture varbinary(max)
 );
 
 CREATE TABLE Paintings
@@ -13,7 +13,7 @@ CREATE TABLE Paintings
     painting_id     INT IDENTITY PRIMARY KEY,
     name            VARCHAR(100),
     author          VARCHAR(100),
-    painting_image  VARCHAR(100),
+    painting_image  varbinary(max),
     rarity          VARCHAR(50),
     points          INT,
     art_information VARCHAR(1000)
@@ -22,7 +22,8 @@ CREATE TABLE Paintings
 CREATE TABLE Events
 (
     event_id    INT IDENTITY PRIMARY KEY,
-    description VARCHAR(1000) NOT NULL
+    description VARCHAR(1000) NOT NULL,
+    event_poster varbinary(max)
 );
 
 CREATE TABLE App_Reviews

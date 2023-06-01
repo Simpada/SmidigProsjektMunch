@@ -33,8 +33,6 @@ public class ReviewEventDaoTest {
                     .usingRecursiveComparison()
                     .isEqualTo(eventReview)
                     .isNotSameAs(eventReview);
-
-
         }
     }
 }

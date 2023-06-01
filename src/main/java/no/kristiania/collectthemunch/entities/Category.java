@@ -20,7 +20,6 @@ public enum Category {
         };
     }
 
-
     public static List<Category> getAllValues() {
         return Arrays.asList(Category.values());
     }
