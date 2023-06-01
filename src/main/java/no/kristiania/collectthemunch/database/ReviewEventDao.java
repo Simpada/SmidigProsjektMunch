@@ -37,10 +37,10 @@ public class ReviewEventDao extends AbstractDao {
         Review review = new Review();
 
         try (var connection = dataSource.getConnection()) {
-            var query = "SELECT * FROM Event_Reviews JOIN Users on Users.user_id = Event_Reviews.user_id JOIN Events on Events.event_id = Event_Reviews.event_id";
+            var query = "SELECT * FROM Event_Reviews JOIN Users on Users.user_id = Event_Reviews.user_id JOIN Events on Events.event_id = Event_Reviews.event_id WHERE Users.user_id = ? AND Events.event_id = ?";
             try (var statement = connection.prepareStatement(query))  {
-                statement.setInt(2, userId);
-                statement.setInt(3, eventId);
+                statement.setInt(1, userId);
+                statement.setInt(2, eventId);
                 try (var response = statement.executeQuery()) {
                     while (response.next()) {
                         review.setId(response.getInt("review_id"));
