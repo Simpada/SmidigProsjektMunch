@@ -34,5 +34,15 @@ public class EventEndPoint extends ApiEndPoint {
         return filteredEvents;
     }
 
-
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Event getEventById(@QueryParam("eventId") int eventId){
+        Event event = new Event();
+        try {
+            event = eventDao.getEventById(eventId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return event;
+    }
 }

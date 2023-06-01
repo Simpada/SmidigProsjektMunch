@@ -9,13 +9,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class EventDao extends AbstractDao{
 
     @Inject
     public EventDao(DataSource dataSource) {
         super(dataSource);
+    }
+
+    public Event getEventById(int eventId) throws SQLException {
+        Event event = new Event();
+        event = getEventByIdFromDatabase(eventId);
+        event.setCategories(getCategoriesByEventId(event.getId()));
+        return event;
     }
 
     public void save(Event event) throws SQLException {
@@ -28,6 +34,26 @@ public class EventDao extends AbstractDao{
                     generatedKeys.next();
                     event.setId(generatedKeys.getInt(1));
                 }
+            }
+        }
+    }
+
+    private Event getEventByIdFromDatabase(int eventId) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Events WHERE event_id = ?";
+            try(var statement = connection.prepareStatement(query)) {
+                try(var resultSet = statement.executeQuery()) {
+
+                }
+            }
+        }
+    }
+
+    private List<Category> getCategoriesByEventId(int eventId) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Categories WHERE event_id = ?";
+            try(var statement = connection.prepareStatement(query)) {
+
             }
         }
     }
