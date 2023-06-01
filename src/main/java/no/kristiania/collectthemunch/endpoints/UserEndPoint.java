@@ -5,6 +5,7 @@ import jakarta.ws.rs.core.MediaType;
 import no.kristiania.collectthemunch.entities.User;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Path("/users")
@@ -18,8 +19,8 @@ public class UserEndPoint extends ApiEndPoint {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addUser(User user) throws SQLException {
-        userDao.save(user);
+    public void addUser(User user, ArrayList<String> preferences) throws SQLException {
+        userDao.save(user, preferences);
     }
 
 }
