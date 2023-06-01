@@ -32,10 +32,12 @@ const EventsScreen = () => {
     <View style={styles.container}>
       <Header style={styles.header} />
       <Filter style={styles.filter} onSearch={handleSearch} />
-      <View style={styles.eventTitleContainer}>
-        <Text style={styles.eventTitle}>New Events</Text>
+      <View style={styles.eventsContainer}>
+        <View style={styles.eventTitleContainer}>
+          <Text style={styles.eventTitle}>New Events</Text>
+        </View>
+        <EventList style={styles.list} events={filteredEvents} />
       </View>
-      <EventList style={styles.list} events={filteredEvents} />
     </View>
   );
 };
@@ -61,6 +63,12 @@ const styles = StyleSheet.create({
     paddingLeft:10,
     color: colors.red, 
     fontFamily: "GirottMunch-BoldBackslant"
+  },
+  filter: {
+    flex: 1
+  },
+  eventsContainer: {
+    flex: 4
   }
  
 });

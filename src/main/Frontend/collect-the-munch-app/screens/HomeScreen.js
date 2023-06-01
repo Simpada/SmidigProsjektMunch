@@ -18,16 +18,12 @@ const HomeScreen = () => {
   };
     return (
       <View style={styles.container}>
-<<<<<<< Updated upstream
         <View>
-          <Image source={HeaderImg} />
+          <View>
+            <Image style={styles.image} source={HeaderImg} resizeMode="cover"/>
+          </View>
             <Text>MUNCH</Text>
         </View>
-
-
-=======
-        
->>>>>>> Stashed changes
       </View>
     )
 }
@@ -36,7 +32,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.navy,
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: "center"
   },
   text: {
     color: colors.red,
@@ -47,6 +44,10 @@ const styles = StyleSheet.create({
     fontSize: 100,
     textAlign:"center",
     color: "black",
+  },
+  image: {
+    width: 100, 
+    height: 100
   },
   munchContainer: {
     backgroundColor: "#FE390F",
