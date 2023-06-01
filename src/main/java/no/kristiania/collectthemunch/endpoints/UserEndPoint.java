@@ -27,9 +27,8 @@ public class UserEndPoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public User retrieveUserByUsername(String username) {
-//        return userDao.retrieve(username);
-        return null;
+    public User retrieveUserByUsername(String username) throws SQLException {
+        return userDao.retrieve(username);
     }
 
     @POST

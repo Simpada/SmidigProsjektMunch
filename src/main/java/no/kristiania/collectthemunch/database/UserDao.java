@@ -56,6 +56,67 @@ public class UserDao extends AbstractDao {
         }
     }
 
+    public List<User> retrieveAll() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Users";
+
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<User> users = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        var user = new User();
+                        user = mapFromResultSet(resultSet);
+                        user.setPreferences(retrieveUserPreferences(user.getUserId()));
+                        users.add(user);
+                    }
+                    return users;
+                }
+            }
+        }
+    }
+
+    //Retrieve by id
+    public User retrieve(int userId) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Users WHERE user_id = ?";
+
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, userId);
+
+                return getUser(statement);
+            }
+        }
+    }
+
+    //Retrieve by username
+    public User retrieve(String username) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Users WHERE username = ?";
+
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, username);
+
+                return getUser(statement);
+            }
+        }
+    }
+
+    private User getUser(PreparedStatement statement) throws SQLException {
+        try (var resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                var user = new User();
+
+                user = mapFromResultSet(resultSet);
+                user.setPreferences(retrieveUserPreferences(user.getUserId()));
+
+                return user;
+            } else {
+                return null;
+            }
+        }
+    }
+
     public void updatePreferences(User user) throws SQLException {
         removeUserPreferences(user.getUserId());
 
@@ -79,49 +140,6 @@ public class UserDao extends AbstractDao {
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
                 statement.executeUpdate();
-            }
-        }
-    }
-
-    public User retrieve(int userId) throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Users WHERE user_id = ?";
-
-            try (var statement = connection.prepareStatement(query)) {
-                statement.setInt(1, userId);
-
-                try (var resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        var user = new User();
-
-                        user = mapFromResultSet(resultSet);
-                        user.setPreferences(retrieveUserPreferences(user.getUserId()));
-
-                        return user;
-                    } else {
-                        return null;
-                    }
-                }
-            }
-        }
-    }
-
-    public List<User> retrieveAll() throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Users";
-
-            try (var statement = connection.prepareStatement(query)) {
-                try (var resultSet = statement.executeQuery()) {
-                    List<User> users = new ArrayList<>();
-
-                    while (resultSet.next()) {
-                        var user = new User();
-                        user = mapFromResultSet(resultSet);
-                        user.setPreferences(retrieveUserPreferences(user.getUserId()));
-                        users.add(user);
-                    }
-                    return users;
-                }
             }
         }
     }
