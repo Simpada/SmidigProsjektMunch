@@ -1,6 +1,7 @@
 package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.Event;
 
@@ -9,6 +10,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+//TODO: getAllEvents, getEventsByName, getEventsByCategory
 
 public class EventDao extends AbstractDao{
 
@@ -42,8 +45,17 @@ public class EventDao extends AbstractDao{
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Events WHERE event_id = ?";
             try(var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, eventId);
                 try(var resultSet = statement.executeQuery()) {
-
+                    if (resultSet.next()) {
+                        Event event = new Event();
+                        event.setId(resultSet.getInt("event_id"));
+                        event.setDescription(resultSet.getString("description"));
+                        return event;
+                    } else {
+                        // Event not found, throw a not found exception with eventid
+                        throw new NotFoundException("Event not found with ID: " + eventId);
+                    }
                 }
             }
         }
@@ -53,7 +65,20 @@ public class EventDao extends AbstractDao{
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Categories WHERE event_id = ?";
             try(var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, eventId);
+                try(var resultSet = statement.executeQuery()) {
+                    List<Category> eventCategories = new ArrayList<>();
 
+                    if (resultSet.next()) {
+                        while (resultSet.next()) {
+                            eventCategories.add(Category.valueOf(resultSet.getString("category")));
+                        }
+                    } else {
+                        // Event not found, throw a not found exception with eventid
+                        throw new NotFoundException("No categories found for event with ID: " + eventId);
+                    }
+                    return
+                }
             }
         }
     }

@@ -7,6 +7,8 @@ import no.kristiania.collectthemunch.entities.Event;
 import java.sql.SQLException;
 import java.util.List;
 
+//TODO: getAllEvents, getEventsByName, getEventsByCategory
+
 @Path("/events")
 public class EventEndPoint extends ApiEndPoint {
 
@@ -36,13 +38,34 @@ public class EventEndPoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Event getEventById(@QueryParam("eventId") int eventId){
+    public Event getEventById(@QueryParam("eventId") int eventId) {
         Event event = new Event();
         try {
             event = eventDao.getEventById(eventId);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return event;
+    }
+
+    //TODO: return a list with all events available in our database
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Event> getAllEvents() {
+        return null;
+    }
+
+    //TODO: search for a specific event
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Event getEventByName() {
+        return null;
+    }
+
+    //TODO: search for a specific event
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Event getEventByCategory() {
+        return null;
     }
 }
