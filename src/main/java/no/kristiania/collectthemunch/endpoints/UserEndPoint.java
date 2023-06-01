@@ -28,8 +28,8 @@ public class UserEndPoint extends ApiEndPoint {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateUserPreferences(int userId) throws SQLException {
-        userDao.updatePreferences(userId);
+    public void updateUserPreferences(User user) throws SQLException {
+        userDao.updatePreferences(user);
     }
 
 

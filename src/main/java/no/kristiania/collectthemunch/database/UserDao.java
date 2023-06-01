@@ -56,10 +56,24 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public void updatePreferences(int userId) throws SQLException {
+    public void updatePreferences(User user) throws SQLException {
+        removeUserPreferences(user.getUserId());
+
         try (var connection = dataSource.getConnection()) {
-            String query = "";
+            String query = "UPDATE Preferences SET preferences WHERE user_id = ?";
+
+            for (Category c : user.getPreferences()) {
+                try (var statement = connection.prepareStatement(query)) {
+                    statement.setString(1, String.valueOf(c));
+                    statement.executeUpdate();
+                }
+            }
         }
+    }
+
+    public void removeUserPreferences(int userId) {
+
+
     }
 
     public User retrieve(int userId) throws SQLException {
