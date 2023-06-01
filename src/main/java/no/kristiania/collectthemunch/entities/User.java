@@ -10,7 +10,7 @@ public class User {
     private String dateOfBirth;
     private String email;
     private List<Category> preferences;
-    private String profilePicture;  //temp datatype until we know how to parse
+    private String profilePicture = "an image";  //temp datatype until we know how to parse
 
     public User() {
 
@@ -22,7 +22,24 @@ public class User {
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
-        this.profilePicture = "an image";
+    }
+
+    @Override
+    public String toString() {
+        return "ID: " + this.userId + "\n" +
+                "Name: " + this.userName + "\n" +
+                "password: " + this.password + "\n" +
+                "Date of birth: " + this.dateOfBirth + "\n" +
+                "Mail: " + this.email + "\n" +
+                "Profile picture: " + this.profilePicture;
+    }
+
+    public void printPreferences() {
+        System.out.println("Preferences: ");
+
+        for (Category c : this.preferences) {
+            System.out.println(c + " ");
+        }
     }
 
     public int getUserId() {

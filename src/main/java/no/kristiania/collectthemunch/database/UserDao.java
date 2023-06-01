@@ -10,8 +10,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static no.kristiania.collectthemunch.entities.Category.*;
-
 public class UserDao extends AbstractDao {
 
     @Inject
@@ -19,9 +17,9 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
-    public void save(User user, ArrayList<String> preferences) throws SQLException {
+    public void save(User user) throws SQLException {
         saveUser(user);
-        saveUserPreferences(user, preferences);
+        saveUserPreferences(user);
     }
 
     private void saveUser(User user) throws SQLException {
@@ -44,47 +42,41 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public void saveUserPreferences(User user, ArrayList<String> preferences) throws SQLException {
-        user.setPreferences(parseCategory(preferences));
-
-        if (user.getPreferences() == null || user.getPreferences().size() == 0) {
-            return;
-        }
-
+    public void saveUserPreferences(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Preferences (user_id, preferences) VALUES ?, ?";
+            String query = "INSERT INTO Preferences (user_id, preference) VALUES (?, ?)";
 
             for (Category c : user.getPreferences()) {
                 try (var statement = connection.prepareStatement(query)) {
                     statement.setInt(1, user.getUserId());
                     statement.setString(2, String.valueOf(c));
+                    statement.executeUpdate();
                 }
             }
         }
     }
 
-    //Parse Category as string from frontend to Category enums.
-    private static ArrayList<Category> parseCategory(ArrayList<String> preferences) {
-        preferences.replaceAll(String::toUpperCase);
+    public List<User> retrieveAll() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Users";
 
-        ArrayList<Category> convertedPreferences = new ArrayList<>();
-        for (String s : preferences) {
-            switch (s) {
-                case "PARTY" -> convertedPreferences.add(PARTY);
-                case "EXHIBITION" -> convertedPreferences.add(EXHIBITION);
-                case "KIDS" -> convertedPreferences.add(KIDS);
-                case "FAMILY" -> convertedPreferences.add(FAMILY);
-                case "NEW" -> convertedPreferences.add(NEW);
-                case "GAMES" -> convertedPreferences.add(GAMES);
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<User> users = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        var user = new User();
+                        user = mapFromResultSet(resultSet);
+                        user.setPreferences(retrieveUserPreferences(user.getUserId()));
+                        users.add(user);
+                    }
+                    return users;
+                }
             }
         }
-
-        if (preferences.size() == convertedPreferences.size()) {
-            return convertedPreferences;
-        }
-        return null;
     }
 
+    //Retrieve by id
     public User retrieve(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Users WHERE user_id = ?";
@@ -92,18 +84,62 @@ public class UserDao extends AbstractDao {
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
 
-                try (var resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        var user = new User();
+                return getUser(statement);
+            }
+        }
+    }
 
-                        user = mapFromResultSet(resultSet);
-                        user.setPreferences(retrieveUserPreferences(user.getUserId()));
+    //Retrieve by username
+    public User retrieve(String username) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Users WHERE username = ?";
 
-                        return user;
-                    } else {
-                        return null;
-                    }
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, username);
+
+                return getUser(statement);
+            }
+        }
+    }
+
+    private User getUser(PreparedStatement statement) throws SQLException {
+        try (var resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                var user = new User();
+
+                user = mapFromResultSet(resultSet);
+                user.setPreferences(retrieveUserPreferences(user.getUserId()));
+
+                return user;
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public void updatePreferences(User user) throws SQLException {
+        removeUserPreferences(user.getUserId());
+
+        try (var connection = dataSource.getConnection()) {
+            String query = "UPDATE Preferences SET preference = ? WHERE user_id = ?";
+
+            for (Category c : user.getPreferences()) {
+                try (var statement = connection.prepareStatement(query)) {
+                    statement.setInt(1, user.getUserId());
+                    statement.setString(2, String.valueOf(c));
+                    statement.executeUpdate();
                 }
+            }
+        }
+    }
+
+    public void removeUserPreferences(int userId) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "UPDATE Preferences SET preference = '' WHERE user_id = ?";
+
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, userId);
+                statement.executeUpdate();
             }
         }
     }
@@ -123,10 +159,10 @@ public class UserDao extends AbstractDao {
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT *
-                    FROM Preferences.preferences
+                    FROM preferences
                     JOIN Users
                         ON Users.user_id = Preferences.user_id
-                    WHERE user_id = ?
+                    WHERE preferences.user_id = ?
                     """;
 
             try (var statement = connection.prepareStatement(query)) {
@@ -143,22 +179,6 @@ public class UserDao extends AbstractDao {
             }
         }
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

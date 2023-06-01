@@ -3,6 +3,7 @@ package no.kristiania.collectthemunch.entities;
 public class Review {
 
     private int id;
+
     private String reviewText;
     private int numOfStars;
 
