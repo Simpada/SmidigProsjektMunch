@@ -6,13 +6,11 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import static no.kristiania.collectthemunch.SampleData.sampleUser;
-import static no.kristiania.collectthemunch.entities.Category.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,10 +73,6 @@ public class UserDaoTest {
 
 
         assertEquals(user.getPreferences().size(), 2);
-
-
-        for (int i = 0; i < user.getPreferences().size(); i++) {
-            assertNotEquals(originalPreferences.get(i), user.getPreferences().get(i));
-        }
+        assertFalse(originalPreferences.containsAll(user.getPreferences()));
     }
 }
