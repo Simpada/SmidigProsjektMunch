@@ -56,7 +56,14 @@ public class EventEndPoint extends ApiEndPoint {
     //TODO: search for a specific event
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Event getEventByCategory() {
-        return null;
+    public List<Event> getEventsByCategory(@QueryParam("category") String category) {
+        //TODO: handle exception better
+        List<Event> allEvents = new ArrayList<>();
+        try {
+            allEvents = eventDao.getEventsByCategoryFromDatabase(category);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allEvents;
     }
 }

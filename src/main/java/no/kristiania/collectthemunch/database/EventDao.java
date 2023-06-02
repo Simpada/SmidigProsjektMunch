@@ -11,7 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: getEventsByName, getEventsByCategory
+//TODO: getEventsByName
 
 public class EventDao extends AbstractDao{
 
@@ -63,6 +63,34 @@ public class EventDao extends AbstractDao{
         }
     }
 
+    public List<Event> getEventsByCategoryFromDatabase(String category) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT E.event_id, E.description, C.category " +
+                            "FROM Events E " +
+                            "JOIN Categories C ON E.event_id = C.event_id " +
+                            "WHERE C.category = ?";
+            try(var statement = connection.prepareStatement(query)) {
+                statement.setString(1, category);
+                statement.executeUpdate();
+                try(var resultSet = statement.executeQuery()) {
+                    List<Event> allEvents = new ArrayList<>();
+                    if (resultSet.next()) {
+                        while (resultSet.next()) {
+                            //TODO: return event with its list of categories?
+                            Event event = new Event();
+                            event.setId(resultSet.getInt("event_id"));
+                            event.setDescription(resultSet.getString("description"));
+                            allEvents.add(event);
+                        }
+                    } else {
+                        throw new NotFoundException("No events with category " + category + " found.");
+                    }
+                    return allEvents;
+                }
+            }
+        }
+    }
+
     public List<Event> getAllEventsFromDatabase() throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Events";
@@ -71,6 +99,7 @@ public class EventDao extends AbstractDao{
                     List<Event> allEvents = new ArrayList<>();
                     if (resultSet.next()) {
                         while (resultSet.next()) {
+                            //TODO: return event with its list of categories?
                             Event event = new Event();
                             event.setId(resultSet.getInt("event_id"));
                             event.setDescription(resultSet.getString("description"));
