@@ -1,14 +1,19 @@
 package no.kristiania.collectthemunch.database;
 
 import no.kristiania.collectthemunch.MemoryDataSource;
+import no.kristiania.collectthemunch.entities.Category;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static no.kristiania.collectthemunch.SampleData.sampleUser;
+import static no.kristiania.collectthemunch.entities.Category.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class UserDaoTest {
 
@@ -35,5 +40,45 @@ public class UserDaoTest {
                 .usingRecursiveComparison()
                 .isEqualTo(user)
                 .isNotSameAs(user);
+    }
+
+    @Test
+    void shouldChangeUserPreferences() throws SQLException {
+        /*
+            Save user
+            Save arraylist of pref
+
+            Change user pref
+            Retrieve user pref
+
+            Compare
+         */
+
+        var user = sampleUser();
+        List<Category> originalPref = new ArrayList<>();
+        originalPref.add(KIDS);
+        originalPref.add(PARTY);
+        user.setPreferences(originalPref);
+
+        userDao.save(user);
+
+
+        List<Category> newPrefs = new ArrayList<>();
+        newPrefs.add(NEW);
+        newPrefs.add(GAMES);
+        user.setPreferences(newPrefs);
+
+        userDao.updatePreferences(user);
+
+
+        user = userDao.retrieve(user.getUserId());
+
+
+        for (int i = 0; i < user.getPreferences().size(); i++) {
+            assertNotEquals(originalPref.get(i), user.getPreferences().get(i));
+
+            System.out.println("Comparing: " + originalPref.get(i).name() + " and " + user.getPreferences().get(i));
+        }
+
     }
 }

@@ -4,12 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum Category {
-    PARTY, EXHIBITION, KIDS, FAMILY, NEW, GAMES;
+    EMPTY, PARTY, EXHIBITION, KIDS, FAMILY, NEW, GAMES;
 
 
     public static Category parse(String s) {
         s = s.toUpperCase();
         return switch (s) {
+            case "EMPTY" -> EMPTY;
             case "PARTY" -> PARTY;
             case "EXHIBITION" -> EXHIBITION;
             case "KIDS" -> KIDS;
