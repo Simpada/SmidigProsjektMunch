@@ -15,6 +15,7 @@ const HomeScreen = () => {
     await Font.loadAsync({
       'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.ttf'),
       'GirottMunch-Bold': require('../assets/fonts/GirottMunch-Bold.ttf'),
+      'GirottMunch-BoldSlant': require('../assets/fonts/GirottMunch-BoldSlant.ttf'),
     });
   };
 
@@ -68,12 +69,7 @@ const HomeScreen = () => {
       rating: 5,
       text: 'Good concept, I want to bring all my friends!',
     },
-    {
-      id: '4',
-      user: 'Jens',
-      rating: 5,
-      text: "Addictive and fun. Can't stop playing!",
-    },
+   
   ];
 
   const ReviewItem = ({ item }) => (
@@ -286,7 +282,7 @@ const styles = StyleSheet.create({
   PlayButtonText: {
     color: colors.white,
     fontSize: 20,
-    fontFamily: 'GirottMunch-Bold',
+    fontFamily: 'GirottMunch-BoldSlant',
     textAlign: 'center',
   },
   reviewButton: {
@@ -301,7 +297,7 @@ const styles = StyleSheet.create({
   reviewButtonText: {
     color: colors.white,
     fontSize: 16,
-    fontFamily: 'GirottMunch-BoldBackslant',
+    fontFamily: 'GirottMunch-BoldSlant',
     textAlign: 'center',
   },
   reviewsScrollView: {

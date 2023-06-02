@@ -39,7 +39,7 @@ const Navigation = () => {
               inactiveTintColor: 'gray',
             }}
           >
-            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Home" component={HomeScreen} options={{headerShown: true, }}/>
             <Tab.Screen name="Play Game" component={PlayGameScreen} />
             <Tab.Screen name="Events" component={EventsScreen} />
             <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
