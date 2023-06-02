@@ -18,7 +18,7 @@ const LoginScreen = () => {
 
   const loadCustomFont = async () => {
     await Font.loadAsync({
-      'GirottMunch-BoldBackslant': require('/assets/fonts/GirottMunch-BoldBackslant.ttf'),
+      'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.otf'),
     });
     setFontLoaded(true);
   };
