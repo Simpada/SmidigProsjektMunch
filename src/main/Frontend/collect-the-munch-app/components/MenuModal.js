@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const MenuModal = ({ visible, closeMenu }) => {
     const navigation = useNavigation();
+    const isUserLoggedIn = true
 
     const handleMenuItemPress = useCallback((value) => {
         navigation.navigate(value);
@@ -15,9 +16,8 @@ const MenuModal = ({ visible, closeMenu }) => {
     <Modal visible={visible} animationType="fade" transparent>
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-
           <TouchableOpacity onPress={closeMenu} style={styles.closeButton}>
-            <Text style={styles.closeButtonText}>Close Menu</Text>
+                <Text style={styles.closeButtonText}>X</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={() => handleMenuItemPress('Leaderboard')}>
             <Text style={styles.menuItemText}>Leaderboard</Text>
@@ -32,7 +32,9 @@ const MenuModal = ({ visible, closeMenu }) => {
             <Text style={styles.menuItemText}>Events</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuItem} onPress={handleMenuItemPress}>
-            <Text style={styles.menuItemText}>Login / Signup</Text>
+            <Text style={styles.menuItemText}>
+                {!isUserLoggedIn ? "Login":  "Log out" }
+            </Text>
           </TouchableOpacity>
      
         </View>
@@ -52,18 +54,30 @@ modalContent: {
     backgroundColor: colors.navy,
     padding: 20,
     marginTop: 100,
+    marginRight: 10,
     width: '80%',
     height: "60%",
     alignItems: 'center',
   },
-  closeButton: {
+  closeBtnContainer: {
+    borderWidth: 1,
+    justifyContent:"center", 
+    alignItems:"center"
+},
+closeButton: {
+    backgroundColor:colors.red,
+    borderRadius: 5,
     alignSelf: 'flex-end',
     marginBottom: 10,
   },
   closeButtonText: {
-    fontSize: 16,
+    textAlign:"center",
+    paddingTop: 3,
+    width: 35,
+    height: 35,
+    fontSize: 25,
     fontWeight: 900,
-    color: colors.red,
+    color: colors.white,
   },
   menuItem: {
       marginVertical: 10,
