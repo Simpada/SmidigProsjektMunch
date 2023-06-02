@@ -34,7 +34,6 @@ const EventsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header style={styles.header} />
       <Filter style={styles.filter} onSearch={handleSearch} />
       <View style={styles.eventsContainer}>
         <View style={styles.eventTitleContainer}>
