@@ -70,13 +70,12 @@ const HomeScreen = () => {
       rating: 5,
       text: 'Good concept, I want to bring all my friends!',
     },
-   
   ];
 
   const ReviewItem = ({ item }) => (
     <View style={styles.reviewContainer}>
-      <View style={styles.profilePicture} >
-        <Image style={styles.reviewImage} source={reviewicon1}/>
+      <View style={styles.profilePicture}>
+        <Image style={styles.reviewImage} source={reviewicon1} />
       </View>
       <View style={styles.reviewTextContainer}>
         <Text style={styles.reviewName}>{item.user}</Text>
@@ -98,83 +97,78 @@ const HomeScreen = () => {
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.midPageContainer}>
       <View style={styles.dropdownContainer}>
         <TouchableOpacity onPress={toggleMenu} style={styles.dropdownButton}>
           <Entypo name="menu" size={24} color={colors.white} />
         </TouchableOpacity>
         {isMenuOpen && (
-          <View style={styles.menu}>
+          <View style={styles.menuDropDownInside}>
             {menuItems.map((item, index) => (
               <React.Fragment key={item}>
                 <TouchableOpacity
                   onPress={() => handleOptionChange(item)}
-                  style={[styles.menuItem, index !== 0 && styles.menuItemWithBorder]}
+                  style={[styles.menuIconPadding, index !== 0 && styles.menuIconWithBorder]}
                 >
-                  <Text style={[styles.menuItemText, selectedOption === item && styles.selectedMenuItemText]}>
+                  <Text style={[styles.menuTextInside, selectedOption === item && styles.selectedMenuItemText]}>
                     {renderIcon(item)} {item}
                   </Text>
                 </TouchableOpacity>
-                {index !== menuItems.length - 1 && <View style={styles.menuItemSeparator} />}
+                {index !== menuItems.length - 1 && <View style={styles.menuIconSeparatorInside} />}
               </React.Fragment>
             ))}
           </View>
         )}
       </View>
-      <View style={styles.imageContainer}>
-        <Image style={styles.image} source={HeaderImg} resizeMode="cover" />
-        <View style={styles.headerContainer}>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>MUNCH</Text>
+      <View style={styles.munchImageContainer}>
+        <Image style={styles.munchImage} source={HeaderImg} resizeMode="cover" />
+        <View style={styles.munchHeaderContainer}>
+          <View style={styles.munchHeaderTextContainer}>
+            <Text style={styles.headlineText}>MUNCH</Text>
           </View>
         </View>
       </View>
-      <View style={styles.textBox}>
-        <Text style={styles.textBoxText}>
+      <View style={styles.gameDescriptionContainer}>
+        <Text style={styles.gameDescriptionText}>
           I dette spillet får du muligheten til å samle ulike kunstverk. Jo flere verk du samler, desto bedre sjanser har du til å klatre til toppen av poengtavlen og vinne unike premier. Bli den ultimate Munch-samleren og opplev spenningen ved å konkurrere mot andre kunstinteresserte.
         </Text>
       </View>
-      <View style={styles.PlayDescription}>
-        <Text style={styles.PlayDescriptionText}>
+
+      <View style={styles.playDescription}>
+        <Text style={styles.playDescriptionText}>
           "Collect the Munch" er en unik måte å oppleve kunstverdenen på, hvor du får både underholdning, kunnskap og sjansen til å vinne flotte premier. Bli med på dette eventyret og la Munchs mesterverker inspirere deg!
         </Text>
       </View>
-      <TouchableOpacity style={styles.PlayButton}>
-        <Text style={styles.PlayButtonText}>Play Collect the Munch</Text>
+
+      <TouchableOpacity style={styles.playButton}>
+        <Text style={styles.playButtonText}>Play Collect the MUNCH</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.reviewButton}>
         <Text style={styles.reviewButtonText}>Review the app!</Text>
       </TouchableOpacity>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.reviewsScrollView}
-      >
-        <View style={styles.reviewsContainer}>
-          <Text style={styles.reviewsTitle}>Reviews</Text>
-          <FlatList
-            data={reviews}
-            renderItem={({ item }) => <ReviewItem item={item} />}
-            keyExtractor={(item) => item.id}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.reviewsContentContainer}
-          />
-        </View>
-      </ScrollView>
+      
+      <View style={[styles.reviewsBackground, { width: '100%' }]}>
+        <Text style={styles.reviewsTitle}>Reviews</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {reviews.map((item) => (
+            <ReviewItem key={item.id} item={item} />
+          ))}
+        </ScrollView>
+      </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  midPageContainer: {
     flexGrow: 1,
     backgroundColor: colors.navy,
     alignItems: 'center',
   },
   dropdownContainer: {
-    position: 'absolute',
-    top: 40,
+    position: 'fixed',
+    top: 20,
     left: 20,
     zIndex: 1,
   },
@@ -187,7 +181,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     elevation: 3,
   },
-  menu: {
+  menuDropDownInside: {
     marginTop: 5,
     backgroundColor: colors.navy,
     borderRadius: 5,
@@ -195,18 +189,18 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     elevation: 3,
   },
-  menuItem: {
+  menuIconPadding: {
     paddingVertical: 8,
   },
-  menuItemWithBorder: {
+  menuIconWithBorder: {
     borderTopColor: colors.white,
     borderTopWidth: 1,
   },
-  menuItemSeparator: {
+  menuIconSeparatorInside: {
     height: 1,
     backgroundColor: colors.white,
   },
-  menuItemText: {
+  menuTextInside: {
     fontSize: 16,
     color: colors.white,
     marginLeft: 5,
@@ -215,17 +209,17 @@ const styles = StyleSheet.create({
   selectedMenuItemText: {
     fontWeight: 'bold',
   },
-  imageContainer: {
+  munchImageContainer: {
     width: '100%',
     height: 400,
     position: 'relative',
   },
-  image: {
+  munchImage: {
     flex: 1,
     width: undefined,
     height: undefined,
   },
-  headerContainer: {
+  munchHeaderContainer: {
     position: 'absolute',
     top: '50%',
     left: 0,
@@ -233,7 +227,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     zIndex: 1,
   },
-  textContainer: {
+  munchHeaderTextContainer: {
     backgroundColor: colors.red,
     paddingHorizontal: 10,
     paddingVertical: 5,
@@ -241,46 +235,46 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     width: '100%',
   },
-  text: {
+  headlineText: {
     color: colors.black,
     fontSize: 100,
     fontFamily: 'GirottMunch-BoldBackslant',
     textAlign: 'center',
   },
-  textBox: {
+  gameDescriptionContainer: {
     backgroundColor: colors.green,
     padding: 35,
     marginVertical: 20,
     marginHorizontal: 20,
     borderRadius: 25,
   },
-  textBoxText: {
+  gameDescriptionText: {
     color: colors.white,
     fontSize: 20,
     fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',
   },
-  PlayDescription: {
+  playDescription: {
     backgroundColor: colors.navy,
     padding: 35,
     marginVertical: 10,
     marginHorizontal: 20,
     borderRadius: 25,
   },
-  PlayDescriptionText: {
+  playDescriptionText: {
     color: colors.white,
     fontSize: 20,
     fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',
   },
-  PlayButton: {
+  playButton: {
     backgroundColor: colors.red,
     paddingHorizontal: 40,
     paddingVertical: 25,
     borderRadius: 10,
     marginVertical: 30,
   },
-  PlayButtonText: {
+  playButtonText: {
     color: colors.white,
     fontSize: 20,
     fontFamily: 'GirottMunch-BoldSlant',
@@ -294,17 +288,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     alignSelf: 'flex-start',
   },
-  
   reviewButtonText: {
     color: colors.white,
     fontSize: 16,
     fontFamily: 'GirottMunch-BoldSlant',
     textAlign: 'center',
   },
-  reviewsScrollView: {
-    paddingHorizontal: 20,
-  },
-  reviewsContainer: {
+  reviewsBackground: {
     backgroundColor: colors.red,
     borderRadius: 20,
     padding: 10,
@@ -315,9 +305,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'GirottMunch-Bold',
     marginBottom: 10,
-  },
-  reviewsContentContainer: {
-    alignItems: 'center',
   },
   reviewContainer: {
     backgroundColor: colors.grey,
