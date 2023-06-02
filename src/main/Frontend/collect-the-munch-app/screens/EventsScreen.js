@@ -1,21 +1,25 @@
+import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { useEffect, useState } from 'react';
 import EventList from '../components/EventList';
 import Header from '../components/Header';
 import Filter from '../components/Filter';
 import { colors } from '../Styles/theme';
+import { useNavigation } from '@react-navigation/native';
 
 const EventsScreen = () => {
+  const navigation = useNavigation();
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
 
+  const handleEventPress = (event) => {
+    navigation.navigate('Event Details', { event });
+  };
+
   useEffect(() => {
-    const initialEvents = [
-      {id: 1, title: "Unveiling History", category: "historical", description: "Join us on a captivating journey through time as we unveil the mysteries of ancient civilizations."},
-      {id: 2, title: "Brushstrokes and Beyond", category: "thematic", description: "Ignite your creativity and delve into the world of art with our Brushstrokes and Beyond workshop."},
-      {id: 3, title: "From Curators to Connoisseurs", category: "historical", description: "Embark on a fascinating journey of scientific discovery at our interactive Science Lab Explorations."},
-      {id: 4, title: "Tales and Treasures", category: "photography", description: " Gather the whole family for a day of enchantment and exploration at our Tales and Treasures event."},
-    ];
+    const initialEvents = [{id: 1, title: "Unveiling History", category: "historical", description: "Join us on a captivating journey through time as we unveil the mysteries of ancient civilizations."},
+    {id: 2, title: "Brushstrokes and Beyond", category: "thematic", description: "Ignite your creativity and delve into the world of art with our Brushstrokes and Beyond workshop."},
+    {id: 3, title: "From Curators to Connoisseurs", category: "historical", description: "Embark on a fascinating journey of scientific discovery at our interactive Science Lab Explorations."},
+    {id: 4, title: "Tales and Treasures", category: "photography", description: "Gather the whole family for a day of enchantment and exploration at our Tales and Treasures event."},];
 
     setEvents(initialEvents);
     setFilteredEvents(initialEvents);
@@ -36,15 +40,15 @@ const EventsScreen = () => {
         <View style={styles.eventTitleContainer}>
           <Text style={styles.eventTitle}>New Events</Text>
         </View>
-        <EventList style={styles.list} events={filteredEvents} />
+        <EventList
+          style={styles.list}
+          events={filteredEvents}
+          handleEventPress={handleEventPress}
+        />
       </View>
     </View>
   );
 };
-
-export default EventsScreen;
-
-
 
 const styles = StyleSheet.create({
   container: {
@@ -54,21 +58,22 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   eventTitleContainer: {
-    width: "100%",
+    width: '100%',
     paddingHorizontal: 20,
   },
   eventTitle: {
-    fontSize: 25, 
+    fontSize: 25,
     fontWeight: 800,
-    paddingLeft:10,
-    color: colors.red, 
-    fontFamily: "GirottMunch-BoldBackslant"
+    paddingLeft: 10,
+    color: colors.red,
+    fontFamily: 'GirottMunch-BoldBackslant',
   },
   filter: {
-    flex: 1
+    flex: 1,
   },
   eventsContainer: {
-    flex: 4
-  }
- 
+    flex: 4,
+  },
 });
+
+export default EventsScreen;

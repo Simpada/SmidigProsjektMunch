@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Path("/review/app")
-public class ReviewAppEndPoint extends ApiEndPoint {
+public class ReviewAppEndpoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)

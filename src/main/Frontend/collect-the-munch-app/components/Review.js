@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Button, TextInput, Pressable } from 'react-native';
-import { Rating, AirbnbRating } from 'react-native-elements';
+import { Rating } from 'react-native-elements';
 import {colors} from '../Styles/theme';
 const Review = () => {
   const [rating, setRating] = useState(0);
@@ -36,7 +36,6 @@ const Review = () => {
   };
 
   return (
-    //Rating System Code
     <View style={styles.container}>
       <Text style={styles.reviewText}>Leave your thoughts on the game!</Text>
       <Rating

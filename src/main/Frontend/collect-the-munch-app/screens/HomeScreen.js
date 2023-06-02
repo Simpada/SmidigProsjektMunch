@@ -6,6 +6,7 @@ import HeaderImg from '../assets/Images/munch-museet.avif';
 import { Entypo, Feather, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import reviewicon1 from "../assets/Images/samuel.png"
 
+
 const HomeScreen = () => {
   useEffect(() => {
     loadFonts();
