@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: getAllEvents, getEventsByName, getEventsByCategory
+//TODO: getEventsByName, getEventsByCategory
 
 @Path("/events")
 public class EventEndPoint extends ApiEndPoint {
@@ -33,7 +33,6 @@ public class EventEndPoint extends ApiEndPoint {
         return event;
     }
 
-    //TODO: return a list with all events available in our database
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Event> getAllEvents() {

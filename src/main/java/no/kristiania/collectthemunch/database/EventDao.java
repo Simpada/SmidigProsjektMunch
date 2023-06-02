@@ -11,7 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: getAllEvents, getEventsByName, getEventsByCategory
+//TODO: getEventsByName, getEventsByCategory
 
 public class EventDao extends AbstractDao{
 
