@@ -1,8 +1,15 @@
-import React from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
+import React,{ useCallback } from 'react';
+import { View, Text, Modal, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { colors } from '../Styles/theme';
+import { useNavigation } from '@react-navigation/native';
 
 const MenuModal = ({ visible, closeMenu }) => {
+    const navigation = useNavigation();
+
+    const handleMenuItemPress = useCallback((value) => {
+        navigation.navigate(value);
+        closeMenu();
+      }, [navigation, closeMenu]);
 
   return (
     <Modal visible={visible} animationType="fade" transparent>
@@ -12,19 +19,19 @@ const MenuModal = ({ visible, closeMenu }) => {
           <TouchableOpacity onPress={closeMenu} style={styles.closeButton}>
             <Text style={styles.closeButtonText}>Close Menu</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => handleMenuItemPress('Leaderboard')}>
             <Text style={styles.menuItemText}>Leaderboard</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={handleMenuItemPress}>
             <Text style={styles.menuItemText}>Profile</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => handleMenuItemPress("Play Game")}>
             <Text style={styles.menuItemText}>Game</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={() => handleMenuItemPress("Events")}>
             <Text style={styles.menuItemText}>Events</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuItem}>
+          <TouchableOpacity style={styles.menuItem} onPress={handleMenuItemPress}>
             <Text style={styles.menuItemText}>Login / Signup</Text>
           </TouchableOpacity>
      
