@@ -1,20 +1,24 @@
+// EventList.js
+
 import React from 'react';
-import { FlatList, View, StyleSheet } from 'react-native';
+import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
 import EventItem from './EventItem';
 
-const EventList = ({ events }) => {
+const EventList = ({ events, handleEventPress }) => {
   return (
     <View style={styles.container}>
       <FlatList
         data={events}
         alwaysBounceVertical={false}
         renderItem={({ item }) => (
-          <EventItem
-            id={item.id}
-            description={item.description}
-            title={item.title}
-            category={item.category}
-          />
+          <TouchableOpacity onPress={() => handleEventPress(item)}>
+            <EventItem
+              id={item.id}
+              description={item.description}
+              title={item.title}
+              category={item.category}
+            />
+          </TouchableOpacity>
         )}
         keyExtractor={(itemData) => itemData.id.toString()}
       />
@@ -22,12 +26,13 @@ const EventList = ({ events }) => {
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+    padding: 20,
+  },
+});
+
 export default EventList;
 
-const styles = StyleSheet.create({
-    container: {
-        flex:1,
-        width: "100%",
-        padding: 20
-    }
-})
