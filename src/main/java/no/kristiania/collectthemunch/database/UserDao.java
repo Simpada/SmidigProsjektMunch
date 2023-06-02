@@ -135,7 +135,7 @@ public class UserDao extends AbstractDao {
 
     public void removeUserPreferences(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "UPDATE Preferences SET preference = '' WHERE user_id = ?";
+            String query = "DELETE FROM Preferences WHERE user_id = ?";
 
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
