@@ -1,11 +1,8 @@
 
-import { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Touchable, TouchableOpacity, Image } from 'react-native'
-import Review from '../components/Review';
+import { useEffect } from 'react';
+import { View, StyleSheet} from 'react-native'
 import * as Font from 'expo-font';
-import { fonts } from 'react-native-elements/dist/config';
 import { colors } from '../Styles/theme';
-import HeaderImg from '../assets/Images/munch-museet.avif'
 const HomeScreen = () => {
   useEffect(() => {
     loadFonts();
@@ -18,12 +15,6 @@ const HomeScreen = () => {
   };
     return (
       <View style={styles.container}>
-        <View>
-          <View>
-            <Image style={styles.image} source={HeaderImg} resizeMode="cover"/>
-          </View>
-            <Text>MUNCH</Text>
-        </View>
       </View>
     )
 }
