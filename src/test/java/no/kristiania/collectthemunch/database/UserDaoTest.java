@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -59,31 +60,25 @@ public class UserDaoTest {
 
     @Test
     void shouldChangeUserPreferences() throws SQLException {
-
         var user = sampleUser();
-        List<Category> originalPref = new ArrayList<>();
-        originalPref.add(KIDS);
-        originalPref.add(PARTY);
-        user.setPreferences(originalPref);
 
+        List<Category> originalPreferences = Arrays.asList(Category.KIDS, Category.PARTY);
+        user.setPreferences(originalPreferences);
         userDao.save(user);
 
-
-        List<Category> newPrefs = new ArrayList<>();
-        newPrefs.add(NEW);
-        newPrefs.add(GAMES);
-        user.setPreferences(newPrefs);
-
+        List<Category> newPreferences = Arrays.asList(Category.NEW, Category.GAMES);
+        user.setPreferences(newPreferences);
         userDao.updatePreferences(user);
 
 
         user = userDao.retrieve(user.getUserId());
 
+
+        assertEquals(user.getPreferences().size(), 2);
+
+
         for (int i = 0; i < user.getPreferences().size(); i++) {
-            System.out.println("Comparing: " + originalPref.get(i).name() + " and " + user.getPreferences().get(i));
-            assertNotEquals(originalPref.get(i), user.getPreferences().get(i));
-
+            assertNotEquals(originalPreferences.get(i), user.getPreferences().get(i));
         }
-
     }
 }

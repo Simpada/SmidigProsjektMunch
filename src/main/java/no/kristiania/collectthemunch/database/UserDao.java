@@ -121,7 +121,7 @@ public class UserDao extends AbstractDao {
         removeUserPreferences(user.getUserId());
 
         try (var connection = dataSource.getConnection()) {
-            String query = "UPDATE Preferences SET preference = ? WHERE user_id = ?";
+            String query = "INSERT INTO Preferences (user_id, preference) VALUES (?,?)";
 
             for (Category c : user.getPreferences()) {
                 try (var statement = connection.prepareStatement(query)) {
