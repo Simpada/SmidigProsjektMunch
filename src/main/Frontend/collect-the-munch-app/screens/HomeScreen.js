@@ -98,28 +98,6 @@ const HomeScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.midPageContainer}>
-      <View style={styles.dropdownContainer}>
-        <TouchableOpacity onPress={toggleMenu} style={styles.dropdownButton}>
-          <Entypo name="menu" size={24} color={colors.white} />
-        </TouchableOpacity>
-        {isMenuOpen && (
-          <View style={styles.menuDropDownInside}>
-            {menuItems.map((item, index) => (
-              <React.Fragment key={item}>
-                <TouchableOpacity
-                  onPress={() => handleOptionChange(item)}
-                  style={[styles.menuIconPadding, index !== 0 && styles.menuIconWithBorder]}
-                >
-                  <Text style={[styles.menuTextInside, selectedOption === item && styles.selectedMenuItemText]}>
-                    {renderIcon(item)} {item}
-                  </Text>
-                </TouchableOpacity>
-                {index !== menuItems.length - 1 && <View style={styles.menuIconSeparatorInside} />}
-              </React.Fragment>
-            ))}
-          </View>
-        )}
-      </View>
       <View style={styles.munchImageContainer}>
         <Image style={styles.munchImage} source={HeaderImg} resizeMode="cover" />
         <View style={styles.munchHeaderContainer}>
@@ -165,6 +143,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: colors.navy,
     alignItems: 'center',
+    paddingBottom: 100
   },
   dropdownContainer: {
     position: 'fixed',
@@ -296,7 +275,6 @@ const styles = StyleSheet.create({
   },
   reviewsBackground: {
     backgroundColor: colors.red,
-    borderRadius: 20,
     padding: 10,
     marginRight: 10,
   },
