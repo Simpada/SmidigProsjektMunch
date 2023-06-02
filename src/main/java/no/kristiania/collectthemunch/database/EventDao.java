@@ -27,6 +27,28 @@ public class EventDao extends AbstractDao{
         return event;
     }
 
+    public List<Event> getFilteredEventsFromDatabase(List<String> preferences) {
+        // Retrieve all events from the database, will at most be an empty list for now
+        List<Event> eventCategories = new ArrayList<>();
+        try {
+            eventCategories = getAllEventCategories();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<Event> filteredEvents = new ArrayList<>();;
+        if (eventCategories != null){
+            // Filter the events based on the provided preferences
+            try {
+                filteredEvents = getEventsByPreferences(preferences, eventCategories);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return filteredEvents;
+    }
+
     public void save(Event event) throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Events (description) VALUES (?)";
@@ -36,6 +58,28 @@ public class EventDao extends AbstractDao{
                 try(var generatedKeys = statement.getGeneratedKeys()) {
                     generatedKeys.next();
                     event.setId(generatedKeys.getInt(1));
+                }
+            }
+        }
+    }
+
+    public List<Event> getAllEventsFromDatabase() throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Events";
+            try(var statement = connection.prepareStatement(query)) {
+                try(var resultSet = statement.executeQuery()) {
+                    List<Event> allEvents = new ArrayList<>();
+                    if (resultSet.next()) {
+                        while (resultSet.next()) {
+                            Event event = new Event();
+                            event.setId(resultSet.getInt("event_id"));
+                            event.setDescription(resultSet.getString("description"));
+                            allEvents.add(event);
+                        }
+                    } else {
+                        throw new NotFoundException("No events found in database.");
+                    }
+                    return allEvents;
                 }
             }
         }
@@ -83,7 +127,7 @@ public class EventDao extends AbstractDao{
         }
     }
 
-    public List<Event> getAllEventsFromDatabase() throws SQLException {
+    public List<Event> getAllEventCategories() throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Categories";
             try(var statement = connection.prepareStatement(query)) {
