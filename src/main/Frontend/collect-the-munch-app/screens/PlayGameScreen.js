@@ -1,4 +1,5 @@
 import { Text, View, StyleSheet } from 'react-native'
+import MenuModal from '../components/MenuModal';
 
 const PlayGameScreen = () => {
 
