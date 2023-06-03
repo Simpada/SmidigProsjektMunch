@@ -98,28 +98,6 @@ const HomeScreen = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.midPageContainer}>
-      <View style={styles.dropdownContainer}>
-        <TouchableOpacity onPress={toggleMenu} style={styles.dropdownButton}>
-          <Entypo name="menu" size={24} color={colors.white} />
-        </TouchableOpacity>
-        {isMenuOpen && (
-          <View style={styles.menuDropDownInside}>
-            {menuItems.map((item, index) => (
-              <React.Fragment key={item}>
-                <TouchableOpacity
-                  onPress={() => handleOptionChange(item)}
-                  style={[styles.menuIconPadding, index !== 0 && styles.menuIconWithBorder]}
-                >
-                  <Text style={[styles.menuTextInside, selectedOption === item && styles.selectedMenuItemText]}>
-                    {renderIcon(item)} {item}
-                  </Text>
-                </TouchableOpacity>
-                {index !== menuItems.length - 1 && <View style={styles.menuIconSeparatorInside} />}
-              </React.Fragment>
-            ))}
-          </View>
-        )}
-      </View>
       <View style={styles.munchImageContainer}>
         <Image style={styles.munchImage} source={HeaderImg} resizeMode="cover" />
         <View style={styles.munchHeaderContainer}>
@@ -166,49 +144,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.navy,
     alignItems: 'center',
   },
-  dropdownContainer: {
-    position: 'fixed',
-    top: 20,
-    left: 20,
-    zIndex: 1,
-  },
-  dropdownButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.navy,
-    width: 30,
-    height: 30,
-    borderRadius: 5,
-    elevation: 3,
-  },
-  menuDropDownInside: {
-    marginTop: 5,
-    backgroundColor: colors.navy,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    elevation: 3,
-  },
-  menuIconPadding: {
-    paddingVertical: 8,
-  },
-  menuIconWithBorder: {
-    borderTopColor: colors.white,
-    borderTopWidth: 1,
-  },
-  menuIconSeparatorInside: {
-    height: 1,
-    backgroundColor: colors.white,
-  },
-  menuTextInside: {
-    fontSize: 16,
-    color: colors.white,
-    marginLeft: 5,
-    fontFamily: 'GirottMunch-Bold',
-  },
-  selectedMenuItemText: {
-    fontWeight: 'bold',
-  },
+
   munchImageContainer: {
     width: '100%',
     height: 400,
