@@ -1,13 +1,11 @@
 package no.kristiania.collectthemunch.database;
 
 import no.kristiania.collectthemunch.MemoryDataSource;
-import no.kristiania.collectthemunch.entities.Category;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static no.kristiania.collectthemunch.SampleData.sampleUser;

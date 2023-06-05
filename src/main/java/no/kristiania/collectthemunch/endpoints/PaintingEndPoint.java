@@ -4,7 +4,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import no.kristiania.collectthemunch.entities.Painting;
 
-import javax.print.attribute.standard.Media;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,28 +15,6 @@ public class PaintingEndPoint extends ApiEndPoint {
     public List<Painting> getAllPainting() throws SQLException {
         return paintingDao.retrieveAll();
     }
-
-    @Path("/inventory")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Painting> getPaintingForUser(int userId) throws SQLException {
-        return paintingDao.retrieveAllForUser(userId);
-    }
-
-    @Path("/save")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void save(Painting painting) throws SQLException {
-        paintingDao.save(painting);
-    }
-
-    @Path("/{userId}/{paintingId}")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void collectPainting(@PathParam("userId")int userId, @PathParam("paintingId") int paintingId) throws SQLException {
-        paintingDao.saveToInventory(userId, paintingId);
-    }
-
 
     @Path("/{paintingId}")
     @GET
@@ -51,7 +28,27 @@ public class PaintingEndPoint extends ApiEndPoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Painting retrieve(@PathParam("title") String title) throws SQLException {
         return paintingDao.retrieve(title);
+    }
 
+    @Path("/save")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void save(Painting painting) throws SQLException {
+        paintingDao.save(painting);
+    }
+
+    @Path("/{userId}/{paintingId}")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void collectPainting(@PathParam("userId") int userId, @PathParam("paintingId") int paintingId) throws SQLException {
+        paintingDao.saveToInventory(userId, paintingId);
+    }
+
+    @Path("/inventory")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Painting> getPaintingForUser(int userId) throws SQLException {
+        return paintingDao.retrieveAllForUser(userId);
     }
 
 }
