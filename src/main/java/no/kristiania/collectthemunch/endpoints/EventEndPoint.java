@@ -47,10 +47,9 @@ public class EventEndPoint extends ApiEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Event> getFilteredEvents(@PathParam("userId") int userId) throws SQLException {
-        List<Category> tempPreferences = userDao.retrieveUserPreferences(userId);
-        List<String> preferenceCategoryNames = tempPreferences.stream()
-                .map(Category::name).toList();
-        return eventDao.getFilteredEventsFromDatabase(preferenceCategoryNames);
+        List<String> tempPreferences = userDao.retrieveUserPreferences(userId);
+
+        return eventDao.getFilteredEventsFromDatabase(tempPreferences);
     }
 
     @Path("/{eventId}")
