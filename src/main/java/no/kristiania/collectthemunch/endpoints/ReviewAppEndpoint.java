@@ -12,7 +12,7 @@ public class ReviewAppEndpoint extends ApiEndPoint {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createAppReview(){
+    public void createAppReview(Review review){
         reviewAppDao.save();
     }
 
