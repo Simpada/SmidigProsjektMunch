@@ -4,6 +4,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import no.kristiania.collectthemunch.entities.Painting;
 
+import javax.print.attribute.standard.Media;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -13,7 +14,14 @@ public class PaintingEndPoint extends ApiEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Painting> getAllPainting() throws SQLException {
-        return null;
+        return paintingDao.retrieveAll();
+    }
+
+    @Path("/inventory")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Painting> getPaintingForUser(int userId) throws SQLException {
+        return paintingDao.retrieveForUser(userId);
     }
 
     @Path("/{paintingId}")
