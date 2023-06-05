@@ -145,49 +145,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 100
   },
-  dropdownContainer: {
-    position: 'fixed',
-    top: 20,
-    left: 20,
-    zIndex: 1,
-  },
-  dropdownButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.navy,
-    width: 30,
-    height: 30,
-    borderRadius: 5,
-    elevation: 3,
-  },
-  menuDropDownInside: {
-    marginTop: 5,
-    backgroundColor: colors.navy,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    elevation: 3,
-  },
-  menuIconPadding: {
-    paddingVertical: 8,
-  },
-  menuIconWithBorder: {
-    borderTopColor: colors.white,
-    borderTopWidth: 1,
-  },
-  menuIconSeparatorInside: {
-    height: 1,
-    backgroundColor: colors.white,
-  },
-  menuTextInside: {
-    fontSize: 16,
-    color: colors.white,
-    marginLeft: 5,
-    fontFamily: 'GirottMunch-Bold',
-  },
-  selectedMenuItemText: {
-    fontWeight: 'bold',
-  },
+
   munchImageContainer: {
     width: '100%',
     height: 400,

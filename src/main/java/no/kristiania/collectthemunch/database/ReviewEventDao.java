@@ -4,8 +4,11 @@ import jakarta.inject.Inject;
 import no.kristiania.collectthemunch.entities.Review;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReviewEventDao extends AbstractDao {
 
@@ -43,13 +46,56 @@ public class ReviewEventDao extends AbstractDao {
                 statement.setInt(2, eventId);
                 try (var response = statement.executeQuery()) {
                     while (response.next()) {
-                        review.setId(response.getInt("review_id"));
-                        review.setReviewText(response.getString("review_text"));
-                        review.setNumOfStars(response.getInt("num_stars"));
+                        review = parseEventReview(response);
                     }
                     return review;
                 }
             }
         }
+    }
+
+    public List<Review> getAllReviewsFromEvent(int eventId) throws SQLException {
+        List<Review> reviews = new ArrayList<>();
+
+        try (var connection = dataSource.getConnection()) {
+            var query = "SELECT * FROM Event_Reviews WHERE event_id = ?";
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, eventId);
+                try (var response = statement.executeQuery()) {
+                    while (response.next()) {
+                        reviews.add(parseEventReview(response));
+                    }
+                }
+                return reviews;
+            }
+        }
+    }
+
+    public List<Review> getAllEventReviewsFromUser(int userId) throws SQLException {
+        List<Review> reviews = new ArrayList<>();
+
+        try (var connection = dataSource.getConnection()) {
+            var query = "SELECT * FROM Event_Reviews WHERE user_id = ?";
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, userId);
+                try (var response = statement.executeQuery()) {
+                    while (response.next()) {
+                        reviews.add(parseEventReview(response));
+                    }
+                }
+                return reviews;
+            }
+        }
+    }
+
+
+    private Review parseEventReview(ResultSet response) throws SQLException {
+        Review review = new Review();
+
+        review.setId(response.getInt("review_id"));
+        review.setReviewText(response.getString("review_text"));
+        review.setNumOfStars(response.getInt("num_stars"));
+
+        return review;
     }
 }
