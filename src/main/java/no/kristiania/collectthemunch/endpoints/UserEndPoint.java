@@ -2,13 +2,11 @@ package no.kristiania.collectthemunch.endpoints;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Path("/users")
 public class UserEndPoint extends ApiEndPoint {
@@ -44,16 +42,7 @@ public class UserEndPoint extends ApiEndPoint {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateUserPreferences(@PathParam("userId") int userId, ArrayList<String> preferences) throws SQLException {
-        List<Category> pref = parseCategory(preferences);
-        userDao.updatePreferences(userId, pref);
+        userDao.updatePreferences(userId, preferences);
     }
 
-
-    //Parse Category as string from frontend to Category enums.
-    public static List<Category> parseCategory(ArrayList<String> preferences) {
-        preferences.replaceAll(String::toUpperCase);
-
-        return preferences.stream()
-                .map(Category::valueOf).toList();
-    }
 }
