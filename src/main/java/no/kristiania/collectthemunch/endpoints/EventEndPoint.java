@@ -13,16 +13,18 @@ import java.util.List;
 @Path("/events")
 public class EventEndPoint extends ApiEndPoint {
 
+    @Path("/userfilteredevents/{preferences}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getFilteredEvents(@QueryParam("preferences") List<String> preferences) {
+    public List<Event> getFilteredEvents(@PathParam("preferences") List<String> preferences) {
         List<Event> filteredEvents = eventDao.getFilteredEventsFromDatabase(preferences);
         return filteredEvents;
     }
 
+    @Path("/{eventId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Event getEventById(@QueryParam("eventId") int eventId) {
+    public Event getEventById(@PathParam("eventId") int eventId) {
         //TODO: handle exception better
         Event event = new Event();
         try {
@@ -53,10 +55,10 @@ public class EventEndPoint extends ApiEndPoint {
         return null;
     }
 
-    //TODO: search for a specific event
+    @Path("/{category}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getEventsByCategory(@QueryParam("category") String category) {
+    public List<Event> getEventsByCategory(@PathParam("category") String category) {
         //TODO: handle exception better
         List<Event> allEvents = new ArrayList<>();
         try {
