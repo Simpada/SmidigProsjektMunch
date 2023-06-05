@@ -8,7 +8,6 @@ import no.kristiania.collectthemunch.entities.Event;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 //TODO: getEventsByName, getEventsByCategory
 
@@ -67,7 +66,6 @@ public class EventEndPoint extends ApiEndPoint {
         }
         return event;
     }
-
 
     @Path("/category/{category}")
     @GET

@@ -117,7 +117,7 @@ public class SampleData {
                 "Create great memories"
         ));
 
-        List<Category> categories = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
         int categoryCount = random.nextInt(4) + 1;
         for (int i = 0; i < categoryCount; i++) {
 
@@ -125,33 +125,33 @@ public class SampleData {
 
             switch (category) {
                 case 0 -> {
-                    if (!categories.contains(Category.PARTY)) {
-                        categories.add(Category.PARTY);
+                    if (!categories.contains(String.valueOf(Category.PARTY))) {
+                        categories.add(String.valueOf(Category.PARTY));
                     }
                 }
                 case 1 -> {
-                    if (!categories.contains(Category.EXHIBITION)) {
-                        categories.add(Category.EXHIBITION);
+                    if (!categories.contains(String.valueOf(Category.EXHIBITION))) {
+                        categories.add(String.valueOf(Category.EXHIBITION));
                     }
                 }
                 case 2 -> {
-                    if (!categories.contains(Category.KIDS)) {
-                        categories.add(Category.KIDS);
+                    if (!categories.contains(String.valueOf(Category.KIDS))) {
+                        categories.add(String.valueOf(Category.KIDS));
                     }
                 }
                 case 3 -> {
-                    if (!categories.contains(Category.FAMILY)) {
-                        categories.add(Category.FAMILY);
+                    if (!categories.contains(String.valueOf(Category.FAMILY))) {
+                        categories.add(String.valueOf(Category.FAMILY));
                     }
                 }
                 case 4 -> {
-                    if (!categories.contains(Category.NEW)) {
-                        categories.add(Category.NEW);
+                    if (!categories.contains(String.valueOf(Category.NEW))) {
+                        categories.add(String.valueOf(Category.NEW));
                     }
                 }
                 case 5 -> {
-                    if (!categories.contains(Category.GAMES)) {
-                        categories.add(Category.GAMES);
+                    if (!categories.contains(String.valueOf(Category.GAMES))) {
+                        categories.add(String.valueOf(Category.GAMES));
                     }
                 }
             }

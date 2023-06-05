@@ -7,7 +7,7 @@ public class Event {
     private String name;
     private Integer id;
     private String description;
-    private List<Category> categories;
+    private List<String> categories;
     private byte[] eventPoster;
 
     public Event(){
@@ -18,7 +18,7 @@ public class Event {
         eventPoster = new byte[0];
     }
 
-    public Event(String description, List<Category> categories) {
+    public Event(String description, List<String> categories) {
         setDescription(description);
         setCategories(categories);
     }
@@ -31,11 +31,11 @@ public class Event {
         this.description = description;
     }
 
-    public List<Category> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 

@@ -22,9 +22,9 @@ CREATE TABLE Paintings
 CREATE TABLE Events
 (
     event_id    INT IDENTITY PRIMARY KEY,
-    event_name VARCHAR(100),
+    name VARCHAR(100),
     description VARCHAR(1000) NOT NULL,
-    event_poster varbinary(max)
+    poster varbinary(max)
 );
 
 CREATE TABLE App_Reviews
