@@ -155,7 +155,7 @@ public class UserDao extends AbstractDao {
         return user;
     }
 
-    private List<Category> retrieveUserPreferences(int userId) throws SQLException {
+    public List<Category> retrieveUserPreferences(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT *
