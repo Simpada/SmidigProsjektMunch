@@ -11,19 +11,19 @@ CREATE TABLE Users
 CREATE TABLE Paintings
 (
     painting_id     INT IDENTITY PRIMARY KEY,
-    name            VARCHAR(100),
+    title           VARCHAR(100),
     author          VARCHAR(100),
     painting_image  varbinary(max),
+    art_information VARCHAR(1000),
     rarity          VARCHAR(50),
-    points          INT,
-    art_information VARCHAR(1000)
+    points          INT
 );
 
 CREATE TABLE Events
 (
-    event_id    INT IDENTITY PRIMARY KEY,
-    event_name VARCHAR(100),
-    description VARCHAR(1000) NOT NULL,
+    event_id     INT IDENTITY PRIMARY KEY,
+    event_name   VARCHAR(100),
+    description  VARCHAR(1000) NOT NULL,
     event_poster varbinary(max)
 );
 

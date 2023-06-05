@@ -65,8 +65,7 @@ public class UserDao extends AbstractDao {
                     List<User> users = new ArrayList<>();
 
                     while (resultSet.next()) {
-                        var user = new User();
-                        user = mapFromResultSet(resultSet);
+                        var user = mapFromResultSet(resultSet);
                         user.setPreferences(retrieveUserPreferences(user.getUserId()));
                         users.add(user);
                     }
@@ -105,9 +104,7 @@ public class UserDao extends AbstractDao {
     private User getUser(PreparedStatement statement) throws SQLException {
         try (var resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
-                var user = new User();
-
-                user = mapFromResultSet(resultSet);
+                var user = mapFromResultSet(resultSet);
                 user.setPreferences(retrieveUserPreferences(user.getUserId()));
 
                 return user;

@@ -16,4 +16,11 @@ public class PaintingEndPoint extends ApiEndPoint {
         return null;
     }
 
+    @Path("/{paintingId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Painting getPainting(@PathParam("paintingId") int paintingId) {
+        return null;
+    }
+
 }
