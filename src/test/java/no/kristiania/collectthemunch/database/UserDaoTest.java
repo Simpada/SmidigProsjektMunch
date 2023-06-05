@@ -66,7 +66,7 @@ public class UserDaoTest {
 
         List<Category> newPreferences = Arrays.asList(Category.NEW, Category.GAMES);
         user.setPreferences(newPreferences);
-        userDao.updatePreferences(user);
+        userDao.updatePreferences(user.getUserId(), user.getPreferences());
 
 
         user = userDao.retrieve(user.getUserId());

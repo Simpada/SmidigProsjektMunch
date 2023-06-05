@@ -117,15 +117,15 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public void updatePreferences(User user) throws SQLException {
-        removeUserPreferences(user.getUserId());
+    public void updatePreferences(int userId, List<Category> preferences) throws SQLException {
+        removeUserPreferences(userId);
 
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Preferences (user_id, preference) VALUES (?,?)";
 
-            for (Category c : user.getPreferences()) {
+            for (Category c : preferences) {
                 try (var statement = connection.prepareStatement(query)) {
-                    statement.setInt(1, user.getUserId());
+                    statement.setInt(1, userId);
                     statement.setString(2, String.valueOf(c));
                     statement.executeUpdate();
                 }
