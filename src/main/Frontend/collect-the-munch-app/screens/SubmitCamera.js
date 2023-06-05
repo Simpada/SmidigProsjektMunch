@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, TouchableOpacity, Modal, Image } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import * as Animatable from 'react-native-animatable';
 
 const QRScanner = ({ navigation }) => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const flipInYRef = useRef(null);
 
   useEffect(() => {
     (async () => {
@@ -30,6 +32,24 @@ const QRScanner = ({ navigation }) => {
     setScanned(false);
   };
 
+  const handleModalClose = () => {
+    flipInYRef.current.reset();
+    setShowModal(false);
+  };
+
+  const handleModalOpen = () => {
+    flipInYRef.current?.animate({
+      0: { scale: 1 },
+      0.3: { scale: 1.2 },
+      0.7: { scale: 1.1 },
+      1: { scale: 1 },
+    }, 4000, 'ease-in-out');
+  
+    setTimeout(() => {
+      flipInYRef.current?.shake(800);
+    }, 3000);
+  };
+
   return (
     <View style={styles.container}>
       {isCameraOpen ? (
@@ -48,16 +68,22 @@ const QRScanner = ({ navigation }) => {
         </TouchableOpacity>
       )}
 
-      <Modal visible={showModal} animationType="slide" transparent={true}>
+      <Modal visible={showModal} animationType="slide" transparent={true} onShow={handleModalOpen}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Image source={require('../assets/Images/Scream.jpg')} style={styles.image} />
+            <Animatable.Image
+              ref={flipInYRef}
+              animation="flipInY"
+              duration={800}
+              source={require('../assets/Images/Scream.jpg')}
+              style={styles.image}
+            />
             <Text style={styles.title}>Scream</Text>
             <View style={styles.rarityContainer}>
               <Text style={styles.rarity}>Rarity:</Text>
               <Text style={[styles.rarity, styles.legendary]}>Legendary</Text>
             </View>
-            <TouchableOpacity style={styles.closeButton} onPress={() => setShowModal(false)}>
+            <TouchableOpacity style={styles.closeButton} onPress={handleModalClose}>
               <Text style={styles.buttonText}>Close</Text>
             </TouchableOpacity>
           </View>

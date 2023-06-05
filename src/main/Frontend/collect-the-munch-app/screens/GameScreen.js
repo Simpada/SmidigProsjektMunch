@@ -1,10 +1,12 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
+import SubmitCamera from './SubmitCamera'
+
 
 const GameScreen = () => {
   return (
     <View style={styles.container}>
-        <Text>Game Screen</Text>
+      <SubmitCamera/>
     </View>
   )
 }

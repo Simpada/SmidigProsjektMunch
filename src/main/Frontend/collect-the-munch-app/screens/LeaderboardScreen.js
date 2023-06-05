@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, ScrollView } from 'react-native'
+import { Text, View, StyleSheet, ScrollView, Pressable, Alert } from 'react-native'
 import { colors } from '../Styles/theme';
-import Header from '../components/Header';
 const LeaderboardScreen = () => {
 
   const [leaderboard, setLeaderBoard] = useState([])
@@ -10,10 +9,7 @@ const LeaderboardScreen = () => {
       const initialLeaderboard = [
         {id: 1, fullName:"Jonas Andersen", userName: "Jønna", points: 2000 },
         {id: 2, fullName:"Sander Sanstrød", userName: "Sand", points: 1800 },
-        {id: 3, fullName:"Samuel something", userName: "The Cheif", points: 1500 },
-        {id: 4, fullName:"Samuel something", userName: "The Cheif", points: 1500 },
-        {id: 5, fullName:"Samuel something", userName: "The Cheif", points: 1500 },
-        {id: 6, fullName:"Samuel something", userName: "The Cheif", points: 1500 },
+        {id: 3, fullName:"Samuel something", userName: "The", points: 1500 },
       ]
 
       setLeaderBoard(initialLeaderboard)
@@ -23,6 +19,19 @@ const LeaderboardScreen = () => {
 
     return  (
       <View style={styles.container}>
+        <View style={styles.categorycontainer}>
+          <TouchableOpacity style={styles.category}
+          >
+            <Text style={styles.categoryText}>Weekly</Text>
+          </TouchableOpacity>
+          <Pressable style={styles.category}>
+            <Text style={styles.categoryText}>Monthly</Text>
+          </Pressable>
+          <Pressable style={styles.category}>
+            <Text style={styles.categoryText}>All-time</Text>
+          </Pressable>
+        </View>
+
        <ScrollView>
       <View style={styles.table}>
         <View style={styles.tableHeader}>
@@ -58,12 +67,29 @@ const LeaderboardScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 100
+    paddingHorizontal: 20,
+    backgroundColor: colors.navy
+  },
+   categorycontainer:{
+    backgroundColor: colors.black,
+    width: "100%",
+    marginVertical: 30,
+    padding: 10,
+    borderRadius: 20,
+    justifyContent:"center",
+    gap:50,
+    flexDirection:"row"
+  },
+  category:{
+    padding: 5,
+  },
+
+  categoryText: {
+    fontWeight: "bold",
+    color: "white"
   },
   table: {
-    borderWidth: 1,
     borderColor: 'black',
-    margin: 10,
   },
   tableHeader: {
     flexDirection: 'row',
