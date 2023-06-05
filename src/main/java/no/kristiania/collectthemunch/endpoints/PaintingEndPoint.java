@@ -44,11 +44,4 @@ public class PaintingEndPoint extends ApiEndPoint {
         paintingDao.saveToInventory(userId, paintingId);
     }
 
-    @Path("/inventory")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Painting> getPaintingForUser(int userId) throws SQLException {
-        return paintingDao.retrieveAllForUser(userId);
-    }
-
 }

@@ -2,13 +2,14 @@ package no.kristiania.collectthemunch.endpoints;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import no.kristiania.collectthemunch.entities.Painting;
 import no.kristiania.collectthemunch.entities.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Path("/users")
+@Path("/user")
 public class UserEndPoint extends ApiEndPoint {
 
     @GET
@@ -37,12 +38,18 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.retrieve(username);
     }
 
-
     @Path("/{userId}/preferences")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateUserPreferences(@PathParam("userId") int userId, ArrayList<String> preferences) throws SQLException {
         userDao.updatePreferences(userId, preferences);
+    }
+
+    @Path("/inventory")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Painting> getPaintingsForUser(int userId) throws SQLException {
+        return paintingDao.retrieveAllForUser(userId);
     }
 
 }
