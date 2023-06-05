@@ -28,7 +28,12 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: java-app
-          path: '${{ github.workspace }}/target/*.jar'
+          path: '${{ github.workspace }}/target/app.jar'
+      - name: Upload azure specific files
+        uses: actions/upload-artifact@v3
+        with:
+          name: azure-folder
+          path: src/main/azure/*
 
   deploy:
     runs-on: windows-latest
@@ -42,6 +47,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: java-app
+
+      - name: Download azure specific artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: azure-folder
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
