@@ -14,7 +14,7 @@ CREATE TABLE Paintings
     name            VARCHAR(100),
     author          VARCHAR(100),
     painting_image  varbinary(max),
-    rarity          VARCHAR(50),
+    rarity          VARCHAR(50) CHECK (rarity IN ('COMMON', 'RARE', 'EPIC', 'LEGENDARY')),
     points          INT,
     art_information VARCHAR(1000)
 );
