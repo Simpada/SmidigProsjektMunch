@@ -1,15 +1,17 @@
 package no.kristiania.collectthemunch.database;
 
 import no.kristiania.collectthemunch.entities.Painting;
-import no.kristiania.collectthemunch.entities.Rarity;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaintingDao extends AbstractDao{
+import static no.kristiania.collectthemunch.entities.Rarity.validateRarityEnum;
+
+public class PaintingDao extends AbstractDao {
 
     public PaintingDao(DataSource dataSource) {
         super(dataSource);
@@ -21,7 +23,7 @@ public class PaintingDao extends AbstractDao{
             try (var connection = dataSource.getConnection()) {
                 String query = "INSERT INTO Paintings (title, author, painting_image, art_information, rarity, points) VALUES (?, ?, ?, ?, ?, ?)";
 
-                try (var statement = connection.prepareStatement(query )) {
+                try (var statement = connection.prepareStatement(query)) {
                     statement.setString(1, painting.getTitle());
                     statement.setString(2, painting.getAuthor());
                     statement.setBytes(3, painting.getPaintingImage());
@@ -71,12 +73,50 @@ public class PaintingDao extends AbstractDao{
         }
     }
 
-    public Painting retrieve(int paintingId) {
-        return null;
+    public void saveToInventory(int userId, int paintingId) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "INSERT INTO Paintings_Collected (user_id, painting_id) VALUES (?, ?)";
+
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, userId);
+                statement.setInt(2, paintingId);
+                statement.executeQuery();
+            }
+        }
     }
 
-    public Painting retrieve(String title) {
-        return null;
+    public Painting retrieve(int paintingId) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Paintings WHERE painting_id = ?";
+
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, paintingId);
+
+                return getPainting(statement);
+            }
+        }
+    }
+
+    public Painting retrieve(String title) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Paintings WHERE title = ?";
+
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, title);
+
+                return getPainting(statement);
+            }
+        }
+    }
+
+    private Painting getPainting(PreparedStatement statement) throws SQLException {
+        try (var resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                return mapFromResultSet(resultSet);
+            } else {
+                return null;
+            }
+        }
     }
 
     private Painting mapFromResultSet(ResultSet resultSet) throws SQLException {
@@ -91,15 +131,6 @@ public class PaintingDao extends AbstractDao{
         painting.setPoints(resultSet.getInt("points"));
 
         return painting;
-    }
-
-    private boolean validateRarityEnum(String rarity) {
-        for (Rarity r : Rarity.values()) {
-            if (r.name().equals(rarity.toUpperCase())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

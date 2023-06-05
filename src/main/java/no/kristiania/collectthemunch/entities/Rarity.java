@@ -4,10 +4,14 @@ public enum Rarity {
     COMMON, RARE, EPIC, LEGENDARY;
 
 
-
-
-    public static String parseToString(Rarity rarityAsEnum) {
-        return String.valueOf(rarityAsEnum);
+    public static boolean validateRarityEnum(String rarity) {
+        for (Rarity r : Rarity.values()) {
+            if (r.name().equals(rarity.toUpperCase())) {
+                return true;
+            }
+        }
+        return false;
     }
+
 }
 

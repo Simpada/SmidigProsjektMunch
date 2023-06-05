@@ -114,6 +114,7 @@ public class UserDao extends AbstractDao {
         }
     }
 
+
     public void updatePreferences(int userId, List<Category> preferences) throws SQLException {
         removeUserPreferences(userId);
 
