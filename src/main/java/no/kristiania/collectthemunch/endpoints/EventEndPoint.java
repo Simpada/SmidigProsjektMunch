@@ -34,7 +34,6 @@ public class EventEndPoint extends ApiEndPoint {
         return null;
     }
 
-
     @Path("/userfilteredevents/{preferences}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
