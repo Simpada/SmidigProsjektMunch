@@ -1,5 +1,6 @@
 package no.kristiania.collectthemunch.entities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,6 +14,15 @@ public enum Category {
             }
         }
         return false;
+    }
+
+    //Parse Category as string from frontend to Category enums.
+    //Not used after change, remove?
+    public static List<Category> parseCategory(ArrayList<String> preferences) {
+        preferences.replaceAll(String::toUpperCase);
+
+        return preferences.stream()
+                .map(Category::valueOf).toList();
     }
 
 
