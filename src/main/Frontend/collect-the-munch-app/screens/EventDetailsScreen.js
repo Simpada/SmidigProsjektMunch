@@ -5,6 +5,7 @@ const EventDetailsScreen = ({ route }) => {
   const { event } = route.params;
 
   return (
+
     <View style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>MUNCH</Text>
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.navy,
   }, 
   headerContainer: {
+    borderWidth:1,
     marginVertical: 50,
     width: "100%",
     height: 150,
@@ -34,8 +36,8 @@ const styles = StyleSheet.create({
     alignItems:"center",
   },
   headerText: {
-    padding: 20,
     fontSize: 90,
+    borderWidth:1,
     color: colors.white,
     fontFamily: "GirottMunch-BoldBackslant"
   },
