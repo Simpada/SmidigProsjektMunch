@@ -66,18 +66,19 @@ const MenuModal = ({ visible, closeMenu }) => {
 
 const styles = StyleSheet.create({
     modalContainer: {
+        paddingTop: 120,
         flex: 1,
+        height: "80%",
         justifyContent: 'flex-start',
-        alignItems: 'flex-end',
+        alignItems: 'center',
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        backgroundColor: 'rgba(15, 35, 53, 0.5)',
+        backgroundColor: 'rgba(15, 35, 53, 1)',
         padding: 20,
-        marginTop: 100,
-        marginRight: 10,
+        marginTop: 0,
+        marginRight: 0,
         width: '80%',
-        height: "60%",
         alignItems: 'center',
     },
     closeButton: {
@@ -93,7 +94,8 @@ const styles = StyleSheet.create({
         height: 35,
         fontSize: 25,
         fontWeight: 'bold',
-        color: colors.white,    },
+        color: colors.white,    
+    },
         menuItem: {
             marginVertical: 10,
             width: "90%",
