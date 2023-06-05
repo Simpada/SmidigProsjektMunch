@@ -4,8 +4,8 @@ import java.util.List;
 
 public class Event {
 
+    private int id;
     private String name;
-    private Integer id;
     private String description;
     private List<String> categories;
     private byte[] eventPoster;
