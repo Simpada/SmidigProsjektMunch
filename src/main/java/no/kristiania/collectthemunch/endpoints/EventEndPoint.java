@@ -15,6 +15,13 @@ import java.util.stream.Collectors;
 @Path("/events")
 public class EventEndPoint extends ApiEndPoint {
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createEvent(Event event) throws SQLException {
+        eventDao.save(event);
+        eventDao.saveCategoriesByEvent(event);
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Event> getAllEvents() {

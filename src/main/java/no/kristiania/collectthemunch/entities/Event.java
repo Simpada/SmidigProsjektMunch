@@ -8,12 +8,14 @@ public class Event {
     private Integer id;
     private String description;
     private List<Category> categories;
+    private byte[] eventPoster;
 
     public Event(){
         this.id = 0;
         this.description = "";
         this.name = "";
         this.categories = null;
+        eventPoster = new byte[0];
     }
 
     public Event(String description, List<Category> categories) {
@@ -49,5 +51,13 @@ public class Event {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public byte[] getEventPoster() {
+        return eventPoster;
+    }
+
+    public void setEventPoster(byte[] eventPoster) {
+        this.eventPoster = eventPoster;
     }
 }

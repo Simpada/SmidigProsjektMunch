@@ -63,6 +63,22 @@ public class EventDao extends AbstractDao{
         }
     }
 
+    public void saveCategoriesByEvent(Event event) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "INSERT INTO Categories (event_id, category) VALUES (?,?)";
+            try(var statement = connection.prepareStatement(query)) {
+                List<String> eventCategories = event.getCategories().stream()
+                        .map(Category::name).toList();
+
+                for (String category : eventCategories) {
+                    statement.setInt(1, event.getId());
+                    statement.setString(2, category);
+                    statement.executeUpdate();
+                }
+            }
+        }
+    }
+
     public List<Event> getEventsByCategoryFromDatabase(String category) throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT E.event_id, E.description, C.category " +

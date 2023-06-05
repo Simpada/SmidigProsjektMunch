@@ -27,7 +27,7 @@ public class UserDao extends AbstractDao {
             String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
 
             try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1, user.getUserName());
+                statement.setString(1, user.getUsername());
                 statement.setString(2, user.getPassword());
                 statement.setString(3, user.getDateOfBirth());
                 statement.setString(4, user.getEmail());
@@ -147,7 +147,7 @@ public class UserDao extends AbstractDao {
     private User mapFromResultSet(ResultSet resultSet) throws SQLException {
         var user = new User();
         user.setUserId(resultSet.getInt("user_id"));
-        user.setUserName(resultSet.getString("username"));
+        user.setUsername(resultSet.getString("username"));
         user.setPassword(resultSet.getString("password"));
         user.setDateOfBirth(resultSet.getString("date_of_birth"));
         user.setEmail(resultSet.getString("email"));

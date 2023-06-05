@@ -89,7 +89,7 @@ public class SampleData {
         }
 
         var user = new User();
-        user.setUserName(name);
+        user.setUsername(name);
         user.setPassword(password);
         user.setDateOfBirth(dateOfBirth);
         user.setEmail(email);
