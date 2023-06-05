@@ -23,7 +23,6 @@ public class EventDao extends AbstractDao{
         Event event = new Event();
         event = getEventByIdFromDatabase(eventId);
         event.setCategories(getCategoriesByEventId(event.getId()));
-        System.out.println(event.getCategories());
         return event;
     }
 
@@ -53,8 +52,8 @@ public class EventDao extends AbstractDao{
         try(var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Events (name, description) VALUES (?, ?)";
             try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1, event.getDescription());
-                statement.setString(2, event.getName());
+                statement.setString(1, event.getName());
+                statement.setString(2, event.getDescription());
                 statement.executeUpdate();
                 try(var generatedKeys = statement.getGeneratedKeys()) {
                     generatedKeys.next();
@@ -159,9 +158,9 @@ public class EventDao extends AbstractDao{
                     List<String> eventCategories = new ArrayList<>();
 
                     if (resultSet.next()) {
-                        while (resultSet.next()) {
+                        do {
                             eventCategories.add(resultSet.getString("category"));
-                        }
+                        } while (resultSet.next());
                     } else {
                         // Event not found, throw a not found exception with eventid
                         throw new NotFoundException("No categories found for event with ID: " + eventId);
