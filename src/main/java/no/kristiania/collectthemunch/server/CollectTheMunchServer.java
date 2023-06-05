@@ -28,9 +28,9 @@ public class CollectTheMunchServer {
     private final Logger logger = LoggerFactory.getLogger(CollectTheMunchServer.class);
 
     //Receive dataSource depending on caller (prod vs testing)
-    public CollectTheMunchServer(int port, DataSource dataSource) throws IOException {
+    public CollectTheMunchServer(int port, DataSource dataSource)  {
         this.server = new Server(port);
-        server.setHandler(new HandlerList(createApiContext(dataSource), createWebApp()));
+        server.setHandler(new HandlerList(createApiContext(dataSource)));
         server.setRequestLog(new CustomRequestLog());
     }
 
