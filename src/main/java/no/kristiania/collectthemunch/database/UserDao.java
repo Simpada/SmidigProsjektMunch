@@ -18,6 +18,8 @@ public class UserDao extends AbstractDao {
     }
 
     public void save(User user) throws SQLException {
+
+
         saveUser(user);
         saveUserPreferences(user);
     }

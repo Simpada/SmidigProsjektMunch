@@ -6,7 +6,7 @@ public enum Rarity {
 
     public static boolean validateRarityEnum(String rarity) {
         for (Rarity r : Rarity.values()) {
-            if (r.name().equals(rarity.toUpperCase())) {
+            if (rarity.toUpperCase().equals(r.name())) {
                 return true;
             }
         }
