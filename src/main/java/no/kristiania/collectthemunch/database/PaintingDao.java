@@ -21,10 +21,10 @@ public class PaintingDao extends AbstractDao {
         if (validateRarityEnum(painting.getRarity())) {
 
             try (var connection = dataSource.getConnection()) {
-                String query = "INSERT INTO Paintings (title, author, painting_image, art_information, rarity, points) VALUES (?, ?, ?, ?, ?, ?)";
+                String query = "INSERT INTO Paintings (name, author, painting_image, art_information, rarity, points) VALUES (?, ?, ?, ?, ?, ?)";
 
                 try (var statement = connection.prepareStatement(query)) {
-                    statement.setString(1, painting.getTitle());
+                    statement.setString(1, painting.getName());
                     statement.setString(2, painting.getAuthor());
                     statement.setBytes(3, painting.getPaintingImage());
                     statement.setString(4, painting.getArtInformation());
@@ -97,12 +97,12 @@ public class PaintingDao extends AbstractDao {
         }
     }
 
-    public Painting retrieve(String title) throws SQLException {
+    public Painting retrieve(String name) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Paintings WHERE title = ?";
+            String query = "SELECT * FROM Paintings WHERE name = ?";
 
             try (var statement = connection.prepareStatement(query)) {
-                statement.setString(1, title);
+                statement.setString(1, name);
 
                 return getPainting(statement);
             }
@@ -123,7 +123,7 @@ public class PaintingDao extends AbstractDao {
         var painting = new Painting();
 
         painting.setPaintingId(resultSet.getInt("painting_id"));
-        painting.setTitle(resultSet.getString("title"));
+        painting.setName(resultSet.getString("name"));
         painting.setAuthor(resultSet.getString("author"));
         painting.setPaintingImage(resultSet.getBytes("painting_image"));
         painting.setArtInformation(resultSet.getString("art_information"));
