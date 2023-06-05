@@ -19,29 +19,33 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.retrieveAll();
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void addUser(User user) throws SQLException {
+        userDao.save(user);
+    }
+
+    @Path("/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public User retrieveUserById(int userId) throws SQLException {
+    public User retrieveUserById(@PathParam("userId") int userId) throws SQLException {
         return userDao.retrieve(userId);
     }
 
+    @Path("/name")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User retrieveUserByUsername(String username) throws SQLException {
         return userDao.retrieve(username);
     }
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void addUser(User user, ArrayList<String> preferences) throws SQLException {
-        user.setPreferences(parseCategory(preferences));
-        userDao.save(user);
-    }
 
+    @Path("/{userId}/preferences")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateUserPreferences(User user) throws SQLException {
-        userDao.updatePreferences(user);
+    public void updateUserPreferences(@PathParam("userId") int userId, ArrayList<String> preferences) throws SQLException {
+        List<Category> pref = parseCategory(preferences);
+        userDao.updatePreferences(userId, pref);
     }
 
 

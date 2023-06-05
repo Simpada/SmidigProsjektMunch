@@ -9,6 +9,7 @@ import PlayGameScreen from '../screens/PlayGameScreen';
 import LeaderboardScreen from '../screens/LeaderboardScreen';
 import EventsScreen from '../screens/EventsScreen';
 import EventsNavigator from './EventsNavigator';
+import Header from './Header';
 const Tab = createBottomTabNavigator();
 
 const Navigation = () => {
@@ -17,7 +18,10 @@ const Navigation = () => {
         <Tab.Navigator
           initialRouteName="Home"
           screenOptions={({ route }) => ({
-            headerShown: false,
+            headerShown: true,
+            header: ({ scene, previous, navigation }) => (
+              <Header navigation={navigation} />
+            ),
             tabBarIcon: ({ focused, color, size }) => {
               let iconName;
               if (route.name === 'Home') {
