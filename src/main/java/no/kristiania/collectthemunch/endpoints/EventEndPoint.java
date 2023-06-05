@@ -13,6 +13,28 @@ import java.util.List;
 @Path("/events")
 public class EventEndPoint extends ApiEndPoint {
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Event> getAllEvents() {
+        //TODO: handle exception better
+        List<Event> allEvents = new ArrayList<>();
+        try {
+            allEvents = eventDao.getAllEventsFromDatabase();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allEvents;
+    }
+
+    //TODO: search for a specific event
+    @Path("/event/{eventName}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Event getEventByName() {
+        return null;
+    }
+
+
     @Path("/userfilteredevents/{preferences}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -35,27 +57,8 @@ public class EventEndPoint extends ApiEndPoint {
         return event;
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getAllEvents() {
-        //TODO: handle exception better
-        List<Event> allEvents = new ArrayList<>();
-        try {
-            allEvents = eventDao.getAllEventsFromDatabase();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return allEvents;
-    }
 
-    //TODO: search for a specific event
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Event getEventByName() {
-        return null;
-    }
-
-    @Path("/{category}")
+    @Path("/category/{category}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Event> getEventsByCategory(@PathParam("category") String category) {

@@ -3,7 +3,6 @@ package no.kristiania.collectthemunch;
 import no.kristiania.collectthemunch.database.Database;
 import no.kristiania.collectthemunch.server.CollectTheMunchServer;
 
-import javax.sql.DataSource;
 import java.util.Optional;
 
 public class Program {
