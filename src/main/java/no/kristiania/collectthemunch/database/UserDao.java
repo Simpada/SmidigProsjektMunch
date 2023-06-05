@@ -10,6 +10,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static no.kristiania.collectthemunch.entities.Category.validateCategoryEnum;
+
 public class UserDao extends AbstractDao {
 
     @Inject
@@ -18,8 +20,19 @@ public class UserDao extends AbstractDao {
     }
 
     public void save(User user) throws SQLException {
-        saveUser(user);
-        saveUserPreferences(user);
+        if (validatePreferences(user.getPreferences())) {
+            saveUser(user);
+            saveUserPreferences(user);
+        }
+    }
+
+    public boolean validatePreferences(List<String> preferences) {
+        for (String s : preferences) {
+            if (!validateCategoryEnum(s)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void saveUser(User user) throws SQLException {
@@ -46,7 +59,7 @@ public class UserDao extends AbstractDao {
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Preferences (user_id, preference) VALUES (?, ?)";
 
-            for (Category c : user.getPreferences()) {
+            for (String c : user.getPreferences()) {
                 try (var statement = connection.prepareStatement(query)) {
                     statement.setInt(1, user.getUserId());
                     statement.setString(2, String.valueOf(c));
@@ -65,8 +78,7 @@ public class UserDao extends AbstractDao {
                     List<User> users = new ArrayList<>();
 
                     while (resultSet.next()) {
-                        var user = new User();
-                        user = mapFromResultSet(resultSet);
+                        var user = mapFromResultSet(resultSet);
                         user.setPreferences(retrieveUserPreferences(user.getUserId()));
                         users.add(user);
                     }
@@ -105,9 +117,7 @@ public class UserDao extends AbstractDao {
     private User getUser(PreparedStatement statement) throws SQLException {
         try (var resultSet = statement.executeQuery()) {
             if (resultSet.next()) {
-                var user = new User();
-
-                user = mapFromResultSet(resultSet);
+                var user = mapFromResultSet(resultSet);
                 user.setPreferences(retrieveUserPreferences(user.getUserId()));
 
                 return user;
@@ -117,13 +127,14 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public void updatePreferences(int userId, List<Category> preferences) throws SQLException {
+
+    public void updatePreferences(int userId, List<String> preferences) throws SQLException {
         removeUserPreferences(userId);
 
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Preferences (user_id, preference) VALUES (?,?)";
 
-            for (Category c : preferences) {
+            for (String c : preferences) {
                 try (var statement = connection.prepareStatement(query)) {
                     statement.setInt(1, userId);
                     statement.setString(2, String.valueOf(c));
@@ -155,7 +166,9 @@ public class UserDao extends AbstractDao {
         return user;
     }
 
-    public List<Category> retrieveUserPreferences(int userId) throws SQLException {
+
+    private List<String> retrieveUserPreferences(int userId) throws SQLException {
+
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT *
@@ -169,10 +182,10 @@ public class UserDao extends AbstractDao {
                 statement.setInt(1, userId);
 
                 try (var resultSet = statement.executeQuery()) {
-                    List<Category> preferences = new ArrayList<>();
+                    List<String> preferences = new ArrayList<>();
 
                     while (resultSet.next()) {
-                        preferences.add(Category.valueOf(resultSet.getString("preference")));
+                        preferences.add(resultSet.getString("preference"));
                     }
                     return preferences;
                 }

@@ -13,7 +13,42 @@ public class PaintingEndPoint extends ApiEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Painting> getAllPainting() throws SQLException {
-        return null;
+        return paintingDao.retrieveAll();
+    }
+
+    @Path("/{paintingId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Painting retrieve(@PathParam("paintingId") int paintingId) throws SQLException {
+        return paintingDao.retrieve(paintingId);
+    }
+
+    @Path("/{title}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Painting retrieve(@PathParam("title") String title) throws SQLException {
+        return paintingDao.retrieve(title);
+    }
+
+    @Path("/save")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void save(Painting painting) throws SQLException {
+        paintingDao.save(painting);
+    }
+
+    @Path("/{userId}/{paintingId}")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void collectPainting(@PathParam("userId") int userId, @PathParam("paintingId") int paintingId) throws SQLException {
+        paintingDao.saveToInventory(userId, paintingId);
+    }
+
+    @Path("/inventory")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Painting> getPaintingForUser(int userId) throws SQLException {
+        return paintingDao.retrieveAllForUser(userId);
     }
 
 }
