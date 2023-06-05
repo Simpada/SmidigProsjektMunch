@@ -5,21 +5,21 @@ public class Painting {
     private int paintingId;
     private String title;
     private String author;
-    private byte[] painting_image;
-    private String art_information;
-    private Rarity rarity;
+    private byte[] paintingImage;
+    private String artInformation;
+    private String rarity;
     private int points;
 
     public Painting() {
 
     }
 
-    public Painting(int paintingId, String title, String author, byte[] painting_image, String art_information, Rarity rarity, int points) {
+    public Painting(int paintingId, String title, String author, byte[] paintingImage, String artInformation, String rarity, int points) {
         this.paintingId = paintingId;
         this.title = title;
         this.author = author;
-        this.painting_image = painting_image;
-        this.art_information = art_information;
+        this.paintingImage = paintingImage;
+        this.artInformation = artInformation;
         this.rarity = rarity;
         this.points = points;
     }
@@ -48,27 +48,27 @@ public class Painting {
         this.author = author;
     }
 
-    public byte[] getPainting_image() {
-        return painting_image;
+    public byte[] getPaintingImage() {
+        return paintingImage;
     }
 
-    public void setPainting_image(byte[] painting_image) {
-        this.painting_image = painting_image;
+    public void setPaintingImage(byte[] paintingImage) {
+        this.paintingImage = paintingImage;
     }
 
-    public String getArt_information() {
-        return art_information;
+    public String getArtInformation() {
+        return artInformation;
     }
 
-    public void setArt_information(String art_information) {
-        this.art_information = art_information;
+    public void setArtInformation(String artInformation) {
+        this.artInformation = artInformation;
     }
 
-    public Rarity getRarity() {
+    public String getRarity() {
         return rarity;
     }
 
-    public void setRarity(Rarity rarity) {
+    public void setRarity(String rarity) {
         this.rarity = rarity;
     }
 

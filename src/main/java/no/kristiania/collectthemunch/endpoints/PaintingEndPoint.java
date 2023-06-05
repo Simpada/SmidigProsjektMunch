@@ -11,6 +11,13 @@ import java.util.List;
 @Path("/painting")
 public class PaintingEndPoint extends ApiEndPoint {
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void save(Painting painting) throws SQLException {
+        paintingDao.save(painting);
+    }
+
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Painting> getAllPainting() throws SQLException {
@@ -21,7 +28,7 @@ public class PaintingEndPoint extends ApiEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Painting> getPaintingForUser(int userId) throws SQLException {
-        return paintingDao.retrieveForUser(userId);
+        return paintingDao.retrieveAllForUser(userId);
     }
 
     @Path("/{paintingId}")

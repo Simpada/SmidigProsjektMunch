@@ -4,7 +4,6 @@ import no.kristiania.collectthemunch.entities.Painting;
 import no.kristiania.collectthemunch.entities.Rarity;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,36 +15,58 @@ public class PaintingDao extends AbstractDao{
         super(dataSource);
     }
 
-    public void save(Painting painting) {
+    public void save(Painting painting) throws SQLException {
+        if (validateRarityEnum(painting.getRarity())) {
 
+            try (var connection = dataSource.getConnection()) {
+                String query = "INSERT INTO Paintings (title, author, painting_image, art_information, rarity, points) VALUES (?, ?, ?, ?, ?, ?)";
+
+                try (var statement = connection.prepareStatement(query )) {
+                    statement.setString(1, painting.getTitle());
+                    statement.setString(2, painting.getAuthor());
+                    statement.setBytes(3, painting.getPaintingImage());
+                    statement.setString(4, painting.getArtInformation());
+                    statement.setString(5, painting.getRarity());
+                    statement.setInt(6, painting.getPaintingId());
+                }
+            }
+        }
     }
 
     public List<Painting> retrieveAll() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Paintings";
 
-            return getPaintings(connection, query);
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<Painting> paintings = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        var painting = mapFromResultSet(resultSet);
+                        paintings.add(painting);
+                    }
+                    return paintings;
+                }
+            }
         }
     }
 
-    public List<Painting> retrieveForUser(int userId) throws SQLException {
+    public List<Painting> retrieveAllForUser(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Paintings_Collected WHERE user_id = ?";
 
-            return getPaintings(connection, query);
-        }
-    }
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, userId);
 
-    private List<Painting> getPaintings(Connection connection, String query) throws SQLException {
-        try (var statement = connection.prepareStatement(query)) {
-            try (var resultSet = statement.executeQuery()) {
-                List<Painting> paintings = new ArrayList<>();
+                try (var resultSet = statement.executeQuery()) {
+                    List<Painting> paintings = new ArrayList<>();
 
-                while (resultSet.next()) {
-                    var painting = mapFromResultSet(resultSet);
-                    paintings.add(painting);
+                    while (resultSet.next()) {
+                        var painting = mapFromResultSet(resultSet);
+                        paintings.add(painting);
+                    }
+                    return paintings;
                 }
-                return paintings;
             }
         }
     }
@@ -64,12 +85,21 @@ public class PaintingDao extends AbstractDao{
         painting.setPaintingId(resultSet.getInt("painting_id"));
         painting.setTitle(resultSet.getString("title"));
         painting.setAuthor(resultSet.getString("author"));
-        painting.setPainting_image(resultSet.getBytes("painting_image"));
-        painting.setArt_information(resultSet.getString("art_information"));
-        painting.setRarity(Rarity.parseToEnum(resultSet.getString("rarity")));
+        painting.setPaintingImage(resultSet.getBytes("painting_image"));
+        painting.setArtInformation(resultSet.getString("art_information"));
+        painting.setRarity(resultSet.getString("rarity"));
         painting.setPoints(resultSet.getInt("points"));
 
         return painting;
+    }
+
+    private boolean validateRarityEnum(String rarity) {
+        for (Rarity r : Rarity.values()) {
+            if (r.name().equals(rarity.toUpperCase())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
