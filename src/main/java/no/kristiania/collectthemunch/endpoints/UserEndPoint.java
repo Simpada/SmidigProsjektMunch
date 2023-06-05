@@ -32,10 +32,10 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.retrieve(userId);
     }
 
-    @Path("/name")
+    @Path("/name/{userName}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public User retrieveUserByUsername(String username) throws SQLException {
+    public User retrieveUserByUsername(@PathParam("userName") String username) throws SQLException {
         return userDao.retrieve(username);
     }
 
