@@ -13,12 +13,12 @@ public class SampleData {
     public static User sampleUser() {
 
         var name = (pickOne(
-                "Meme_guy",
-                "MUNCHmaster",
-                "Screamy",
-                "OlaNordmann",
-                "EventGoer"
-        )) + random.nextInt(1000000);
+                "Meme",
+                "MUNCH",
+                "Scream",
+                "Ola",
+                "Event"
+        )) + random.nextInt(100000000);
 
         var password = (pickOne(
                 "1234",
