@@ -2,7 +2,6 @@ package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
-import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.Event;
 
 import javax.sql.DataSource;
@@ -24,6 +23,7 @@ public class EventDao extends AbstractDao{
         Event event = new Event();
         event = getEventByIdFromDatabase(eventId);
         event.setCategories(getCategoriesByEventId(event.getId()));
+        System.out.println(event.getCategories());
         return event;
     }
 
@@ -51,13 +51,28 @@ public class EventDao extends AbstractDao{
 
     public void save(Event event) throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Events (description) VALUES (?)";
+            String query = "INSERT INTO Events (name, description) VALUES (?, ?)";
             try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, event.getDescription());
+                statement.setString(2, event.getName());
                 statement.executeUpdate();
                 try(var generatedKeys = statement.getGeneratedKeys()) {
                     generatedKeys.next();
                     event.setId(generatedKeys.getInt(1));
+                }
+            }
+        }
+    }
+
+    public void saveCategoriesByEvent(Event event) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "INSERT INTO Categories (event_id, category) VALUES (?,?)";
+            try(var statement = connection.prepareStatement(query)) {
+
+                for (String category : event.getCategories()) {
+                    statement.setInt(1, event.getId());
+                    statement.setString(2, category);
+                    statement.executeUpdate();
                 }
             }
         }
@@ -123,6 +138,7 @@ public class EventDao extends AbstractDao{
                     if (resultSet.next()) {
                         Event event = new Event();
                         event.setId(resultSet.getInt("event_id"));
+                        event.setName(resultSet.getString("name"));
                         event.setDescription(resultSet.getString("description"));
                         return event;
                     } else {
@@ -134,17 +150,17 @@ public class EventDao extends AbstractDao{
         }
     }
 
-    private List<Category> getCategoriesByEventId(int eventId) throws SQLException {
+    private List<String> getCategoriesByEventId(int eventId) throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Categories WHERE event_id = ?";
             try(var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, eventId);
                 try(var resultSet = statement.executeQuery()) {
-                    List<Category> eventCategories = new ArrayList<>();
+                    List<String> eventCategories = new ArrayList<>();
 
                     if (resultSet.next()) {
                         while (resultSet.next()) {
-                            eventCategories.add(Category.valueOf(resultSet.getString("category")));
+                            eventCategories.add(resultSet.getString("category"));
                         }
                     } else {
                         // Event not found, throw a not found exception with eventid
@@ -178,7 +194,7 @@ public class EventDao extends AbstractDao{
                         }
 
                         // Add the category to the current event's list of categories
-                        currentEvent.getCategories().add(Category.valueOf(category));
+                        currentEvent.getCategories().add(category);
                     }
 
                     return eventList;
@@ -233,17 +249,11 @@ public class EventDao extends AbstractDao{
 
         for (Event event : events) {
             // A temporary list of the events categories
-            List<Category> eventCategories = event.getCategories();
-
-            // Convert the preferences retrieved from the user that are in
-            // strings to valid enums.
-            // TODO: Strings toUpperCase?
-            List<Category> preferenceCategories = preferences.stream()
-                    .map(Category::valueOf).toList();
+            List<String> eventCategories = event.getCategories();
 
             // Check if eventCategories contains any of the user preferences
             boolean hasMatchingPreference = eventCategories.stream()
-                    .anyMatch(preferenceCategories::contains);
+                    .anyMatch(preferences::contains);
             // If any of the categories in the event matches any
             // of the categories the user has as a preference:
             // Add that event

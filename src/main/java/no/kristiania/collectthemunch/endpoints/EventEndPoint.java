@@ -2,6 +2,7 @@ package no.kristiania.collectthemunch.endpoints;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.Event;
 
 import java.sql.SQLException;
@@ -12,6 +13,13 @@ import java.util.List;
 
 @Path("/events")
 public class EventEndPoint extends ApiEndPoint {
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createEvent(Event event) throws SQLException {
+        eventDao.save(event);
+        eventDao.saveCategoriesByEvent(event);
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -25,7 +33,7 @@ public class EventEndPoint extends ApiEndPoint {
         }
         return allEvents;
     }
-
+    /*
     //TODO: search for a specific event
     @Path("/event/{eventName}")
     @GET
@@ -33,14 +41,16 @@ public class EventEndPoint extends ApiEndPoint {
     public Event getEventByName() {
         return null;
     }
+     */
 
-
-    @Path("/userfilteredevents/{preferences}")
+    @Path("/userfilteredevents/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getFilteredEvents(@PathParam("preferences") List<String> preferences) {
-        List<Event> filteredEvents = eventDao.getFilteredEventsFromDatabase(preferences);
-        return filteredEvents;
+    public List<Event> getFilteredEvents(@PathParam("userId") int userId) throws SQLException {
+        List<Category> tempPreferences = userDao.retrieveUserPreferences(userId);
+        List<String> preferenceCategoryNames = tempPreferences.stream()
+                .map(Category::name).toList();
+        return eventDao.getFilteredEventsFromDatabase(preferenceCategoryNames);
     }
 
     @Path("/{eventId}")
@@ -56,7 +66,6 @@ public class EventEndPoint extends ApiEndPoint {
         }
         return event;
     }
-
 
     @Path("/category/{category}")
     @GET

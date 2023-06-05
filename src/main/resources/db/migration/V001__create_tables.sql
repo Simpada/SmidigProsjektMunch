@@ -14,7 +14,7 @@ CREATE TABLE Paintings
     name            VARCHAR(100),
     author          VARCHAR(100),
     painting_image  varbinary(max),
-    rarity          VARCHAR(50),
+    rarity          VARCHAR(50) CHECK (rarity IN ('COMMON', 'RARE', 'EPIC', 'LEGENDARY')),
     points          INT,
     art_information VARCHAR(1000)
 );
@@ -22,9 +22,9 @@ CREATE TABLE Paintings
 CREATE TABLE Events
 (
     event_id    INT IDENTITY PRIMARY KEY,
-    event_name VARCHAR(100),
+    name VARCHAR(100),
     description VARCHAR(1000) NOT NULL,
-    event_poster varbinary(max)
+    poster varbinary(max)
 );
 
 CREATE TABLE App_Reviews
