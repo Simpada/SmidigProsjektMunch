@@ -3,7 +3,7 @@ package no.kristiania.collectthemunch.entities;
 public class Painting {
 
     private int paintingId;
-    private String title;
+    private String name;
     private String author;
     private byte[] paintingImage;
     private String artInformation;
@@ -14,9 +14,9 @@ public class Painting {
 
     }
 
-    public Painting(int paintingId, String title, String author, byte[] paintingImage, String artInformation, String rarity, int points) {
+    public Painting(int paintingId, String name, String author, byte[] paintingImage, String artInformation, String rarity, int points) {
         this.paintingId = paintingId;
-        this.title = title;
+        this.name = name;
         this.author = author;
         this.paintingImage = paintingImage;
         this.artInformation = artInformation;
@@ -32,12 +32,12 @@ public class Painting {
         this.paintingId = paintingId;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAuthor() {
