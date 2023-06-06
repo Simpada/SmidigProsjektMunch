@@ -69,6 +69,18 @@ public class UserDao extends AbstractDao {
         }
     }
 
+    public User login(String username, String password) throws SQLException {
+        User user = retrieve(username);
+
+        if (user == null || !user.getPassword().equals(password)) {
+            System.out.println("No user or wrong login/password");
+            return null;
+        }
+        else {
+            return user;
+        }
+    }
+
     public List<User> retrieveAll() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Users";
@@ -192,6 +204,8 @@ public class UserDao extends AbstractDao {
             }
         }
     }
+
+
 }
 
 
