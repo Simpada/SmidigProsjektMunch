@@ -1,6 +1,7 @@
 package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import no.kristiania.collectthemunch.entities.Review;
 
 import javax.sql.DataSource;
@@ -30,8 +31,20 @@ public class ReviewAppDao extends AbstractDao{
         }
     }
 
-    public Review retrieveReviewById() {
-
-        return null;
+    public Review retrieveReviewById(int userId) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM App_Reviews WHERE user_id = ?";
+            try(var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, userId);
+                try(var resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        var review = new
+                    } else {
+                        // Review not found, throw a not found exception with user id
+                        throw new NotFoundException("Review not found with ID: " + userId);
+                    }
+                }
+            }
+        }
     }
 }
