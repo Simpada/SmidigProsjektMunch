@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import * as Font from 'expo-font';
 
 const LoginScreen = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     loadCustomFont();
-    checkLoginStatus();
   }, []);
 
   const loadCustomFont = async () => {
@@ -21,60 +20,42 @@ const LoginScreen = () => {
     setFontLoaded(true);
   };
 
-  const checkLoginStatus = async () => {
-    // Check if the user is already logged in
-    // You can implement your own logic here, such as checking AsyncStorage or a server-side session
-
-    // For demonstration purposes, we'll consider the user logged in if a username is stored
-    const storedUsername = await AsyncStorage.getItem('username');
-    if (storedUsername) {
-      setIsLoggedIn(true);
-    }
-  };
-
   const handleLogin = async () => {
-    // Perform your login logic here
-    // You can replace this with your API call or authentication mechanism
+    try {
+      const response = await axios.get(`https://findthemunchgame.azurewebsites.net/api/user/login/${username}/${password}`);
 
-    // For demonstration purposes, we'll simply check if the username and password match hardcoded values
-    if (username === 'user1' && password === 'password1') {
+      // Handle the response without JWT-related code
+      const user = response.data;
+
+      // Perform any necessary actions with the user data
+      console.log('User:', user);
+
       // Update the login state
       setIsLoggedIn(true);
-
-      // Store the username in AsyncStorage to simulate a logged-in state
-      await AsyncStorage.setItem('username', username);
-    } else {
+    } catch (error) {
       // Handle login error
-      Alert.alert('Login Failed', 'Invalid username or password');
+      Alert.alert('Login Failed', error.message);
     }
-  };
-
-  const handleLogout = async () => {
-    // Clear the username from storage and update the login state
-    await AsyncStorage.removeItem('username');
-    setIsLoggedIn(false);
   };
 
   const renderContent = () => {
-    if (!fontLoaded) {
-      return null; // Render nothing until the custom font is loaded
-    }
-
     if (isLoggedIn) {
       return (
-        <View style={styles.loggedContainer}>
-          <Text style={styles.loggedText}>You are logged in!</Text>
-          <Button title="Logout" onPress={handleLogout} />
+        <View style={styles.container}>
+          {/* Content for logged-in user */}
+          <Text style={styles.loggedInText}>You are logged in!</Text>
+          <Button title="Logout" onPress={() => setIsLoggedIn(false)} />
         </View>
       );
     } else {
       return (
         <View style={styles.container}>
+          {/* Content for login screen */}
           <View style={styles.headline}>
             <Text style={styles.headlineText}>MUNCH</Text>
           </View>
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: 'white' }]}
             placeholder="Username"
             placeholderTextColor={'white'}
             value={username}
@@ -82,7 +63,7 @@ const LoginScreen = () => {
             autoCapitalize="none"
           />
           <TextInput
-            style={styles.input}
+            style={[styles.input, { color: 'white' }]}
             placeholder="Password"
             placeholderTextColor={'white'}
             value={password}
@@ -96,6 +77,10 @@ const LoginScreen = () => {
       );
     }
   };
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the custom font is loaded
+  }
 
   return renderContent();
 };
@@ -132,7 +117,6 @@ const styles = StyleSheet.create({
     padding: 10,
     fontFamily: 'GirottMunch-BoldBackslant',
     textAlign: 'center',
-    color: 'white',
   },
   button: {
     width: '100%',
@@ -148,16 +132,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'GirottMunch-BoldBackslant',
   },
-  loggedContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 16,
-  },
-  loggedText: {
-    fontSize: 20,
+  loggedInText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
     marginBottom: 16,
-    fontFamily: 'GirottMunch-BoldBackslant',
   },
 });
 
