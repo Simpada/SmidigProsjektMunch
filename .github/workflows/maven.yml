@@ -2,9 +2,9 @@ name: Maven Tests
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "deploymentBranch"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "deploymentBranch"]
 
   workflow_dispatch:
 
