@@ -10,13 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static no.kristiania.collectthemunch.SampleData.samplePainting;
+import static no.kristiania.collectthemunch.SampleData.sampleUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PaintingDaoTest {
 
     private final JdbcDataSource dataSource = (JdbcDataSource) MemoryDataSource.createTestDataSource();
     private final PaintingDao paintingDao = new PaintingDao(dataSource);
+    private final UserDao userdao = new UserDao(dataSource);
 
 
     @Test
@@ -43,18 +46,42 @@ public class PaintingDaoTest {
            paintingDao.save(samplePainting());
         }
 
-        List<Painting> retrievedFromDb = paintingDao.retrieveAll();
+        List<Painting> paintings = paintingDao.retrieveAll();
 
-        assertEquals(numOfPaintings + flywayData, retrievedFromDb.size());
+        assertEquals(numOfPaintings + flywayData, paintings.size());
     }
 
     @Test
-    void shouldRetrieveAllFromUser() {
-        /*
-            Create user
-            add paintings to user
-            print all
-         */
+    void shouldRetrieveAllFromUser() throws SQLException {
+        int numOfPaintings = 10;
+
+        for (int i = 0; i < numOfPaintings; i++) {
+            paintingDao.save(samplePainting());
+        }
+
+        var p1 = paintingDao.retrieve(1);
+        var p2 = paintingDao.retrieve(2);
+        var p3 = paintingDao.retrieve(3);
+
+
+        var user = sampleUser();
+        userdao.save(user);
+
+        paintingDao.saveToInventory(user.getUserId(), p1.getPaintingId());
+        paintingDao.saveToInventory(user.getUserId(), p2.getPaintingId());
+        paintingDao.saveToInventory(user.getUserId(), p3.getPaintingId());
+
+
+        List<Painting> paintingsInventory = paintingDao.retrieveAllForUser(user.getUserId());
+
+
+
+        assertEquals(3, paintingsInventory.size());
+        assertTrue(paintingsInventory.contains(p1));
+        assertTrue(paintingsInventory.contains(p2));
+        assertTrue(paintingsInventory.contains(p3));
+
+
 
 
     }

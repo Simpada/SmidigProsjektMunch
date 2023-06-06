@@ -62,7 +62,15 @@ public class PaintingDao extends AbstractDao {
 
     public List<Painting> retrieveAllForUser(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Paintings_Collected WHERE user_id = ?";
+            String query = """
+                    SELECT *
+                    FROM Paintings
+                    JOIN Paintings_Collected
+                        ON Paintings.painting_id = Paintings_Collected.painting_id
+                    JOIN Users
+                        ON Users.user_id = Paintings_Collected.user_id
+                    WHERE Users.user_id = ?
+                    """;
 
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
@@ -87,7 +95,7 @@ public class PaintingDao extends AbstractDao {
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
                 statement.setInt(2, paintingId);
-                statement.executeQuery();
+                statement.executeUpdate();
             }
         }
     }
