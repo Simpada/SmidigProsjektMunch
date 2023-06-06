@@ -28,7 +28,7 @@ public class UserDao extends AbstractDao {
     }
 
     private void saveUser(User user) throws SQLException {
-        user.setProfilePicture("pic");
+        user.setProfilePicture(new byte[]{1});
 
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
@@ -38,7 +38,7 @@ public class UserDao extends AbstractDao {
                 statement.setString(2, user.getPassword());
                 statement.setString(3, user.getDateOfBirth());
                 statement.setString(4, user.getEmail());
-                statement.setString(5, user.getProfilePicture());
+                statement.setBytes(5, user.getProfilePicture());
 
                 statement.executeUpdate();
                 try (var generatedKeys = statement.getGeneratedKeys()) {
@@ -228,7 +228,7 @@ public class UserDao extends AbstractDao {
         user.setPassword(resultSet.getString("password"));
         user.setDateOfBirth(resultSet.getString("date_of_birth"));
         user.setEmail(resultSet.getString("email"));
-        user.setProfilePicture(resultSet.getString("profile_picture"));
+        user.setProfilePicture(resultSet.getBytes("profile_picture"));
         return user;
     }
 
