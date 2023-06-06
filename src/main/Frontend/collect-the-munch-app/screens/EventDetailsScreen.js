@@ -7,11 +7,14 @@ const EventDetailsScreen = ({ route }) => {
   return (
 
     <View style={styles.container}>
+      {/*
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>MUNCH</Text>
       </View>
+      */}
       <View style={styles.eventContent}>
-        <Text style={styles.eventTitle}>{event.title}</Text>
+        <Text>Event Name</Text>
+        {!event.title ? <Text>No event title</Text> : <Text style={styles.eventTitle}>{event.title}</Text>}
         <Text style={styles.eventCategory}>{event.category}</Text>
         <Text style={styles.eventDescription}>{event.description}</Text>
       </View>

@@ -44,7 +44,7 @@ const SignupScreen = () => {
     }
 
     try {
-      const response = await axios.post('https://findthemunchgame.azurewebsites.net/api/user', {
+      const response = await axios.post('https://findthemunchgame.azurewebsites.net/api/user/register', {
         username,
         password,
         dateOfBirth,
