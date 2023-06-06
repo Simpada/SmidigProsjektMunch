@@ -32,9 +32,19 @@ public class ReviewAppEndpoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Review> getAllAppReviews() throws SQLException {
+    public Response getAllAppReviews(){
+        try {
+            var appReviews = reviewAppDao.retrieveAllAppReviews();
+            return Response.ok(appReviews).build();
+        } catch (NotFoundException nfe) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(nfe.getMessage())
+                    .build();
+        } catch (SQLException sqlE) {
+            sqlE.printStackTrace();
 
-        return null;
+            return Response.serverError().build();
+        }
     }
 
     @Path("/getbyId/{user_id}")
@@ -45,10 +55,17 @@ public class ReviewAppEndpoint extends ApiEndPoint {
         // 200 = OK with json review object.
         // 404 = notfound with json containing message
         // 500 = SQL exception with json containing generic internal server error message
-        // frontend has to account for other response codes than 200.
+        // - frontend has to account for other response codes than 200.
+        // -
+        // - other approach: for somplicity and concise code but without error code handking
+        /*
+            return Optional.ofNullable(reviewAppDao.retrieveReviewById(userId))
+            .orElseThrow(() -> new NotFoundException("Review not found"));
+         */
+
         try {
-            Review review = reviewAppDao.retrieveReviewById(userId);
-            return Response.ok(review).build();
+            var appReview = reviewAppDao.retrieveAppReviewById(userId);
+            return Response.ok(appReview).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity(e.getMessage())
@@ -58,15 +75,6 @@ public class ReviewAppEndpoint extends ApiEndPoint {
             // Handle or log the exception
             return Response.serverError().build();
         }
-        /*
-        var review = new Review();
-        try {
-            review = reviewAppDao.retrieveReviewById(userId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return review;
-        */
     }
 
     @Path("/getbystars/{num_stars}")
