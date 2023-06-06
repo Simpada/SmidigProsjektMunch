@@ -34,20 +34,30 @@ public class PaintingDaoTest {
                 .isNotSameAs(painting);
     }
 
-    /*
     @Test
     void shouldRetrieveAll() throws SQLException {
-        List<Painting> paintings = new ArrayList<>();
         int numOfPaintings = 10;
+        int flywayData = 5;
 
         for (int i = 0; i < numOfPaintings; i++) {
-           paintings.add(samplePainting());
+           paintingDao.save(samplePainting());
         }
 
         List<Painting> retrievedFromDb = paintingDao.retrieveAll();
 
-        assertEquals(numOfPaintings, retrievedFromDb.size());
+        assertEquals(numOfPaintings + flywayData, retrievedFromDb.size());
     }
-    */
+
+    @Test
+    void shouldRetrieveAllFromUser() {
+        /*
+            Create user
+            add paintings to user
+            print all
+         */
+
+
+    }
+
 
 }
