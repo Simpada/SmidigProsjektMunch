@@ -5,7 +5,7 @@ import jwtDecode from 'jwt-decode';
 import * as Font from 'expo-font';
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -49,7 +49,8 @@ const LoginScreen = () => {
 
   const handleLoginGet = async () => {
     try {
-      const response = await fetch('Your API endpoint to GET here', {
+      const endpoint = `https://findthemunchgame.azurewebsites.net/api/user/login/${username}/${password}`;
+      const response = await fetch(endpoint, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -98,10 +99,10 @@ const LoginScreen = () => {
           </View>
           <TextInput
             style={styles.input}
-            placeholder="Email"
+            placeholder="Username"
             placeholderTextColor={'white'}
-            value={email}
-            onChangeText={setEmail}
+            value={username}
+            onChangeText={setUsername}
             autoCapitalize="none"
           />
           <TextInput
@@ -159,8 +160,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontFamily: 'GirottMunch-BoldBackslant',
     textAlign: 'center',
-    color: 'white', 
-    
+    color: 'white',
   },
   button: {
     width: '100%',

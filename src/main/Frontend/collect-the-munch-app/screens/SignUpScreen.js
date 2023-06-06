@@ -16,7 +16,7 @@ const SignupScreen = () => {
 
   const loadCustomFont = async () => {
     await Font.loadAsync({
-      'GirottMunch-BoldBackslant': require('../assets/Fonts/GirottMunch-BoldBackslant.otf'),
+      'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.otf'),
     });
     setFontLoaded(true);
   };
@@ -44,7 +44,7 @@ const SignupScreen = () => {
     }
 
     try {
-      const response = await axios.post('http://172.26.25.164:3000/signup', {
+      const response = await axios.post('https://findthemunchgame.azurewebsites.net/api/user', {
         username,
         password,
         dateOfBirth,

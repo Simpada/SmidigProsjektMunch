@@ -1,6 +1,8 @@
 import { StyleSheet, View } from 'react-native';
 
 import Navigation from './components/Navigation';
+import SignupScreen from './screens/SignUpScreen';
+import LoginScreen from './screens/LoginScreenJWT';
 
 
 
@@ -8,7 +10,7 @@ export default function App() {
 
 
   return (
-      <Navigation />
+      <LoginScreen/>
       );
 }
 
