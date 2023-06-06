@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import jwtDecode from 'jwt-decode';
 import * as Font from 'expo-font';
@@ -48,15 +47,17 @@ const LoginScreen = () => {
     }
   };
 
-  const handleLogin = async () => {
+  const handleLoginGet = async () => {
     try {
-      const response = await axios.post('Ur API endpoint to POST here', {
-        email,
-        password,
+      const response = await fetch('Your API endpoint to GET here', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       // Extract the JWT token from the response
-      const token = response.data.token;
+      const token = await response.text();
 
       // Store the token in AsyncStorage
       await AsyncStorage.setItem('jwt_token', token);
@@ -111,7 +112,7 @@ const LoginScreen = () => {
             onChangeText={setPassword}
             secureTextEntry
           />
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <TouchableOpacity style={styles.button} onPress={handleLoginGet}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -189,4 +190,3 @@ const styles = StyleSheet.create({
 });
 
 export default LoginScreen;
-
