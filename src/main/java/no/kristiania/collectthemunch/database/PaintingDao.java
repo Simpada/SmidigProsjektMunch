@@ -30,7 +30,7 @@ public class PaintingDao extends AbstractDao {
                     statement.setBytes(3, painting.getPaintingImage());
                     statement.setString(4, painting.getArtInformation());
                     statement.setString(5, painting.getRarity());
-                    statement.setInt(6, painting.getPaintingId());
+                    statement.setInt(6, painting.getPoints());
 
                     statement.executeUpdate();
                     try (var generatedKeys = statement.getGeneratedKeys()) {

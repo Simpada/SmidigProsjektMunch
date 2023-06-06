@@ -14,10 +14,11 @@ public class PaintingDaoTest {
     private final JdbcDataSource dataSource = (JdbcDataSource) MemoryDataSource.createTestDataSource();
     private final PaintingDao paintingDao = new PaintingDao(dataSource);
 
-/*
+
     @Test
     void shouldSaveAndRetrieveUser() throws SQLException {
         var painting = samplePainting();
+        painting.setPaintingImage(new byte[]{1,2});
         paintingDao.save(painting);
 
         var painting2 = paintingDao.retrieve(painting.getPaintingId());
@@ -29,5 +30,4 @@ public class PaintingDaoTest {
                 .isNotSameAs(painting);
     }
 
-*/
 }
