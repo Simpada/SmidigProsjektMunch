@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   winnerName: {
     color: colors.white,
     fontWeight: 'bold',
-    marginTop: 5,
+    marginTop: 20,
     fontFamily: 'GirottMunch-Bold',
   },
   winnerPoints: {
@@ -231,7 +231,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 2,
-    backgroundColor: 'inherit',
+    backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     bottom: -5,
