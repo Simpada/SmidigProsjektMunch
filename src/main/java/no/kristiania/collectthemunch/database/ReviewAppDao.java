@@ -18,12 +18,13 @@ public class ReviewAppDao extends AbstractDao{
         super(dataSource);
     }
 
-    public void save(Review review) throws SQLException {
+    public void save(Review review, int userId) throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO App_Reviews (review_text, num_stars) VALUES(?, ?)";
+            String query = "INSERT INTO App_Reviews (user_id, review_text, num_stars) VALUES(?, ?, ?)";
             try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1, review.getReviewText());
-                statement.setInt(2, review.getNumOfStars());
+                statement.setInt(1, userId);
+                statement.setString(2, review.getReviewText());
+                statement.setInt(3, review.getNumOfStars());
                 statement.executeUpdate();
                 try(var generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {

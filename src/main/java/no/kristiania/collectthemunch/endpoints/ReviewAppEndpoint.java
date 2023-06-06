@@ -11,11 +11,12 @@ import java.util.List;
 @Path("/review/app")
 public class ReviewAppEndpoint extends ApiEndPoint {
 
+    @Path("/{userId}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createAppReview(Review review){
+    public void createAppReview(Review review, @PathParam("userId") int userId){
         try {
-            reviewAppDao.save(review);
+            reviewAppDao.save(review, userId);
         } catch (SQLException e) {
             //TODO: Send a fitting response to frontend.
             //Example:

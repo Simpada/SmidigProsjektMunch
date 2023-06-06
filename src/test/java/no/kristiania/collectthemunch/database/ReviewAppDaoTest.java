@@ -12,6 +12,7 @@ public class ReviewAppDaoTest {
 
     private final JdbcDataSource dataSource = (JdbcDataSource) MemoryDataSource.createTestDataSource();
     private final ReviewAppDao reviewAppDao = new ReviewAppDao(dataSource);
+    private final UserDao userDao = new UserDao(dataSource);
 
     public ReviewAppDaoTest() {
     }
@@ -19,8 +20,17 @@ public class ReviewAppDaoTest {
     @Test
     void shouldSaveAppReviewInDatabase() throws SQLException {
         var review = SampleData.sampleReview();
-        reviewAppDao.save(review);
+        var user = SampleData.sampleUser();
 
-        //assertThat();
+        userDao.save(user);
+        reviewAppDao.save(review, user.getUserId());
+
+        assertThat(reviewAppDao.retrieveAppReviewById(user.getUserId()))
+                .hasNoNullFieldsOrProperties()
+                .usingRecursiveComparison()
+                .isNotSameAs(review)
+                .isEqualTo(review);
     }
+
+
 }
