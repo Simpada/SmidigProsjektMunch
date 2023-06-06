@@ -2,7 +2,6 @@ package no.kristiania.collectthemunch.endpoints;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.Event;
 
 import java.sql.SQLException;
@@ -14,12 +13,6 @@ import java.util.List;
 @Path("/events")
 public class EventEndPoint extends ApiEndPoint {
 
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void createEvent(Event event) throws SQLException {
-        eventDao.save(event);
-        eventDao.saveCategoriesByEvent(event);
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -27,21 +20,20 @@ public class EventEndPoint extends ApiEndPoint {
         //TODO: handle exception better
         List<Event> allEvents = new ArrayList<>();
         try {
-            allEvents = eventDao.getAllEventsFromDatabase();
+            allEvents = eventDao.getAllEvents();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return allEvents;
     }
-    /*
-    //TODO: search for a specific event
-    @Path("/event/{eventName}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Event getEventByName() {
-        return null;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createEvent(Event event) throws SQLException {
+        eventDao.save(event);
+        eventDao.saveEventCategories(event);
     }
-     */
+
 
     @Path("/userfilteredevents/{userId}")
     @GET
@@ -49,21 +41,14 @@ public class EventEndPoint extends ApiEndPoint {
     public List<Event> getFilteredEvents(@PathParam("userId") int userId) throws SQLException {
         List<String> tempPreferences = userDao.retrieveUserPreferences(userId);
 
-        return eventDao.getFilteredEventsFromDatabase(tempPreferences);
+        return eventDao.getFilteredEvents(tempPreferences);
     }
 
     @Path("/{eventId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Event getEventById(@PathParam("eventId") int eventId) {
-        //TODO: handle exception better
-        Event event = new Event();
-        try {
-            event = eventDao.getEventById(eventId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return event;
+    public Event getEventById(@PathParam("eventId") int eventId) throws SQLException {
+        return eventDao.getEventById(eventId);
     }
 
     @Path("/category/{category}")
@@ -73,7 +58,7 @@ public class EventEndPoint extends ApiEndPoint {
         //TODO: handle exception better
         List<Event> allEvents = new ArrayList<>();
         try {
-            allEvents = eventDao.getEventsByCategoryFromDatabase(category);
+            allEvents = eventDao.getEventsByCategory(category);
         } catch (SQLException e) {
             e.printStackTrace();
         }
