@@ -1,5 +1,10 @@
 package no.kristiania.collectthemunch.entities;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+
 public class Painting {
 
     private int paintingId;
@@ -10,8 +15,27 @@ public class Painting {
     private String rarity;
     private int points;
 
+    public String imagePath = "C:\\Users\\tobia\\Desktop\\wellwell";
+    public String imageType = ".jpg";
+
     public Painting() {
 
+    }
+
+    public byte[] loadImageAsByteArray(String imagePath, String imageType) {
+        try {
+            File imageFile = new File(imagePath + imageType);
+
+            BufferedImage image = ImageIO.read(imageFile);
+
+            //Convert to byte array
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ImageIO.write(image, imageType, out);
+
+            return out.toByteArray();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Painting(int paintingId, String name, String author, byte[] paintingImage, String artInformation, String rarity, int points) {
