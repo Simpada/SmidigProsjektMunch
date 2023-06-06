@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import * as Font from 'expo-font';
+import { useNavigation } from '@react-navigation/native';
 import MenuModal from '../components/MenuModal';
 
 import popImage from '../assets/Images/pop.jpg';
@@ -8,6 +9,7 @@ import leaderboardImage from '../assets/Images/leaderboard.png';
 
 const PlayGameScreen = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     loadFonts();
@@ -24,8 +26,12 @@ const PlayGameScreen = () => {
   };
 
   if (!fontsLoaded) {
-    return null; // Render a loading state or placeholder if fonts are not yet loaded
+    return null;
   }
+
+  const navigateToCreateTeam = () => {
+    navigation.navigate('CreateTeam');
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -55,7 +61,7 @@ const PlayGameScreen = () => {
               </View>
             </View>
           </View>
-          <View style={styles.additionalTextSpacer} /> {/* Add this spacer view */}
+          <View style={styles.additionalTextSpacer} />
           <Text style={styles.additionalText}>3 - Compete with your friends and others!</Text>
           <View style={styles.photoContainer}>
             <View style={styles.overlayContainer}>
@@ -67,12 +73,11 @@ const PlayGameScreen = () => {
           </View>
         </View>
 
-        {/* Buttons */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Play Solo</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={navigateToCreateTeam}>
             <Text style={styles.buttonText}>Create A Party</Text>
           </TouchableOpacity>
         </View>
@@ -164,7 +169,7 @@ const styles = StyleSheet.create({
     height: 10,
   },
   buttonContainer: {
-    alignItems: 'center', // Center buttons horizontally
+    alignItems: 'center',
     marginTop: 20,
   },
   button: {
