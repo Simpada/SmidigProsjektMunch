@@ -5,6 +5,7 @@ import no.kristiania.collectthemunch.entities.Review;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class ReviewAppDao extends AbstractDao{
 
@@ -13,12 +14,24 @@ public class ReviewAppDao extends AbstractDao{
         super(dataSource);
     }
 
-    public Review save(Review review) throws SQLException {
+    public void save(Review review) throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "INSERT INTO App_Reviews (review_text, num_stars) VALUES(?, ?)";
-            try(var statement = connection.prepareStatement(query)) {
-
+            try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, review.getReviewText());
+                statement.setInt(2, review.getNumOfStars());
+                statement.executeUpdate();
+                try(var generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        review.setId(generatedKeys.getInt(1));
+                    }
+                }
             }
         }
+    }
+
+    public Review retrieveReviewById() {
+
+        return null;
     }
 }
