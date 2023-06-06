@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import MenuModal from '../components/MenuModal';
 
 import popImage from '../assets/Images/pop.jpg';
+import leaderboardImage from '../assets/Images/leaderboard.png';
 
 const PlayGameScreen = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -40,7 +41,7 @@ const PlayGameScreen = () => {
           <View style={styles.overlayContainer}>
             <Image source={require('../assets/Images/QR.jpg')} style={styles.photo} />
             <View style={styles.overlayTextContainer}>
-              <Text style={styles.overlayText}> 1 - Scan a painting</Text>
+              <Text style={styles.overlayText}>1 - Scan a painting</Text>
             </View>
           </View>
         </View>
@@ -50,7 +51,17 @@ const PlayGameScreen = () => {
             <View style={styles.overlayContainer}>
               <Image source={popImage} style={styles.photo} />
               <View style={styles.overlayTextContainer}>
-                <Text style={styles.overlayText}> </Text>
+                <Text style={styles.overlayText}></Text>
+              </View>
+            </View>
+          </View>
+          <View style={styles.additionalTextSpacer} /> {/* Add this spacer view */}
+          <Text style={styles.additionalText}>3 - Compete with your friends and others!</Text>
+          <View style={styles.photoContainer}>
+            <View style={styles.overlayContainer}>
+              <Image source={leaderboardImage} style={styles.photo} />
+              <View style={styles.overlayTextContainer}>
+                <Text style={styles.overlayText}></Text>
               </View>
             </View>
           </View>
@@ -110,7 +121,7 @@ const styles = StyleSheet.create({
   },
   photo: {
     width: 200,
-    height: 500,
+    height: 400,
     resizeMode: 'cover',
   },
   overlayTextContainer: {
@@ -138,6 +149,9 @@ const styles = StyleSheet.create({
     fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',
     paddingHorizontal: 20,
+  },
+  additionalTextSpacer: {
+    height: 10,
   },
 });
 
