@@ -20,7 +20,7 @@ public class EventDao extends AbstractDao{
     }
 
     public Event getEventById(int eventId) throws SQLException {
-        Event event = new Event();
+        Event event;
         event = getEventByIdFromDatabase(eventId);
         event.setCategories(getCategoriesByEventId(event.getId()));
         return event;
@@ -35,7 +35,7 @@ public class EventDao extends AbstractDao{
             e.printStackTrace();
         }
 
-        List<Event> filteredEvents = new ArrayList<>();;
+        List<Event> filteredEvents = new ArrayList<>();
         if (eventCategories != null){
             // Filter the events based on the provided preferences
             try {
@@ -50,10 +50,11 @@ public class EventDao extends AbstractDao{
 
     public void save(Event event) throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Events (name, description) VALUES (?, ?)";
+            String query = "INSERT INTO Events (name, description, poster) VALUES (?, ?, ?)";
             try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, event.getName());
                 statement.setString(2, event.getDescription());
+                statement.setBytes(3, event.getEventPoster());
                 statement.executeUpdate();
                 try(var generatedKeys = statement.getGeneratedKeys()) {
                     generatedKeys.next();
@@ -93,6 +94,7 @@ public class EventDao extends AbstractDao{
                             //TODO: return event with its list of categories?
                             Event event = new Event();
                             event.setId(resultSet.getInt("event_id"));
+                            event.setName(resultSet.getString("name"));
                             event.setDescription(resultSet.getString("description"));
                             allEvents.add(event);
                         }
@@ -116,6 +118,7 @@ public class EventDao extends AbstractDao{
                             //TODO: return event with its list of categories?
                             Event event = new Event();
                             event.setId(resultSet.getInt("event_id"));
+                            event.setName(resultSet.getString("name"));
                             event.setDescription(resultSet.getString("description"));
                             allEvents.add(event);
                         }
