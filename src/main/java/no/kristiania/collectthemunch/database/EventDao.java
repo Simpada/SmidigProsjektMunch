@@ -33,6 +33,7 @@ public class EventDao extends AbstractDao{
                             event.setId(resultSet.getInt("event_id"));
                             event.setName(resultSet.getString("name"));
                             event.setDescription(resultSet.getString("description"));
+                            event.setCategories(getCategoriesByEventId(event.getId()));
                             allEvents.add(event);
                         }
                     } else {
@@ -143,7 +144,7 @@ public class EventDao extends AbstractDao{
 
     public List<Event> getEventsByCategory(String category) throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT E.event_id, E.description, C.category " +
+            String query = "SELECT *" +
                             "FROM Events E " +
                             "JOIN Categories C ON E.event_id = C.event_id " +
                             "WHERE C.category = ?";
@@ -157,6 +158,8 @@ public class EventDao extends AbstractDao{
                         event.setId(resultSet.getInt("event_id"));
                         event.setName(resultSet.getString("name"));
                         event.setDescription(resultSet.getString("description"));
+                        event.setEventPoster(resultSet.getBytes("poster"));
+                        event.setCategories(getCategoriesByEventId(event.getId()));
                         allEvents.add(event);
                     }
                     if (allEvents.isEmpty()) {
