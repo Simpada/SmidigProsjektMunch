@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'brown',
   },
   pointsColor: {
-    fontSize:20,
+    fontSize: 20,
     color:"white"
   },
   flex1: {
