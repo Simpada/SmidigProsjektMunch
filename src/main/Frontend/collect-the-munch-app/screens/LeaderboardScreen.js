@@ -67,23 +67,29 @@ const LeaderboardScreen = () => {
         <View style={styles.table}>
         
       
-          {leaderboard.slice(3, leaderboard.length).map((item, index) => (
-            <View style={
-              index !== leaderboard.length - 1
-            ? styles.tableRowWithBorder
-            : styles.tableRow
-            } key={item.id}>
-              <View style={styles.circle}>
-                <Text style={styles.circleText}>{item.id}</Text>
-              </View>
-              <Text style={styles.cell}>{item.fullName}</Text>
-              <Text style={styles.cell}>{"@"+`${item.userName}`}</Text>
-              <View style={styles.pointsContainer}>
-                <Text style={styles.cell}>{item.points}</Text>
-                <Text style={styles.pts}>pts</Text>
-              </View>
-            </View>
-          ))}
+        {leaderboard.slice(3, leaderboard.length).map((item, index) => (
+  <View
+    style={
+      index !== leaderboard.length - 1
+        ? styles.tableRowWithBorder
+        : styles.tableRow
+    }
+    key={item.id}
+  >
+    <View style={styles.profileImageContainer}>
+      <Image source={item.profileImage} style={styles.profileImage} />
+    </View>
+    <View style={styles.nameContainer}>
+      <Text style={styles.fullName}>{item.fullName}</Text>
+      <Text style={styles.userName}>@{item.userName}</Text>
+    </View>
+    <View style={styles.pointsContainer}>
+      <Text style={styles.cell}>{item.points}</Text>
+      <Text style={styles.pts}>pts</Text>
+    </View>
+  </View>
+))}
+
         </View>
       </ScrollView>
     </View>
@@ -96,6 +102,24 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: colors.navy,
   },
+  nameContainer: {
+    flex: 2,
+    flexDirection: 'column',
+    marginLeft: 10,
+  },
+  fullName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.white,
+    fontFamily: 'GirottMunch-Bold',
+  },
+  userName: {
+    fontSize: 12,
+    color: 'gray',
+    fontFamily: 'GirottMunch-Bold',
+    opacity: 0.9
+  },
+  
   categorycontainer: {
     backgroundColor: colors.black,
     width: '100%',
