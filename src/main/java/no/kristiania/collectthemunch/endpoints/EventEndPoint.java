@@ -54,14 +54,8 @@ public class EventEndPoint extends ApiEndPoint {
     @Path("/category/{category}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getEventsByCategory(@PathParam("category") String category) {
-        //TODO: handle exception better
-        List<Event> allEvents = new ArrayList<>();
-        try {
-            allEvents = eventDao.getEventsByCategory(category);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return allEvents;
+    public List<Event> getEventsByCategory(@PathParam("category") String category) throws SQLException {
+
+        return eventDao.getEventsByCategory(category);
     }
 }
