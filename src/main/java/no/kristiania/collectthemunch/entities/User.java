@@ -10,7 +10,7 @@ public class User {
     private String dateOfBirth;
     private String email;
     private List<String> preferences;
-    private String profilePicture = "an image";  //temp datatype until we know how to parse
+    private byte[] profilePicture;  //temp datatype until we know how to parse
 
     public User() {
 
@@ -90,12 +90,11 @@ public class User {
         this.preferences = preferences;
     }
 
-
-    public String getProfilePicture() {
+    public byte[] getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(String profilePicture) {
+    public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
     }
 }
