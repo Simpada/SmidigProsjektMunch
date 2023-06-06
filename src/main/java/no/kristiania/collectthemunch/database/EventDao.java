@@ -84,11 +84,6 @@ public class EventDao extends AbstractDao{
                         eventCategories.add(resultSet.getString("category"));
                     }
 
-                    if (eventCategories.isEmpty()) {
-                        // Event not found, throw a not found exception with eventid
-                        throw new NotFoundException("No categories found for event with ID: " + eventId);
-                    }
-
                     return eventCategories;
                 }
             }
@@ -226,7 +221,6 @@ public class EventDao extends AbstractDao{
                         // and add its corresponding categories from the filtered events
                         Event event = new Event();
                         int id = resultSet.getInt("event_id");
-                        String description = resultSet.getString("description");
 
                         //TODO: Do the event objects returned to the frontend need the categories?
                         for (Event filteredEvent : filteredEvents) {
