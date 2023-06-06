@@ -3,7 +3,6 @@ package no.kristiania.collectthemunch.endpoints;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import no.kristiania.collectthemunch.entities.Review;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -28,6 +27,22 @@ public class ReviewEventEndpoint extends ApiEndPoint {
     public void saveReview(Review review, @PathParam("eventId") int eventId, @PathParam("userId") int userId) throws SQLException {
         reviewEventDao.save(review, eventId, userId);
     }
+
+
+    @Path("/{eventId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Review> getReviewsFromEvent(@PathParam("eventId") int eventId) throws SQLException {
+        return reviewEventDao.getAllReviewsFromEvent(eventId);
+    }
+
+    @Path("/user/{userId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Review> getReviewsFromUser(@PathParam("userId") int userId) throws SQLException {
+        return reviewEventDao.getAllReviewsFromEvent(userId);
+    }
+
 
 
 }

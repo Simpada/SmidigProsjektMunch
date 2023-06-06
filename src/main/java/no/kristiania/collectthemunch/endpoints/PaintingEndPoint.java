@@ -15,6 +15,11 @@ public class PaintingEndPoint extends ApiEndPoint {
     public List<Painting> getAllPainting() throws SQLException {
         return paintingDao.retrieveAll();
     }
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void save(Painting painting) throws SQLException {
+        paintingDao.save(painting);
+    }
 
     @Path("/{paintingId}")
     @GET
@@ -23,19 +28,14 @@ public class PaintingEndPoint extends ApiEndPoint {
         return paintingDao.retrieve(paintingId);
     }
 
-    @Path("/{title}")
+    @Path("/name/{title}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Painting retrieve(@PathParam("title") String title) throws SQLException {
         return paintingDao.retrieve(title);
     }
 
-    @Path("/save")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void save(Painting painting) throws SQLException {
-        paintingDao.save(painting);
-    }
+
 
     @Path("/{userId}/{paintingId}")
     @POST

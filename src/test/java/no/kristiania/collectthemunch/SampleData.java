@@ -1,6 +1,5 @@
 package no.kristiania.collectthemunch;
 
-
 import no.kristiania.collectthemunch.entities.*;
 
 import java.util.ArrayList;
