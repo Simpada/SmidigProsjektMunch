@@ -19,7 +19,7 @@ public class PaintingDaoTest {
         var painting = samplePainting();
         paintingDao.save(painting);
 
-
+        var painting2 = paintingDao.retrieve(painting.getPaintingId());
 
     }
 
