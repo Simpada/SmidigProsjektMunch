@@ -48,7 +48,7 @@ public class SampleData {
         ))  + random.nextInt(10000000)
             + "@munch.com";
 
-        List<Category> preferences = new ArrayList<>();
+        List<String> preferences = new ArrayList<>();
         int preferenceCount = random.nextInt(4) + 1;
         for (int i = 0; i < preferenceCount; i++) {
 
@@ -56,33 +56,33 @@ public class SampleData {
 
             switch (category) {
                 case 0 -> {
-                    if (!preferences.contains(Category.PARTY)) {
-                        preferences.add(Category.PARTY);
+                    if (!preferences.contains(String.valueOf(Category.PARTY))) {
+                        preferences.add(String.valueOf(Category.PARTY));
                     }
                 }
                 case 1 -> {
-                    if (!preferences.contains(Category.EXHIBITION)) {
-                        preferences.add(Category.EXHIBITION);
+                    if (!preferences.contains(String.valueOf(Category.EXHIBITION))) {
+                        preferences.add(String.valueOf(Category.EXHIBITION));
                     }
                 }
                 case 2 -> {
-                    if (!preferences.contains(Category.KIDS)) {
-                        preferences.add(Category.KIDS);
+                    if (!preferences.contains(String.valueOf(Category.KIDS))) {
+                        preferences.add(String.valueOf(Category.KIDS));
                     }
                 }
                 case 3 -> {
-                    if (!preferences.contains(Category.FAMILY)) {
-                        preferences.add(Category.FAMILY);
+                    if (!preferences.contains(String.valueOf(Category.FAMILY))) {
+                        preferences.add(String.valueOf(Category.FAMILY));
                     }
                 }
                 case 4 -> {
-                    if (!preferences.contains(Category.NEW)) {
-                        preferences.add(Category.NEW);
+                    if (!preferences.contains(String.valueOf(Category.NEW))) {
+                        preferences.add(String.valueOf(Category.NEW));
                     }
                 }
                 case 5 -> {
-                    if (!preferences.contains(Category.GAMES)) {
-                        preferences.add(Category.GAMES);
+                    if (!preferences.contains(String.valueOf(Category.GAMES))) {
+                        preferences.add(String.valueOf(Category.GAMES));
                     }
                 }
             }

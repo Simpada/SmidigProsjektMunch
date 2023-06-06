@@ -1,6 +1,5 @@
 package no.kristiania.collectthemunch.database;
 
-
 import no.kristiania.collectthemunch.MemoryDataSource;
 import no.kristiania.collectthemunch.SampleData;
 import org.h2.jdbcx.JdbcDataSource;

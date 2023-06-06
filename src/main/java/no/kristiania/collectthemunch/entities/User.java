@@ -9,7 +9,7 @@ public class User {
     private String password;
     private String dateOfBirth;
     private String email;
-    private List<Category> preferences;
+    private List<String> preferences;
     private String profilePicture = "an image";  //temp datatype until we know how to parse
 
     public User() {
@@ -37,8 +37,8 @@ public class User {
     public void printPreferences() {
         System.out.println("Preferences: ");
 
-        for (Category c : this.preferences) {
-            System.out.println(c + " ");
+        for (String s : this.preferences) {
+            System.out.println(s + " ");
         }
     }
 
@@ -82,11 +82,11 @@ public class User {
         this.email = email;
     }
 
-    public List<Category> getPreferences() {
+    public List<String> getPreferences() {
         return preferences;
     }
 
-    public void setPreferences(List<Category> preferences) {
+    public void setPreferences(List<String> preferences) {
         this.preferences = preferences;
     }
 
