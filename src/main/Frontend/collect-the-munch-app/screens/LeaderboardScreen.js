@@ -65,13 +65,14 @@ const LeaderboardScreen = () => {
 
       <ScrollView>
         <View style={styles.table}>
-          <View style={styles.tableHeader}>
-            <Text style={styles.headerText}>Name</Text>
-            <Text style={styles.headerText}>Username</Text>
-            <Text style={styles.headerText}>Points</Text>
-          </View>
-          {leaderboard.map((item, index) => (
-            <View style={styles.tableRow} key={item.id}>
+        
+      
+          {leaderboard.slice(3, leaderboard.length).map((item, index) => (
+            <View style={
+              index !== leaderboard.length - 1
+            ? styles.tableRowWithBorder
+            : styles.tableRow
+            } key={item.id}>
               <View
                 style={[
                   styles.circle,
@@ -83,7 +84,7 @@ const LeaderboardScreen = () => {
                 <Text style={styles.circleText}>{item.id}</Text>
               </View>
               <Text style={styles.cell}>{item.fullName}</Text>
-              <Text style={styles.cell}>{item.userName}</Text>
+              <Text style={styles.cell}>{"@"+`${item.userName}`}</Text>
               <Text style={styles.cell}>{item.points}</Text>
             </View>
           ))}
@@ -152,7 +153,11 @@ const styles = StyleSheet.create({
     fontFamily: 'GirottMunch-Bold',
   },
   table: {
-    borderColor: 'black',
+    overflow: "hidden",
+    borderWidth:3,
+    borderColor: colors.darkNavy,
+    marginVertical: 20,
+    borderRadius: 20,
   },
   tableHeader: {
     flexDirection: 'row',
@@ -174,6 +179,11 @@ const styles = StyleSheet.create({
   },
   tableRow: {
     flexDirection: 'row',
+    padding: 10,
+    alignItems: 'center',
+  },
+  tableRowWithBorder: {
+    flexDirection: 'row',
     borderBottomWidth: 1,
     borderColor: 'gray',
     padding: 10,
@@ -194,7 +204,7 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 2,
-    backgroundColor: 'inherit',
+    backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
     bottom: -5,
