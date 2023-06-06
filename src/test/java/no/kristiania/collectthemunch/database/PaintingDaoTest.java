@@ -1,13 +1,17 @@
 package no.kristiania.collectthemunch.database;
 
 import no.kristiania.collectthemunch.MemoryDataSource;
+import no.kristiania.collectthemunch.entities.Painting;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static no.kristiania.collectthemunch.SampleData.samplePainting;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PaintingDaoTest {
 
@@ -29,5 +33,21 @@ public class PaintingDaoTest {
                 .isEqualTo(painting)
                 .isNotSameAs(painting);
     }
+
+    /*
+    @Test
+    void shouldRetrieveAll() throws SQLException {
+        List<Painting> paintings = new ArrayList<>();
+        int numOfPaintings = 10;
+
+        for (int i = 0; i < numOfPaintings; i++) {
+           paintings.add(samplePainting());
+        }
+
+        List<Painting> retrievedFromDb = paintingDao.retrieveAll();
+
+        assertEquals(numOfPaintings, retrievedFromDb.size());
+    }
+    */
 
 }

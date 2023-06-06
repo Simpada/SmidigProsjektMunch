@@ -195,7 +195,7 @@ public class SampleData {
                 "Oh noo",
                 "Banana",
                 "Masterchef"
-        ));
+        )) + random.nextInt(1000);
 
         var author = (pickOne(
                 "Edvard Munch",
