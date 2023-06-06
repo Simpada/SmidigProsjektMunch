@@ -8,7 +8,7 @@ const LeaderboardScreen = () => {
   useEffect(() => {
     const initialLeaderboard = [
       { id: 1, fullName: 'Lily Pilly', userName: 'lily23', points: 2468, profileImage: require('../assets/Images/lily.jpg') },
-      { id: 2, fullName: 'Jackson Hubert', userName: 'Jackson_H', points: 1882, profileImage: require('../assets/Images/profile1.png') },
+      { id: 2, fullName: 'Jackson Hubert', userName: 'Jackson_H', points: 1882, profileImage: require('../assets/Images/samuel.png') },
       { id: 3, fullName: 'Shockdoggo', userName: 'shockdoggo47', points: 1532, profileImage: require('../assets/Images/shockdoggo.jpg') },
       { id: 4, fullName: 'John Smithies', userName: 'JohnSmithies66', points: 1521, profileImage: require('../assets/Images/profile1.png') },
       { id: 5, fullName: 'Arnold Schwarzenegger', userName: 'Arnold', points: 1511, profileImage: require('../assets/Images/profile1.png') },
@@ -231,11 +231,12 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderRadius: 2,
-    backgroundColor: 'green',
+    backgroundColor: 'inherit',
     justifyContent: 'center',
     alignItems: 'center',
     bottom: -5,
-    transform: 'rotate(45deg)'
+    transform: 'rotate(45deg)',
+    borderWidth: 1.5
     
   },
   circleTopThreeText: {
@@ -264,7 +265,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'silver',
   },
   bronze: {
-    backgroundColor: 'brown',
+    backgroundColor: '#946110',
   },
   pointsColor: {
     fontSize: 20,
