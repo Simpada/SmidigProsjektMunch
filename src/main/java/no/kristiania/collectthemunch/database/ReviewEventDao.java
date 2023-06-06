@@ -48,10 +48,11 @@ public class ReviewEventDao extends AbstractDao {
                     while (response.next()) {
                         review = parseEventReview(response);
                     }
-                    return review;
+
                 }
             }
         }
+        return review;
     }
 
     public List<Review> getAllReviewsFromEvent(int eventId) throws SQLException {
@@ -66,9 +67,10 @@ public class ReviewEventDao extends AbstractDao {
                         reviews.add(parseEventReview(response));
                     }
                 }
-                return reviews;
+
             }
         }
+        return reviews;
     }
 
     public List<Review> getAllEventReviewsFromUser(int userId) throws SQLException {
@@ -83,11 +85,11 @@ public class ReviewEventDao extends AbstractDao {
                         reviews.add(parseEventReview(response));
                     }
                 }
-                return reviews;
+
             }
         }
+        return reviews;
     }
-
 
     private Review parseEventReview(ResultSet response) throws SQLException {
         Review review = new Review();
