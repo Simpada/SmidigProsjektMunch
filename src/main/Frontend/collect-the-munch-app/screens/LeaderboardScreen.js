@@ -76,16 +76,16 @@ const LeaderboardScreen = () => {
     }
     key={item.id}
   >
-    <View style={styles.profileImageContainer}>
+    <View style={[styles.profileImageContainer, styles.flex1]}>
       <Image source={item.profileImage} style={styles.profileImage} />
     </View>
-    <View style={styles.nameContainer}>
+    <View style={[styles.nameContainer, styles.flex2]}>
       <Text style={styles.fullName}>{item.fullName}</Text>
       <Text style={styles.userName}>@{item.userName}</Text>
     </View>
-    <View style={styles.pointsContainer}>
-      <Text style={styles.cell}>{item.points}</Text>
-      <Text style={styles.pts}>pts</Text>
+    <View style={[styles.cell, styles.flex1]}>
+      <Text style={styles.pointsColor}>{item.points}</Text>
+      <Text style={styles.pointsColor}> pts</Text>
     </View>
   </View>
 ))}
@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
   },
   profileImage: {
     width: 70,
@@ -242,10 +241,11 @@ const styles = StyleSheet.create({
     fontFamily: 'GirottMunch-Bold',
   },
   cell: {
+    flexDirection: "row",
     flex: 2,
     fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'left',
+    textAlign: 'center',
     color: colors.white,
     fontFamily: 'GirottMunch-Bold',
   },
@@ -258,8 +258,17 @@ const styles = StyleSheet.create({
   bronze: {
     backgroundColor: 'brown',
   },
-
-
+  pointsColor: {
+    fontSize:20,
+    color:"white"
+  },
+  flex1: {
+    flex:1
+  },
+  flex2: {
+    flex:2
+  }
+ 
 
 });
 
