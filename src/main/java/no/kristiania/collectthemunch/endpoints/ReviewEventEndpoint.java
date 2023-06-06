@@ -42,7 +42,4 @@ public class ReviewEventEndpoint extends ApiEndPoint {
     public List<Review> getReviewsFromUser(@PathParam("userId") int userId) throws SQLException {
         return reviewEventDao.getAllEventReviewsFromUser(userId);
     }
-
-
-
 }
