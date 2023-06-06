@@ -40,9 +40,33 @@ public class ReviewAppEndpoint extends ApiEndPoint {
     @Path("/getbyId/{user_id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Review getAppReviewById(@PathParam("user_id") int userId){
-
-        return null;
+    public Response getAppReviewById(@PathParam("user_id") int userId){
+        //TODO: Test if using a response works better for exception handling
+        // 200 = OK with json review object.
+        // 404 = notfound with json containing message
+        // 500 = SQL exception with json containing generic internal server error message
+        // frontend has to account for other response codes than 200.
+        try {
+            Review review = reviewAppDao.retrieveReviewById(userId);
+            return Response.ok(review).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Handle or log the exception
+            return Response.serverError().build();
+        }
+        /*
+        var review = new Review();
+        try {
+            review = reviewAppDao.retrieveReviewById(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return review;
+        */
     }
 
     @Path("/getbystars/{num_stars}")

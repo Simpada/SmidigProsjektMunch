@@ -38,7 +38,11 @@ public class ReviewAppDao extends AbstractDao{
                 statement.setInt(1, userId);
                 try(var resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        var review = new
+                        var review = new Review();
+                        review.setId(resultSet.getInt("user_id"));
+                        review.setReviewText(resultSet.getString("review_text"));
+                        review.setNumOfStars(resultSet.getInt("num_stars"));
+                        return review;
                     } else {
                         // Review not found, throw a not found exception with user id
                         throw new NotFoundException("Review not found with ID: " + userId);
@@ -47,4 +51,5 @@ public class ReviewAppDao extends AbstractDao{
             }
         }
     }
+
 }
