@@ -44,7 +44,6 @@ public class EventDao extends AbstractDao{
                 e.printStackTrace();
             }
         }
-
         return filteredEvents;
     }
 
