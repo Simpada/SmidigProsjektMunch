@@ -24,6 +24,16 @@ public class Painting {
         this.points = points;
     }
 
+    @Override
+    public String toString() {
+        return "ID: " + this.paintingId + "\n" +
+                "Name: " + this.name + "\n" +
+                "Author: " + this.author + "\n" +
+                "Art Information: " + this.artInformation + "\n" +
+                "Rarity: " + this.rarity + "\n" +
+                "Points: " + this.points;
+    }
+
     public int getPaintingId() {
         return paintingId;
     }
