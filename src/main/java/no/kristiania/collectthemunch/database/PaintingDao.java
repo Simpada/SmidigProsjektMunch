@@ -7,6 +7,7 @@ import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +26,19 @@ public class PaintingDao extends AbstractDao {
             try (var connection = dataSource.getConnection()) {
                 String query = "INSERT INTO Paintings (name, author, painting_image, art_information, rarity, points) VALUES (?, ?, ?, ?, ?, ?)";
 
-                try (var statement = connection.prepareStatement(query)) {
+                try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                     statement.setString(1, painting.getName());
                     statement.setString(2, painting.getAuthor());
                     statement.setBytes(3, painting.getPaintingImage());
                     statement.setString(4, painting.getArtInformation());
                     statement.setString(5, painting.getRarity());
-                    statement.setInt(6, painting.getPaintingId());
+                    statement.setInt(6, painting.getPoints());
+
+                    statement.executeUpdate();
+                    try (var generatedKeys = statement.getGeneratedKeys()) {
+                        generatedKeys.next();
+                        painting.setPaintingId(generatedKeys.getInt(1));
+                    }
                 }
             }
         //}
@@ -57,7 +64,15 @@ public class PaintingDao extends AbstractDao {
 
     public List<Painting> retrieveAllForUser(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Paintings_Collected WHERE user_id = ?";
+            String query = """
+                    SELECT *
+                    FROM Paintings
+                    JOIN Paintings_Collected
+                        ON Paintings.painting_id = Paintings_Collected.painting_id
+                    JOIN Users
+                        ON Users.user_id = Paintings_Collected.user_id
+                    WHERE Users.user_id = ?
+                    """;
 
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
@@ -82,7 +97,7 @@ public class PaintingDao extends AbstractDao {
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
                 statement.setInt(2, paintingId);
-                statement.executeQuery();
+                statement.executeUpdate();
             }
         }
     }
