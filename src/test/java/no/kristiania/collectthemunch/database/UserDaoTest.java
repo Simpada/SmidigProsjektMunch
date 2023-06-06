@@ -25,9 +25,6 @@ public class UserDaoTest {
 
         var user2 = userDao.retrieve(user.getUserId());
 
-//        Collections.sort(user.getPreferences());
-//        Collections.sort(user2.getPreferences());
-
         System.out.println(user);
         user.printPreferences();
 
