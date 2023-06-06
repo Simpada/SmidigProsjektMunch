@@ -63,7 +63,7 @@ public class UserDao extends AbstractDao {
 
     public boolean validateUniqueUser(String username, String email) throws SQLException {
         List<String> existingUsernames = retrieveUsernames();
-        List<String> existingEmail = retrieveEmails();
+        List<String> existingEmails = retrieveEmails();
 
         for (String s : existingUsernames) {
             if (username.equals(s)) {
@@ -71,7 +71,7 @@ public class UserDao extends AbstractDao {
             }
         }
 
-        for (String s : existingEmail) {
+        for (String s : existingEmails) {
             if (email.equals(s)) {
                 return false;
             }
