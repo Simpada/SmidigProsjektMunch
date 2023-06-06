@@ -21,13 +21,13 @@ public class ReviewEventEndpoint extends ApiEndPoint {
     public Review getEventReviews(@PathParam("eventId") int eventId, @PathParam("userId") int userId) throws SQLException {
         return reviewEventDao.getReviewFromUserOnEvent(eventId, userId);
     }
+
     @Path("/{eventId}/{userId}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void saveReview(Review review, @PathParam("eventId") int eventId, @PathParam("userId") int userId) throws SQLException {
         reviewEventDao.save(review, eventId, userId);
     }
-
 
     @Path("/{eventId}")
     @GET
@@ -40,7 +40,7 @@ public class ReviewEventEndpoint extends ApiEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Review> getReviewsFromUser(@PathParam("userId") int userId) throws SQLException {
-        return reviewEventDao.getAllReviewsFromEvent(userId);
+        return reviewEventDao.getAllEventReviewsFromUser(userId);
     }
 
 
