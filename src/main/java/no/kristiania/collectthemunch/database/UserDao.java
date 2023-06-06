@@ -20,10 +20,10 @@ public class UserDao extends AbstractDao {
 
     public void save(User user) throws SQLException {
         if (validateUniqueUser(user.getUsername(), user.getEmail())) {
-            if (validatePreferences(user.getPreferences())) {
+           // if (validatePreferences(user.getPreferences())) {
                 saveUser(user);
                 saveUserPreferences(user);
-            }
+           // }
         }
     }
 
