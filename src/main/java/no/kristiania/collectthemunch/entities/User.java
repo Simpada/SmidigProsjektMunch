@@ -10,7 +10,7 @@ public class User {
     private String dateOfBirth;
     private String email;
     private List<String> preferences;
-    private byte[] profilePicture = {1};  //temp datatype until we know how to parse
+    private byte[] profilePicture;  //temp datatype until we know how to parse
 
     public User() {
 

@@ -25,11 +25,10 @@ public class EventDaoTest {
             var event = SampleData.sampleEvent();
 
             eventDao.save(event);
-            eventDao.saveCategoriesByEvent(event);
-            System.out.println(event.getCategories());
+            eventDao.saveEventCategories(event);
 
             var returnedEvent = eventDao.getEventById(event.getId());
-            System.out.println(returnedEvent.getCategories());
+            System.out.println(returnedEvent.getName());
 
             assertThat(returnedEvent)
                     .hasNoNullFieldsOrProperties()

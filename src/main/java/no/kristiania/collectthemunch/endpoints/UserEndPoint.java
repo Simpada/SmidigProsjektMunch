@@ -60,10 +60,10 @@ public class UserEndPoint extends ApiEndPoint {
         userDao.updatePreferences(userId, preferences);
     }
 
-    @Path("/inventory")
+    @Path("/inventory/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Painting> getPaintingsForUser(int userId) throws SQLException {
+    public List<Painting> getPaintingsForUser(@PathParam("userId") int userId) throws SQLException {
         return paintingDao.retrieveAllForUser(userId);
     }
 
