@@ -37,26 +37,37 @@ const LeaderboardScreen = () => {
       </View>
 
       <View style={styles.headerContainer}>
-        
-        <ScrollView horizontal>
-          {leaderboard.slice(0, 3).map((item) => (
-            <View style={styles.winnerContainer} key={item.id}>
-              <View style={styles.profileImageContainer}>
-                <Image source={item.profileImage} style={styles.profileImage} />
-              </View>
-              <Text style={styles.winnerName}>{item.fullName}</Text>
-              <Text style={styles.winnerPoints}>{item.points} points</Text>
-            </View>
-          ))}
-        </ScrollView>
+     
+
+<ScrollView horizontal>
+  {leaderboard.slice(0, 3).map((item, index) => (
+    <View style={styles.winnerContainer} key={item.id}>
+      <View style={[
+        styles.profileImageContainer,
+        index === 0 && styles.gold,
+        index === 1 && styles.silver,
+        index === 2 && styles.bronze,
+      ]}>
+        <Image source={item.profileImage} style={styles.profileImage} />
+        <View style={styles.circleTopThree}>
+          <Text style={styles.circleTopThreeText}>{index + 1}</Text>
+        </View>
       </View>
+      <Text style={styles.winnerName}>{item.fullName}</Text>
+      <Text style={styles.winnerPoints}>{item.points} points</Text>
+    </View>
+  ))}
+</ScrollView>
+
+
+
+</View>
 
       <ScrollView>
         <View style={styles.table}>
           <View style={styles.tableHeader}>
-            <Text style={styles.headerIdText}>ID</Text>
-            <Text style={styles.headerText}>Full Name</Text>
             <Text style={styles.headerText}>Name</Text>
+            <Text style={styles.headerText}>Username</Text>
             <Text style={styles.headerText}>Points</Text>
           </View>
           {leaderboard.map((item, index) => (
@@ -106,7 +117,7 @@ const styles = StyleSheet.create({
     color: colors.white,
   },
   headerContainer: {
-    marginTop: 0, // Adjust the marginTop value to move the container further up
+    marginTop: 0,
     marginBottom: 20,
     alignItems: 'center',
   },
@@ -115,6 +126,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   profileImageContainer: {
+    position: 'relative',
     width: 80,
     height: 80,
     borderRadius: 40,
@@ -175,10 +187,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
+    
+  },
+  circleTopThree: {
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    borderRadius: 2,
+    backgroundColor: 'inherit',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: -5,
+    transform: 'rotate(45deg)'
+    
+  },
+  circleTopThreeText: {
+    position: 'absolute',
+    transform: 'rotate(-45deg)',
+    fontWeight: 'bold',
+    fontFamily: 'GirottMunch-Bold',
   },
   circleText: {
     fontWeight: 'bold',
-    fontFamily: 'GirottMunch-Bold'
+    fontFamily: 'GirottMunch-Bold',
   },
   cell: {
     flex: 2,
