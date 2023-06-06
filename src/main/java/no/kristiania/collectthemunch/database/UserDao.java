@@ -1,7 +1,6 @@
 package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
-import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.User;
 
 import javax.sql.DataSource;
@@ -20,19 +19,12 @@ public class UserDao extends AbstractDao {
     }
 
     public void save(User user) throws SQLException {
-        if (validatePreferences(user.getPreferences())) {
-            saveUser(user);
-            saveUserPreferences(user);
-        }
-    }
-
-    public boolean validatePreferences(List<String> preferences) {
-        for (String s : preferences) {
-            if (!validateCategoryEnum(s)) {
-                return false;
+        if (validateUniqueUser(user.getUsername(), user.getEmail())) {
+            if (validatePreferences(user.getPreferences())) {
+                saveUser(user);
+                saveUserPreferences(user);
             }
         }
-        return true;
     }
 
     private void saveUser(User user) throws SQLException {
@@ -66,6 +58,79 @@ public class UserDao extends AbstractDao {
                     statement.executeUpdate();
                 }
             }
+        }
+    }
+
+    public boolean validateUniqueUser(String username, String email) throws SQLException {
+        List<String> existingUsernames = retrieveUsernames();
+        List<String> existingEmails = retrieveEmails();
+
+        for (String s : existingUsernames) {
+            if (username.equals(s)) {
+                return false;
+            }
+        }
+
+        for (String s : existingEmails) {
+            if (email.equals(s)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public List<String> retrieveUsernames() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT username FROM users";
+
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<String> usernames = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        usernames.add(resultSet.getString("username"));
+                    }
+                    return usernames;
+                }
+            }
+        }
+    }
+
+    public List<String> retrieveEmails() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT email FROM users";
+
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<String> emails = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        emails.add(resultSet.getString("email"));
+                    }
+                    return emails;
+                }
+            }
+        }
+    }
+
+    public boolean validatePreferences(List<String> preferences) {
+        for (String s : preferences) {
+            if (!validateCategoryEnum(s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public User login(String username, String password) throws SQLException {
+        User user = retrieve(username);
+
+        if (user == null || !password.equals(user.getPassword())) {
+            System.out.println("No user or wrong login/password");
+            return null;
+        } else {
+            return user;
         }
     }
 
@@ -126,7 +191,6 @@ public class UserDao extends AbstractDao {
             }
         }
     }
-
 
     public void updatePreferences(int userId, List<String> preferences) throws SQLException {
         removeUserPreferences(userId);
@@ -192,6 +256,8 @@ public class UserDao extends AbstractDao {
             }
         }
     }
+
+
 }
 
 
