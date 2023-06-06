@@ -21,10 +21,25 @@ public class UserDao extends AbstractDao {
 
     public void save(User user) throws SQLException {
         if (validatePreferences(user.getPreferences())) {
+
+            //check duplicates
+
+
             saveUser(user);
             saveUserPreferences(user);
         }
     }
+
+    public void checkUsername() {
+
+    }
+
+    public void checkEmail() {
+
+    }
+
+
+
 
     public boolean validatePreferences(List<String> preferences) {
         for (String s : preferences) {
@@ -72,7 +87,7 @@ public class UserDao extends AbstractDao {
     public User login(String username, String password) throws SQLException {
         User user = retrieve(username);
 
-        if (user == null || !user.getPassword().equals(password)) {
+        if (user == null || !password.equals(user.getPassword())) {
             System.out.println("No user or wrong login/password");
             return null;
         }
