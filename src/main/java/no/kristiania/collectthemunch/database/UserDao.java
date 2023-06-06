@@ -27,71 +27,6 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public boolean validateUniqueUser(String username, String email) throws SQLException {
-        List<String> existingUsernames = retrieveUsernames();
-        List<String> existingEmail = retrieveEmails();
-
-        for (String s : existingUsernames) {
-            if (username.equals(s)) {
-                return false;
-            }
-        }
-
-        for (String s : existingEmail) {
-            if (email.equals(s)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public List<String> retrieveUsernames() throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "SELECT username FROM users";
-
-            try (var statement = connection.prepareStatement(query)) {
-                try (var resultSet = statement.executeQuery()) {
-                    List<String> usernames = new ArrayList<>();
-
-                    while (resultSet.next()) {
-                       usernames.add(resultSet.getString("username"));
-                    }
-                    return usernames;
-                }
-            }
-        }
-    }
-
-    public List<String> retrieveEmails() throws SQLException {
-        try (var connection = dataSource.getConnection()) {
-            String query = "SELECT email FROM users";
-
-            try (var statement = connection.prepareStatement(query)) {
-                try (var resultSet = statement.executeQuery()) {
-                    List<String> emails = new ArrayList<>();
-
-                    while (resultSet.next()) {
-                        emails.add(resultSet.getString("email"));
-                    }
-                    return emails;
-                }
-            }
-        }
-    }
-
-
-
-
-    public boolean validatePreferences(List<String> preferences) {
-        for (String s : preferences) {
-            if (!validateCategoryEnum(s)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     private void saveUser(User user) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
@@ -126,14 +61,75 @@ public class UserDao extends AbstractDao {
         }
     }
 
+    public boolean validateUniqueUser(String username, String email) throws SQLException {
+        List<String> existingUsernames = retrieveUsernames();
+        List<String> existingEmail = retrieveEmails();
+
+        for (String s : existingUsernames) {
+            if (username.equals(s)) {
+                return false;
+            }
+        }
+
+        for (String s : existingEmail) {
+            if (email.equals(s)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public List<String> retrieveUsernames() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT username FROM users";
+
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<String> usernames = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        usernames.add(resultSet.getString("username"));
+                    }
+                    return usernames;
+                }
+            }
+        }
+    }
+
+    public List<String> retrieveEmails() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT email FROM users";
+
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<String> emails = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        emails.add(resultSet.getString("email"));
+                    }
+                    return emails;
+                }
+            }
+        }
+    }
+
+    public boolean validatePreferences(List<String> preferences) {
+        for (String s : preferences) {
+            if (!validateCategoryEnum(s)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public User login(String username, String password) throws SQLException {
         User user = retrieve(username);
 
         if (user == null || !password.equals(user.getPassword())) {
             System.out.println("No user or wrong login/password");
             return null;
-        }
-        else {
+        } else {
             return user;
         }
     }
@@ -195,7 +191,6 @@ public class UserDao extends AbstractDao {
             }
         }
     }
-
 
     public void updatePreferences(int userId, List<String> preferences) throws SQLException {
         removeUserPreferences(userId);
