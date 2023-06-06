@@ -21,6 +21,7 @@ const EventsScreen = () => {
       try {
         const response = await axios.get('https://findthemunchgame.azurewebsites.net/api/events');
         const data = response.data;
+        console.log(data)
         setEvents(data);
         setFilteredEvents(data);
       } catch (error) {
@@ -87,7 +88,8 @@ const EventsScreen = () => {
         <View style={styles.eventTitleContainer}>
           <Text style={styles.eventTitle}>New Events</Text>
         </View>
-        <EventList
+
+        <EventList 
           style={styles.list}
           events={filteredEvents}
           handleEventPress={handleEventPress}

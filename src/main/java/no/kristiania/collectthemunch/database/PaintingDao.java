@@ -1,5 +1,6 @@
 package no.kristiania.collectthemunch.database;
 
+import jakarta.inject.Inject;
 import no.kristiania.collectthemunch.entities.Painting;
 
 import javax.sql.DataSource;
@@ -14,12 +15,13 @@ import static no.kristiania.collectthemunch.entities.Rarity.validateRarityEnum;
 
 public class PaintingDao extends AbstractDao {
 
+    @Inject
     public PaintingDao(DataSource dataSource) {
         super(dataSource);
     }
 
     public void save(Painting painting) throws SQLException {
-        if (validateRarityEnum(painting.getRarity())) {
+        //if (validateRarityEnum(painting.getRarity())) {
 
             try (var connection = dataSource.getConnection()) {
                 String query = "INSERT INTO Paintings (name, author, painting_image, art_information, rarity, points) VALUES (?, ?, ?, ?, ?, ?)";
@@ -39,7 +41,7 @@ public class PaintingDao extends AbstractDao {
                     }
                 }
             }
-        }
+        //}
     }
 
     public List<Painting> retrieveAll() throws SQLException {

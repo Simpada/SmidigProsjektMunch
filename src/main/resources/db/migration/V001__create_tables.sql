@@ -11,18 +11,18 @@ CREATE TABLE Users
 CREATE TABLE Paintings
 (
     painting_id     INT IDENTITY PRIMARY KEY,
-    name            VARCHAR(100),
-    author          VARCHAR(100),
+    name            VARCHAR(100) NOT NULL,
+    author          VARCHAR(100) NOT NULL,
     painting_image  varbinary(max),
     rarity          VARCHAR(50) CHECK (rarity IN ('COMMON', 'RARE', 'EPIC', 'LEGENDARY')),
     points          INT,
-    art_information VARCHAR(1000)
+    art_information VARCHAR(1000) NOT NULL
 );
 
 CREATE TABLE Events
 (
     event_id    INT IDENTITY PRIMARY KEY,
-    name VARCHAR(100),
+    name VARCHAR(100) NOT NULL,
     description VARCHAR(1000) NOT NULL,
     poster varbinary(max)
 );
@@ -31,7 +31,7 @@ CREATE TABLE App_Reviews
 (
     user_id     INT PRIMARY KEY,
     review_text VARCHAR(1000),
-    num_stars   INT,
+    num_stars   INT NOT NULL,
     CONSTRAINT fk_userid_to_app_review FOREIGN KEY (user_id) REFERENCES Users (user_id)
 );
 
@@ -41,7 +41,7 @@ CREATE TABLE Event_Reviews
     user_id     INT,
     event_id    INT,
     review_text VARCHAR(1000),
-    num_stars   INT,
+    num_stars   INT NOT NULL,
     CONSTRAINT fk_userid_to_review FOREIGN KEY (user_id) REFERENCES Users (user_id),
     CONSTRAINT fk_event_review FOREIGN KEY (event_id) REFERENCES Events (event_id)
 );

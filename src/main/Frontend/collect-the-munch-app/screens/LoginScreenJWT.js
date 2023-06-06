@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import jwtDecode from 'jwt-decode';
 import * as Font from 'expo-font';
 
 const LoginScreen = () => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [fontLoaded, setFontLoaded] = useState(false);
@@ -23,66 +22,44 @@ const LoginScreen = () => {
   };
 
   const checkLoginStatus = async () => {
-    // Check if a token exists in storage
-    const token = await AsyncStorage.getItem('jwt_token');
-    if (token) {
-      // Verify the token's validity
-      try {
-        const decodedToken = jwtDecode(token);
-        const currentTime = Date.now() / 1000; // Convert to seconds
+    // Check if the user is already logged in
+    // You can implement your own logic here, such as checking AsyncStorage or a server-side session
 
-        // Check if the token has expired
-        if (decodedToken.exp < currentTime) {
-          // Token has expired, clear it from storage
-          await AsyncStorage.removeItem('jwt_token');
-          setIsLoggedIn(false);
-        } else {
-          // Token is valid, set the login state
-          setIsLoggedIn(true);
-        }
-      } catch (error) {
-        // Error occurred while decoding or verifying the token
-        console.log('Token verification error:', error);
-      }
+    // For demonstration purposes, we'll consider the user logged in if a username is stored
+    const storedUsername = await AsyncStorage.getItem('username');
+    if (storedUsername) {
+      setIsLoggedIn(true);
     }
   };
 
-  const handleLoginGet = async () => {
-    try {
-      const response = await fetch('Your API endpoint to GET here', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+  const handleLogin = async () => {
+    // Perform your login logic here
+    // You can replace this with your API call or authentication mechanism
 
-      // Extract the JWT token from the response
-      const token = await response.text();
-
-      // Store the token in AsyncStorage
-      await AsyncStorage.setItem('jwt_token', token);
-
-      // Decode the token to get user information
-      const user = jwtDecode(token);
-
-      // Perform any necessary actions with the user data
-      console.log('User:', user);
-
+    // For demonstration purposes, we'll simply check if the username and password match hardcoded values
+    if (username === 'user1' && password === 'password1') {
       // Update the login state
       setIsLoggedIn(true);
-    } catch (error) {
+
+      // Store the username in AsyncStorage to simulate a logged-in state
+      await AsyncStorage.setItem('username', username);
+    } else {
       // Handle login error
-      Alert.alert('Login Failed', error.message);
+      Alert.alert('Login Failed', 'Invalid username or password');
     }
   };
 
   const handleLogout = async () => {
-    // Clear the token from storage and update the login state
-    await AsyncStorage.removeItem('jwt_token');
+    // Clear the username from storage and update the login state
+    await AsyncStorage.removeItem('username');
     setIsLoggedIn(false);
   };
 
   const renderContent = () => {
+    if (!fontLoaded) {
+      return null; // Render nothing until the custom font is loaded
+    }
+
     if (isLoggedIn) {
       return (
         <View style={styles.loggedContainer}>
@@ -98,10 +75,10 @@ const LoginScreen = () => {
           </View>
           <TextInput
             style={styles.input}
-            placeholder="Email"
+            placeholder="Username"
             placeholderTextColor={'white'}
-            value={email}
-            onChangeText={setEmail}
+            value={username}
+            onChangeText={setUsername}
             autoCapitalize="none"
           />
           <TextInput
@@ -112,17 +89,13 @@ const LoginScreen = () => {
             onChangeText={setPassword}
             secureTextEntry
           />
-          <TouchableOpacity style={styles.button} onPress={handleLoginGet}>
+          <TouchableOpacity style={styles.button} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
         </View>
       );
     }
   };
-
-  if (!fontLoaded) {
-    return null; // Render nothing until the custom font is loaded
-  }
 
   return renderContent();
 };
@@ -159,8 +132,7 @@ const styles = StyleSheet.create({
     padding: 10,
     fontFamily: 'GirottMunch-BoldBackslant',
     textAlign: 'center',
-    color: 'white', 
-    
+    color: 'white',
   },
   button: {
     width: '100%',
