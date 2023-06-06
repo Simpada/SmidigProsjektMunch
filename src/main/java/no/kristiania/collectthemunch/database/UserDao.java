@@ -1,7 +1,6 @@
 package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
-import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.User;
 
 import javax.sql.DataSource;
@@ -20,22 +19,65 @@ public class UserDao extends AbstractDao {
     }
 
     public void save(User user) throws SQLException {
-        if (validatePreferences(user.getPreferences())) {
-
-            //check duplicates
-
-
-            saveUser(user);
-            saveUserPreferences(user);
+        if (validateUniqueUser(user.getUsername(), user.getEmail())) {
+            if (validatePreferences(user.getPreferences())) {
+                saveUser(user);
+                saveUserPreferences(user);
+            }
         }
     }
 
-    public void checkUsername() {
+    public boolean validateUniqueUser(String username, String email) throws SQLException {
+        List<String> existingUsernames = retrieveUsernames();
+        List<String> existingEmail = retrieveEmails();
 
+        for (String s : existingUsernames) {
+            if (username.equals(s)) {
+                return false;
+            }
+        }
+
+        for (String s : existingEmail) {
+            if (email.equals(s)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    public void checkEmail() {
+    public List<String> retrieveUsernames() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT username FROM users";
 
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<String> usernames = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                       usernames.add(resultSet.getString("username"));
+                    }
+                    return usernames;
+                }
+            }
+        }
+    }
+
+    public List<String> retrieveEmails() throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT email FROM users";
+
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<String> emails = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        emails.add(resultSet.getString("email"));
+                    }
+                    return emails;
+                }
+            }
+        }
     }
 
 
