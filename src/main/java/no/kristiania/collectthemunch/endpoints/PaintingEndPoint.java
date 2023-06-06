@@ -15,6 +15,8 @@ public class PaintingEndPoint extends ApiEndPoint {
     public List<Painting> getAllPainting() throws SQLException {
         return paintingDao.retrieveAll();
     }
+
+    @Path("/new")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void save(Painting painting) throws SQLException {
