@@ -73,19 +73,15 @@ const LeaderboardScreen = () => {
             ? styles.tableRowWithBorder
             : styles.tableRow
             } key={item.id}>
-              <View
-                style={[
-                  styles.circle,
-                  index === 0 && styles.gold,
-                  index === 1 && styles.silver,
-                  index === 2 && styles.bronze,
-                ]}
-              >
+              <View style={styles.circle}>
                 <Text style={styles.circleText}>{item.id}</Text>
               </View>
               <Text style={styles.cell}>{item.fullName}</Text>
               <Text style={styles.cell}>{"@"+`${item.userName}`}</Text>
-              <Text style={styles.cell}>{item.points}</Text>
+              <View style={styles.pointsContainer}>
+                <Text style={styles.cell}>{item.points}</Text>
+                <Text style={styles.pts}>pts</Text>
+              </View>
             </View>
           ))}
         </View>
@@ -238,6 +234,9 @@ const styles = StyleSheet.create({
   bronze: {
     backgroundColor: 'brown',
   },
+
+
+
 });
 
 export default LeaderboardScreen;
