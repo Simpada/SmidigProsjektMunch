@@ -18,6 +18,14 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.retrieveAll();
     }
 
+    @Path("/login/{username}/{password}")
+    @GET
+    @Produces
+    public User login(@PathParam("username") String username, @PathParam("password") String password) throws SQLException {
+        return userDao.login(username, password);
+    }
+
+    @Path("/register")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void addUser(User user) throws SQLException {
@@ -31,7 +39,7 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.retrieve(userId);
     }
 
-    @Path("/name/{userName}")
+    @Path("/username/{userName}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User retrieveUserByUsername(@PathParam("userName") String username) throws SQLException {
