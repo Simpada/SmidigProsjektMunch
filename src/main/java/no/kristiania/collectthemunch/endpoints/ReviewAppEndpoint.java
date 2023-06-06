@@ -80,8 +80,18 @@ public class ReviewAppEndpoint extends ApiEndPoint {
     @Path("/getbystars/{num_stars}")
     @GET
     @Produces()
-    public List<Review> getAppReviewsByStars(@PathParam("num_stars") int numStars){
+    public Response getAppReviewsByStars(@PathParam("num_stars") int numStars){
+        try {
+            var appReviewsSorted = reviewAppDao.retrieveAppReviewsByStars(numStars);
+            return Response.ok(appReviewsSorted).build();
+        } catch (NotFoundException nfe) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(nfe.getMessage())
+                    .build();
+        } catch (SQLException sqlE) {
+            sqlE.printStackTrace();
 
-        return null;
+            return Response.serverError().build();
+        }
     }
 }

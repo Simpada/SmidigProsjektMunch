@@ -70,6 +70,26 @@ public class ReviewAppDao extends AbstractDao{
         }
     }
 
+    public List<Review> retrieveAppReviewsByStars(int numStars) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * From App_Reviews WHERE num_stars = ?";
+            try(var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, numStars);
+                try(var resultSet = statement.executeQuery()) {
+                    List<Review> resultReviews = new ArrayList<>();
+                    if (resultSet.next()) {
+                        while (resultSet.next()) {
+                            resultReviews.add(mapFromResultSet(resultSet));
+                        }
+                        return resultReviews;
+                    } else {
+                        throw new NotFoundException("No reviews with " + numStars + " stars found.");
+                    }
+                }
+            }
+        }
+    }
+
     private Review mapFromResultSet(ResultSet resultSet) throws SQLException {
         var review = new Review();
         review.setId(resultSet.getInt("user_id"));
