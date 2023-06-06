@@ -42,9 +42,9 @@ public class ReviewAppDao extends AbstractDao{
                 try(var resultSet = statement.executeQuery()) {
                     List<Review> resultReviews = new ArrayList<>();
                     if (resultSet.next()) {
-                        while (resultSet.next()) {
+                        do {
                             resultReviews.add(mapFromResultSet(resultSet));
-                        }
+                        } while (resultSet.next());
                         return resultReviews;
                     } else {
                         throw new NotFoundException("No reviews registered for this app");
@@ -79,9 +79,9 @@ public class ReviewAppDao extends AbstractDao{
                 try(var resultSet = statement.executeQuery()) {
                     List<Review> resultReviews = new ArrayList<>();
                     if (resultSet.next()) {
-                        while (resultSet.next()) {
+                        do {
                             resultReviews.add(mapFromResultSet(resultSet));
-                        }
+                        } while (resultSet.next());
                         return resultReviews;
                     } else {
                         throw new NotFoundException("No reviews with " + numStars + " stars found.");
@@ -96,6 +96,7 @@ public class ReviewAppDao extends AbstractDao{
         review.setId(resultSet.getInt("user_id"));
         review.setReviewText(resultSet.getString("review_text"));
         review.setNumOfStars(resultSet.getInt("num_stars"));
+        System.out.println(review.getReviewText());
         return review;
     }
 
