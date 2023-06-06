@@ -7,9 +7,16 @@ const LeaderboardScreen = () => {
 
   useEffect(() => {
     const initialLeaderboard = [
-      { id: 1, fullName: 'Jonas Andersen', userName: 'Jønna', points: 2000, profileImage: require('../assets/profile1.png') },
-      { id: 2, fullName: 'Sander Sanstrød', userName: 'Sand', points: 1800, profileImage: require('../assets/profile2.png') },
-      { id: 3, fullName: 'Samuel something', userName: 'The', points: 1500, profileImage: require('../assets/profile3.png') },
+      { id: 1, fullName: 'Lily Pilly', userName: 'lily23', points: 2468, profileImage: require('../assets/Images/lily.jpg') },
+      { id: 2, fullName: 'Jackson Hubert', userName: 'Jackson_H', points: 1882, profileImage: require('../assets/Images/profile1.png') },
+      { id: 3, fullName: 'Shockdoggo', userName: 'shockdoggo47', points: 1532, profileImage: require('../assets/Images/shockdoggo.jpg') },
+      { id: 4, fullName: 'John Smithies', userName: 'JohnSmithies66', points: 1521, profileImage: require('../assets/Images/profile1.png') },
+      { id: 5, fullName: 'Arnold Schwarzenegger', userName: 'Arnold', points: 1511, profileImage: require('../assets/Images/profile1.png') },
+      { id: 6, fullName: 'Carly Harley', userName: 'iCarly3', points: 1501, profileImage: require('../assets/Images/profile1.png') },
+      { id: 7, fullName: 'Jesper Hansen', userName: 'jSper_00', points: 1493, profileImage: require('../assets/Images/profile1.png') },
+      { id: 8, fullName: 'Isak Einarsen', userName: 'Izzy', points: 1492, profileImage: require('../assets/Images/profile1.png') },
+      { id: 9, fullName: 'Alex Dragon', userName: 'DRAGONALEX44', points: 1451, profileImage: require('../assets/Images/profile1.png') },
+      { id: 10, fullName: 'Karen Haren', userName: 'karen_haren', points: 1447, profileImage: require('../assets/Images/profile1.png') },
     ];
 
     setLeaderBoard(initialLeaderboard);
@@ -30,7 +37,7 @@ const LeaderboardScreen = () => {
       </View>
 
       <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>Top 3 Winners</Text>
+        
         <ScrollView horizontal>
           {leaderboard.slice(0, 3).map((item) => (
             <View style={styles.winnerContainer} key={item.id}>
@@ -53,16 +60,15 @@ const LeaderboardScreen = () => {
             <Text style={styles.headerText}>Points</Text>
           </View>
           {leaderboard.map((item, index) => (
-            <View
-              style={[
-                styles.tableRow,
-                index === 0 && styles.topOneRow,
-                index === 1 && styles.topTwoRow,
-                index === 2 && styles.topThreeRow,
-              ]}
-              key={item.id}
-            >
-              <View style={styles.circle}>
+            <View style={styles.tableRow} key={item.id}>
+              <View
+                style={[
+                  styles.circle,
+                  index === 0 && styles.gold,
+                  index === 1 && styles.silver,
+                  index === 2 && styles.bronze,
+                ]}
+              >
                 <Text style={styles.circleText}>{item.id}</Text>
               </View>
               <Text style={styles.cell}>{item.fullName}</Text>
@@ -95,19 +101,14 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   categoryText: {
-    fontWeight: 'bold',
-    color: 'white',
-  },
-  headerContainer: {
-    marginTop: 20,
-    marginBottom: 10,
-    alignItems: 'center',
-  },
-  headerText: {
-    fontSize: 18,
+    fontFamily: 'GirottMunch-Bold',
     fontWeight: 'bold',
     color: colors.white,
-    marginBottom: 10,
+  },
+  headerContainer: {
+    marginTop: 0, // Adjust the marginTop value to move the container further up
+    marginBottom: 20,
+    alignItems: 'center',
   },
   winnerContainer: {
     alignItems: 'center',
@@ -120,6 +121,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20,
   },
   profileImage: {
     width: 70,
@@ -130,10 +132,12 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontWeight: 'bold',
     marginTop: 5,
+    fontFamily: 'GirottMunch-Bold',
   },
   winnerPoints: {
     color: colors.white,
     fontWeight: 'bold',
+    fontFamily: 'GirottMunch-Bold',
   },
   table: {
     borderColor: 'black',
@@ -147,9 +151,11 @@ const styles = StyleSheet.create({
     flex: 1,
     color: colors.white,
     fontWeight: 'bold',
+    fontFamily: 'GirottMunch-Bold',
   },
   headerText: {
     flex: 2,
+    fontFamily: 'GirottMunch-Bold',
     fontSize: 18,
     color: colors.white,
     fontWeight: 'bold',
@@ -160,18 +166,6 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     padding: 10,
     alignItems: 'center',
-  },
-  topOneRow: {
-    backgroundColor: 'green',
-    color: colors.white,
-  },
-  topTwoRow: {
-    backgroundColor: 'yellow',
-    color: colors.white,
-  },
-  topThreeRow: {
-    backgroundColor: 'orange',
-    color: colors.white,
   },
   circle: {
     width: 30,
@@ -184,12 +178,24 @@ const styles = StyleSheet.create({
   },
   circleText: {
     fontWeight: 'bold',
+    fontFamily: 'GirottMunch-Bold'
   },
   cell: {
     flex: 2,
     fontSize: 16,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'left',
+    color: colors.white,
+    fontFamily: 'GirottMunch-Bold',
+  },
+  gold: {
+    backgroundColor: 'gold',
+  },
+  silver: {
+    backgroundColor: 'silver',
+  },
+  bronze: {
+    backgroundColor: 'brown',
   },
 });
 
