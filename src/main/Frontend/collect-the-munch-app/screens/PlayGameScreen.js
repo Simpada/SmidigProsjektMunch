@@ -3,6 +3,8 @@ import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
 import * as Font from 'expo-font';
 import MenuModal from '../components/MenuModal';
 
+import popImage from '../assets/Images/pop.jpg';
+
 const PlayGameScreen = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -44,6 +46,14 @@ const PlayGameScreen = () => {
         </View>
         <View style={styles.additionalTextContainer}>
           <Text style={styles.additionalText}>2 - Swipe to collect the card</Text>
+          <View style={styles.photoContainer}>
+            <View style={styles.overlayContainer}>
+              <Image source={popImage} style={styles.photo} />
+              <View style={styles.overlayTextContainer}>
+                <Text style={styles.overlayText}> </Text>
+              </View>
+            </View>
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -132,6 +142,3 @@ const styles = StyleSheet.create({
 });
 
 export default PlayGameScreen;
-
-
-
