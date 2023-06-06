@@ -76,8 +76,8 @@ const LeaderboardScreen = () => {
     }
     key={item.id}
   >
-    <View style={[styles.profileImageContainer, styles.flex1]}>
-      <Image source={item.profileImage} style={styles.profileImage} />
+    <View style={[styles.flex1, styles.imageContainer]}>
+      <Image source={item.profileImage} style={styles.profileImageRest} />
     </View>
     <View style={[styles.nameContainer, styles.flex2]}>
       <Text style={styles.fullName}>{item.fullName}</Text>
@@ -155,10 +155,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  imageContainer: {
+    alignItems:"center"
+  },
   profileImage: {
     width: 70,
     height: 70,
     borderRadius: 35,
+  },
+  profileImageRest: {
+    width: 55,
+    height: 55,
+    borderRadius: "50%",
   },
   winnerName: {
     color: colors.white,
