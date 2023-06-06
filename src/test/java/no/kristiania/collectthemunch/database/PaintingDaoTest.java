@@ -4,6 +4,10 @@ import no.kristiania.collectthemunch.MemoryDataSource;
 import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
+import static no.kristiania.collectthemunch.SampleData.samplePainting;
+
 public class PaintingDaoTest {
 
     private final JdbcDataSource dataSource = (JdbcDataSource) MemoryDataSource.createTestDataSource();
@@ -11,8 +15,12 @@ public class PaintingDaoTest {
 
 
     @Test
-    void shouldSaveAndRetrieveUser() {
-        
+    void shouldSaveAndRetrieveUser() throws SQLException {
+        var painting = samplePainting();
+        paintingDao.save(painting);
+
+
+
     }
 
 

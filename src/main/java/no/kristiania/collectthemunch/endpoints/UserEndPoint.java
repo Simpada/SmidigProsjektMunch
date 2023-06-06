@@ -5,6 +5,7 @@ import jakarta.ws.rs.core.MediaType;
 import no.kristiania.collectthemunch.entities.Painting;
 import no.kristiania.collectthemunch.entities.User;
 
+import javax.print.attribute.standard.Media;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,7 @@ public class UserEndPoint extends ApiEndPoint {
 
     @Path("/login/{username}/{password}")
     @GET
-    @Produces
+    @Produces(MediaType.APPLICATION_JSON)
     public User login(@PathParam("username") String username, @PathParam("password") String password) throws SQLException {
         return userDao.login(username, password);
     }
