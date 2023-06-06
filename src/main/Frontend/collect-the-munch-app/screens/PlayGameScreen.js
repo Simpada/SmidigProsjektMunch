@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, Image, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import * as Font from 'expo-font';
 import MenuModal from '../components/MenuModal';
 
@@ -65,6 +65,16 @@ const PlayGameScreen = () => {
               </View>
             </View>
           </View>
+        </View>
+
+        {/* Buttons */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Play Solo</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Create A Party</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </ScrollView>
@@ -152,6 +162,24 @@ const styles = StyleSheet.create({
   },
   additionalTextSpacer: {
     height: 10,
+  },
+  buttonContainer: {
+    alignItems: 'center', // Center buttons horizontally
+    marginTop: 20,
+  },
+  button: {
+    backgroundColor: 'red',
+    width: 150,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 18,
+    fontFamily: 'GirottMunch-Bold',
   },
 });
 
