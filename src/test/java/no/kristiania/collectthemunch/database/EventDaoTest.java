@@ -64,7 +64,7 @@ public class EventDaoTest {
         List<Event> filteredEvents = eventDao.getFilteredEvents(myPreferences);
 
         for (Event e : filteredEvents) {
-            System.out.println(e);
+            System.out.println(e.getId());
         }
     }
 
