@@ -4,6 +4,7 @@ import no.kristiania.collectthemunch.MemoryDataSource;
 import no.kristiania.collectthemunch.SampleData;
 import no.kristiania.collectthemunch.entities.Review;
 import org.h2.jdbcx.JdbcDataSource;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -11,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ReviewAppDaoTest {
@@ -39,44 +41,37 @@ public class ReviewAppDaoTest {
 
     @Test
     void shouldRetrieveAllAppReviewsInDatabase() throws SQLException {
-        for (int i = 0; i < 5; i++) {
+        List<Review> appReviews = new ArrayList<>();
+
+        for (int i = 0; i < 30; i++) {
             var review = SampleData.sampleReview();
             var user = SampleData.sampleUser();
 
             userDao.save(user);
             reviewAppDao.save(review, user.getUserId());
+            appReviews.add(review);
         }
 
-        List<Review> appReviews = reviewAppDao.retrieveAllAppReviews();
-
-        assertNotNull(appReviews);
-        assertEquals(5, appReviews.size());
+        List<Review> reviewsFromDb = reviewAppDao.retrieveAllAppReviews();
 
         for (Review review : appReviews) {
-
-            assertThat(review).hasNoNullFieldsOrProperties();
+            assertThat(reviewsFromDb)
+                    .usingRecursiveFieldByFieldElementComparator()
+                    .contains(review);
         }
     }
 
     @Test
     void shouldRetrieveAllAppReviewsWithSpecificStarsInDatabase() throws SQLException {
-        for (int i = 0; i < 5; i++) {
-            var review = SampleData.sampleReview();
-            var user = SampleData.sampleUser();
-            review.setNumOfStars(4);
+        var review = SampleData.sampleReview();
+        var user = SampleData.sampleUser();
+        review.setNumOfStars(4);
 
-            userDao.save(user);
-            reviewAppDao.save(review, user.getUserId());
-        }
+        userDao.save(user);
+        reviewAppDao.save(review, user.getUserId());
 
-        List<Review> appReviews = reviewAppDao.retrieveAppReviewsByStars(4);
-
-        assertNotNull(appReviews);
-        assertEquals(5, appReviews.size());
-
-        for (Review review : appReviews) {
-            assertEquals(review.getNumOfStars(), 4);
-            assertThat(review).hasNoNullFieldsOrProperties();
-        }
+        assertThat(reviewAppDao.retrieveAppReviewsByStars(4))
+                .usingRecursiveFieldByFieldElementComparator()
+                .contains(review);
     }
 }
