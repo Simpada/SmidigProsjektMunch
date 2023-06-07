@@ -138,7 +138,6 @@ public class UserDao extends AbstractDao {
             String query = "SELECT email FROM users";
 
             try (var statement = connection.prepareStatement(query)) {
-                statement.
                 try (var resultSet = statement.executeQuery()) {
                     List<String> emails = new ArrayList<>();
 
