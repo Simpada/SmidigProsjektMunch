@@ -96,7 +96,6 @@ public class ReviewAppDao extends AbstractDao{
         review.setId(resultSet.getInt("user_id"));
         review.setReviewText(resultSet.getString("review_text"));
         review.setNumOfStars(resultSet.getInt("num_stars"));
-        System.out.println(review.getReviewText());
         return review;
     }
 

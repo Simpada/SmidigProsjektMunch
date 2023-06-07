@@ -45,15 +45,37 @@ public class ReviewAppDaoTest {
 
             userDao.save(user);
             reviewAppDao.save(review, user.getUserId());
-            System.out.println(review.getReviewText());
         }
-        System.out.println(" --- ");
+
         List<Review> appReviews = reviewAppDao.retrieveAllAppReviews();
 
         assertNotNull(appReviews);
         assertEquals(5, appReviews.size());
 
         for (Review review : appReviews) {
+
+            assertThat(review).hasNoNullFieldsOrProperties();
+        }
+    }
+
+    @Test
+    void shouldRetrieveAllAppReviewsWithSpecificStarsInDatabase() throws SQLException {
+        for (int i = 0; i < 5; i++) {
+            var review = SampleData.sampleReview();
+            var user = SampleData.sampleUser();
+            review.setNumOfStars(4);
+
+            userDao.save(user);
+            reviewAppDao.save(review, user.getUserId());
+        }
+
+        List<Review> appReviews = reviewAppDao.retrieveAppReviewsByStars(4);
+
+        assertNotNull(appReviews);
+        assertEquals(5, appReviews.size());
+
+        for (Review review : appReviews) {
+            assertEquals(review.getNumOfStars(), 4);
             assertThat(review).hasNoNullFieldsOrProperties();
         }
     }
