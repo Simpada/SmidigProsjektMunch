@@ -28,6 +28,8 @@ public class ReviewAppDaoTest {
     void shouldSaveAppReviewInDatabase() throws SQLException {
         var review = SampleData.sampleReview();
         var user = SampleData.sampleUser();
+        review.setUserName(user.getUsername());
+        review.setProfilePicture(user.getProfilePicture());
 
         userDao.save(user);
         reviewAppDao.save(review, user.getUserId());
@@ -46,6 +48,8 @@ public class ReviewAppDaoTest {
         for (int i = 0; i < 30; i++) {
             var review = SampleData.sampleReview();
             var user = SampleData.sampleUser();
+            review.setUserName(user.getUsername());
+            review.setProfilePicture(user.getProfilePicture());
 
             userDao.save(user);
             reviewAppDao.save(review, user.getUserId());
@@ -66,6 +70,8 @@ public class ReviewAppDaoTest {
         var review = SampleData.sampleReview();
         var user = SampleData.sampleUser();
         review.setNumOfStars(4);
+        review.setUserName(user.getUsername());
+        review.setProfilePicture(user.getProfilePicture());
 
         userDao.save(user);
         reviewAppDao.save(review, user.getUserId());
