@@ -35,13 +35,14 @@ public class UserDao extends AbstractDao {
         }
 
         try (var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Users (username, password, date_of_birth, email) VALUES (?, ?, ?, ?)";
+            String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
 
             try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, user.getUsername());
                 statement.setString(2, user.getPassword());
                 statement.setString(3, user.getDateOfBirth());
                 statement.setString(4, user.getEmail());
+                statement.setBytes(5, user.getProfilePicture());
 
                 statement.executeUpdate();
                 try (var generatedKeys = statement.getGeneratedKeys()) {
