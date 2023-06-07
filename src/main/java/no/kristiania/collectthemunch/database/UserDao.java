@@ -22,7 +22,7 @@ public class UserDao extends AbstractDao {
         if (validateUniqueUser(user.getUsername(), user.getEmail())) {
            // if (validatePreferences(user.getPreferences())) {
                 saveUser(user);
-                //saveUserPreferences(user);
+                saveUserPreferences(user);
            // }
             return true;
         }
