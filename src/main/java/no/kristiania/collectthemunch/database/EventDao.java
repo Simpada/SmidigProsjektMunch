@@ -31,6 +31,7 @@ public class EventDao extends AbstractDao{
                         event.setId(resultSet.getInt("event_id"));
                         event.setName(resultSet.getString("name"));
                         event.setDescription(resultSet.getString("description"));
+                        event.setEventPoster(resultSet.getBytes("poster"));
                         event.setCategories(getCategoriesByEventId(event.getId()));
                         allEvents.add(event);
                     }
