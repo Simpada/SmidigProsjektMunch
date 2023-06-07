@@ -34,6 +34,7 @@ public class PaintingDao extends AbstractDao {
                     statement.setString(5, painting.getRarity());
                     statement.setInt(6, painting.getPoints());
 
+
                     statement.executeUpdate();
                     try (var generatedKeys = statement.getGeneratedKeys()) {
                         generatedKeys.next();
@@ -43,6 +44,10 @@ public class PaintingDao extends AbstractDao {
                 }
             }
         //}
+    }
+
+    private void convertByteArrayToImage(byte[] image) {
+
     }
 
     public List<Painting> retrieveAll() throws SQLException {
