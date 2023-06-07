@@ -65,11 +65,4 @@ public class UserEndPoint extends ApiEndPoint {
     public List<Painting> getPaintingsForUser(@PathParam("userId") int userId) throws SQLException {
         return paintingDao.retrieveAllForUser(userId);
     }
-
-    @Path("/points")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllUsersWithPoints() throws SQLException {
-        return userDao.retrieveAllUsersWithPoints();
-    }
 }
