@@ -37,7 +37,7 @@ const Review = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.reviewText}>Leave your thoughts on the game!</Text>
+      <Text style={styles.reviewText}>Leave your thoughts on the event!</Text>
       <Rating
         showRating
         onFinishRating={handleRatingChange}

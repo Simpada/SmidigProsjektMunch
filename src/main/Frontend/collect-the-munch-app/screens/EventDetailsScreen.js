@@ -1,23 +1,26 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { colors } from '../Styles/theme';
+import Review from '../components/Review';
 const EventDetailsScreen = ({ route }) => {
   const { event } = route.params;
+
 
   return (
 
     <View style={styles.container}>
-      {/*
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>MUNCH</Text>
-      </View>
-      */}
       <View style={styles.eventContent}>
-        <Text>Event Name</Text>
-        {!event.title ? <Text>No event title</Text> : <Text style={styles.eventTitle}>{event.title}</Text>}
-        <Text style={styles.eventCategory}>{event.category}</Text>
-        <Text style={styles.eventDescription}>{event.description}</Text>
+        {!event.name ? <Text>No event title</Text> : <Text style={styles.eventTitle}>{event.name}</Text>}
+        <View style={styles.categoriesContainer}>
+        {event.categories.map((category, index) => (
+            <React.Fragment key={index}>
+              <Text style={styles.eventCat}>{category}</Text>
+              {index !== event.categories.length -1 && <Text style={styles.comma}>, </Text>}
+            </React.Fragment>
+          ))}
+        </View>
       </View>
+      <Review />
     </View>
   );
 };
@@ -25,6 +28,7 @@ const EventDetailsScreen = ({ route }) => {
 export default EventDetailsScreen;
 
 const styles = StyleSheet.create({
+  // Page styles
   container: {
     flex: 1,
     backgroundColor: colors.navy,
@@ -44,8 +48,27 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontFamily: "GirottMunch-BoldBackslant"
   },
+  // Event styles
   eventContent: {
+    flex:1,
     padding: 20,
+  },
+  eventCat: {
+    color: "#FE390F",
+    textTransform:"capitalize",
+    fontWeight:"700", 
+    fontSize: 20
+  },
+  comma:{
+    color: colors.red,
+    fontWeight:"700", 
+    fontSize: 20
+  },
+  categoriesContainer:{
+    flexDirection:"row",
+    marginTop: 20,
+    justifyContent: "flex-end"
+   
   },
   eventTitle: {
     textAlign:"center",
