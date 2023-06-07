@@ -10,6 +10,7 @@ public class Painting {
     private String rarity;
     private int points;
 
+
     public Painting() {
 
     }
