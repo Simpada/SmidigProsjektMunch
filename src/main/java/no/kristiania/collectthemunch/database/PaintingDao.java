@@ -20,7 +20,7 @@ public class PaintingDao extends AbstractDao {
         super(dataSource);
     }
 
-    public void save(Painting painting) throws SQLException {
+    public Boolean save(Painting painting) throws SQLException {
         //if (validateRarityEnum(painting.getRarity())) {
 
             try (var connection = dataSource.getConnection()) {
@@ -39,6 +39,7 @@ public class PaintingDao extends AbstractDao {
                         generatedKeys.next();
                         painting.setPaintingId(generatedKeys.getInt(1));
                     }
+                    return true;
                 }
             }
         //}
