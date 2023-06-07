@@ -6,30 +6,9 @@ import jakarta.ws.rs.core.Response;
 import no.kristiania.collectthemunch.entities.Review;
 
 import java.sql.SQLException;
-import java.util.List;
 
 @Path("/review/app")
 public class ReviewAppEndpoint extends ApiEndPoint {
-
-    @Path("/{userId}")
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void createAppReview(Review review, @PathParam("userId") int userId){
-        try {
-            reviewAppDao.save(review, userId);
-        } catch (SQLException e) {
-            //TODO: Send a fitting response to frontend.
-            //Example:
-            /*
-            String errorMessage = "An error occurred while saving the review.";
-            Response errorResponse = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(errorMessage)
-                .build();
-            throw new WebApplicationException(errorResponse);
-             */
-            e.printStackTrace();
-        }
-    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,7 +27,7 @@ public class ReviewAppEndpoint extends ApiEndPoint {
         }
     }
 
-    @Path("/getbyId/{user_id}")
+    @Path("/{user_id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAppReviewById(@PathParam("user_id") int userId){
@@ -78,7 +57,28 @@ public class ReviewAppEndpoint extends ApiEndPoint {
         }
     }
 
-    @Path("/getbystars/{num_stars}")
+    @Path("/{userId}")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void createAppReview(Review review, @PathParam("userId") int userId){
+        try {
+            reviewAppDao.save(review, userId);
+        } catch (SQLException e) {
+            //TODO: Send a fitting response to frontend.
+            //Example:
+            /*
+            String errorMessage = "An error occurred while saving the review.";
+            Response errorResponse = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(errorMessage)
+                .build();
+            throw new WebApplicationException(errorResponse);
+             */
+            e.printStackTrace();
+        }
+    }
+
+
+    @Path("/getByStars/{num_stars}")
     @GET
     @Produces()
     public Response getAppReviewsByStars(@PathParam("num_stars") int numStars){
