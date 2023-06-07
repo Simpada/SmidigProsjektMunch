@@ -3,9 +3,14 @@ package no.kristiania.collectthemunch.entities;
 public class Review {
 
     private int id;
-
     private String reviewText;
     private int numOfStars;
+
+    public Review() {
+        this.id = 0;
+        this.reviewText = "";
+        this.numOfStars = 0;
+    }
 
     public int getId() {
         return id;
