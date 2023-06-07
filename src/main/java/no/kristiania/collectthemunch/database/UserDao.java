@@ -9,8 +9,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static no.kristiania.collectthemunch.entities.Category.validateCategoryEnum;
-
 public class UserDao extends AbstractDao {
 
     @Inject
@@ -20,10 +18,8 @@ public class UserDao extends AbstractDao {
 
     public Boolean save(User user) throws SQLException {
         if (validateUniqueUser(user.getUsername(), user.getEmail())) {
-           // if (validatePreferences(user.getPreferences())) {
-                saveUser(user);
-                saveUserPreferences(user);
-           // }
+            saveUser(user);
+            saveUserPreferences(user);
             return true;
         }
         return false;
@@ -122,15 +118,6 @@ public class UserDao extends AbstractDao {
                 }
             }
         }
-    }
-
-    public Boolean validatePreferences(List<String> preferences) {
-        for (String s : preferences) {
-            if (!validateCategoryEnum(s)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public User login(String username, String password) throws SQLException {

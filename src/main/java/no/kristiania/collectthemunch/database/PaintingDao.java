@@ -11,8 +11,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import static no.kristiania.collectthemunch.entities.Rarity.validateRarityEnum;
-
 public class PaintingDao extends AbstractDao {
 
     @Inject
@@ -21,29 +19,26 @@ public class PaintingDao extends AbstractDao {
     }
 
     public Boolean save(Painting painting) throws SQLException {
-        //if (validateRarityEnum(painting.getRarity())) {
+        try (var connection = dataSource.getConnection()) {
+            String query = "INSERT INTO Paintings (name, author, painting_image, art_information, rarity, points) VALUES (?, ?, ?, ?, ?, ?)";
 
-            try (var connection = dataSource.getConnection()) {
-                String query = "INSERT INTO Paintings (name, author, painting_image, art_information, rarity, points) VALUES (?, ?, ?, ?, ?, ?)";
-
-                try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                    statement.setString(1, painting.getName());
-                    statement.setString(2, painting.getAuthor());
-                    statement.setBytes(3, painting.getPaintingImage());
-                    statement.setString(4, painting.getArtInformation());
-                    statement.setString(5, painting.getRarity());
-                    statement.setInt(6, painting.getPoints());
+            try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, painting.getName());
+                statement.setString(2, painting.getAuthor());
+                statement.setBytes(3, painting.getPaintingImage());
+                statement.setString(4, painting.getArtInformation());
+                statement.setString(5, painting.getRarity());
+                statement.setInt(6, painting.getPoints());
 
 
-                    statement.executeUpdate();
-                    try (var generatedKeys = statement.getGeneratedKeys()) {
-                        generatedKeys.next();
-                        painting.setPaintingId(generatedKeys.getInt(1));
-                    }
-                    return true;
+                statement.executeUpdate();
+                try (var generatedKeys = statement.getGeneratedKeys()) {
+                    generatedKeys.next();
+                    painting.setPaintingId(generatedKeys.getInt(1));
                 }
+                return true;
             }
-        //}
+        }
     }
 
     private void convertByteArrayToImage(byte[] image) {
