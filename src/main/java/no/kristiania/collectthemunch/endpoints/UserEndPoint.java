@@ -6,7 +6,6 @@ import jakarta.ws.rs.core.Response;
 import no.kristiania.collectthemunch.entities.Painting;
 import no.kristiania.collectthemunch.entities.User;
 
-import javax.print.attribute.standard.Media;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,4 +66,10 @@ public class UserEndPoint extends ApiEndPoint {
         return paintingDao.retrieveAllForUser(userId);
     }
 
+    @Path("/points")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<User> getAllUsersWithPoints() throws SQLException {
+        return userDao.retrieveAllUsersWithPoints();
+    }
 }
