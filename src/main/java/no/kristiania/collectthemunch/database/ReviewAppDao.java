@@ -37,7 +37,7 @@ public class ReviewAppDao extends AbstractDao{
 
     public List<Review> retrieveAllAppReviews() throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM App_Reviews, Users";
+            String query = "SELECT * FROM App_Reviews JOIN Users U on U.user_id = App_Reviews.user_id";
             try(var statement = connection.prepareStatement(query)){
                 try(var resultSet = statement.executeQuery()) {
                     List<Review> resultReviews = new ArrayList<>();
