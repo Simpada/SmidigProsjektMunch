@@ -16,6 +16,8 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
+
+
     public Boolean save(User user) throws SQLException {
         if (validateUniqueUser(user.getUsername(), user.getEmail())) {
             saveUser(user);
@@ -98,6 +100,33 @@ public class UserDao extends AbstractDao {
                         usernames.add(resultSet.getString("username"));
                     }
                     return usernames;
+                }
+            }
+        }
+    }
+
+    public List<User> retrieveAllUsersWithPoints() throws SQLException {
+        List<User> users = retrieveAll();
+
+        for (User user : users) {
+            retrievePoints(user);
+        }
+
+        return users;
+    }
+
+    private void retrievePoints(User user) throws SQLException {
+
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Points";
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        user.setCurrentPoints(resultSet.getInt("current_points"));
+                        user.setWeeklyPoints(resultSet.getInt("weekly_points"));
+                        user.setMonthlyPoints(resultSet.getInt("monthly_points"));
+                        user.setAllTimePoints(resultSet.getInt("alltime_points"));
+                    }
                 }
             }
         }

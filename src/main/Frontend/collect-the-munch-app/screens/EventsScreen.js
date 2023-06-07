@@ -36,7 +36,7 @@ const EventsScreen = () => {
 
   const handleSearch = (text) => {
     const filtered = events.filter((event) =>
-      event.title.toLowerCase().includes(text.toLowerCase())
+      event.name.toLowerCase().includes(text.toLowerCase())
     );
     setFilteredEvents(filtered);
   };
