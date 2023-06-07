@@ -44,11 +44,11 @@ public class SampleData {
                 "Brrrgrrr",
                 "ILikeMunch",
                 "fdawdngoe"
-        ))  + random.nextInt(10000000)
-            + "@munch.com";
+        )) + random.nextInt(10000000)
+                + "@munch.com";
 
         List<String> preferences = new ArrayList<>();
-        int preferenceCount = random.nextInt(4) + 1;
+        var preferenceCount = random.nextInt(4) + 1;
         for (int i = 0; i < preferenceCount; i++) {
 
             int category = random.nextInt(6);
@@ -87,12 +87,17 @@ public class SampleData {
             }
         }
 
+        byte[] randomBytes = new byte[random.nextInt(10) + 2];
+
+        new Random().nextBytes(randomBytes);
+
         var user = new User();
         user.setUsername(name);
         user.setPassword(password);
         user.setDateOfBirth(dateOfBirth);
         user.setEmail(email);
         user.setPreferences(preferences);
+        user.setProfilePicture(randomBytes);
 
         return user;
     }
@@ -190,6 +195,47 @@ public class SampleData {
 
         var painting = new Painting();
 
+        var name = (pickOne(
+                "Scream",
+                "Oh noo",
+                "Banana",
+                "Masterchef"
+        )) + random.nextInt(1000);
+
+        var author = (pickOne(
+                "Edvard Munch",
+                "Vincent Van Gogh",
+                "Darude",
+                "Claude Monet"
+        ));
+
+        var artInformation = (pickOne(
+                "Vibrant swirls evoke introspection, capturing the essence of human emotion",
+                "Expressive brushstrokes reveal haunting figures amidst a landscape of melancholy",
+                "Bold colors collide, conveying the intensity of raw passion and inner turmoil",
+                "Ethereal forms emerge, blurring the line between reality and the subconscious"
+        ));
+
+        var rarity = (pickOne(
+                "COMMON",
+                "RARE",
+                "EPIC",
+                "LEGENDARY"
+        ));
+
+        var points = (pickOne(
+                100,
+                250,
+                500,
+                1000
+        ));
+
+        painting.setName(name);
+        painting.setAuthor(author);
+        painting.setArtInformation(artInformation);
+        painting.setRarity(rarity);
+        painting.setPoints(points);
+
         return painting;
     }
 
@@ -197,5 +243,8 @@ public class SampleData {
         return alternatives[random.nextInt(alternatives.length)];
     }
 
+    private static int pickOne(int... alternatives) {
+        return alternatives[random.nextInt(alternatives.length)];
+    }
 
 }

@@ -2,6 +2,7 @@ package no.kristiania.collectthemunch.endpoints;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import no.kristiania.collectthemunch.entities.Painting;
 
 import java.sql.SQLException;
@@ -15,10 +16,16 @@ public class PaintingEndPoint extends ApiEndPoint {
     public List<Painting> getAllPainting() throws SQLException {
         return paintingDao.retrieveAll();
     }
+
+    @Path("/new")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void save(Painting painting) throws SQLException {
-        paintingDao.save(painting);
+    public Response save(Painting painting) throws SQLException {
+        if (paintingDao.save(painting)) {
+            return Response.status(201).build();
+        } else {
+            return Response.status(400).build();
+        }
     }
 
     @Path("/{paintingId}")

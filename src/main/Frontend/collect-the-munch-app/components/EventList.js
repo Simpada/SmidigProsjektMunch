@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
-import EventItem from './EventItem';
+import EventItem from '../assets/Images/PlaceholderImage.jpg';
 
 const EventList = ({ events, handleEventPress }) => {
   return (

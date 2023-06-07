@@ -9,8 +9,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static no.kristiania.collectthemunch.entities.Category.validateCategoryEnum;
-
 public class UserDao extends AbstractDao {
 
     @Inject
@@ -18,16 +16,20 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
-    public void save(User user) throws SQLException {
+    public Boolean save(User user) throws SQLException {
         if (validateUniqueUser(user.getUsername(), user.getEmail())) {
-            if (validatePreferences(user.getPreferences())) {
-                saveUser(user);
-                saveUserPreferences(user);
-            }
+            saveUser(user);
+            saveUserPreferences(user);
+            return true;
         }
+        return false;
     }
 
     private void saveUser(User user) throws SQLException {
+        if (user.getProfilePicture() == null) {
+            user.setProfilePicture(new byte[1]);
+        }
+
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
 
@@ -36,7 +38,7 @@ public class UserDao extends AbstractDao {
                 statement.setString(2, user.getPassword());
                 statement.setString(3, user.getDateOfBirth());
                 statement.setString(4, user.getEmail());
-                statement.setString(5, user.getProfilePicture());
+                statement.setBytes(5, user.getProfilePicture());
 
                 statement.executeUpdate();
                 try (var generatedKeys = statement.getGeneratedKeys()) {
@@ -48,6 +50,10 @@ public class UserDao extends AbstractDao {
     }
 
     public void saveUserPreferences(User user) throws SQLException {
+        if (user.getPreferences() == null) {
+            return;
+        }
+
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Preferences (user_id, preference) VALUES (?, ?)";
 
@@ -61,7 +67,7 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public boolean validateUniqueUser(String username, String email) throws SQLException {
+    public Boolean validateUniqueUser(String username, String email) throws SQLException {
         List<String> existingUsernames = retrieveUsernames();
         List<String> existingEmails = retrieveEmails();
 
@@ -112,15 +118,6 @@ public class UserDao extends AbstractDao {
                 }
             }
         }
-    }
-
-    public boolean validatePreferences(List<String> preferences) {
-        for (String s : preferences) {
-            if (!validateCategoryEnum(s)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public User login(String username, String password) throws SQLException {
@@ -226,7 +223,7 @@ public class UserDao extends AbstractDao {
         user.setPassword(resultSet.getString("password"));
         user.setDateOfBirth(resultSet.getString("date_of_birth"));
         user.setEmail(resultSet.getString("email"));
-        user.setProfilePicture(resultSet.getString("profile_picture"));
+        user.setProfilePicture(resultSet.getBytes("profile_picture"));
         return user;
     }
 
