@@ -46,7 +46,7 @@ public class ReviewEventDao extends AbstractDao {
                 statement.setInt(2, eventId);
                 try (var response = statement.executeQuery()) {
                     while (response.next()) {
-                        review = parseEventReview(response);
+                        review = mapFromResultSet(response);
                     }
 
                 }
@@ -64,7 +64,7 @@ public class ReviewEventDao extends AbstractDao {
                 statement.setInt(1, eventId);
                 try (var response = statement.executeQuery()) {
                     while (response.next()) {
-                        reviews.add(parseEventReview(response));
+                        reviews.add(mapFromResultSet(response));
                     }
                 }
 
@@ -82,7 +82,7 @@ public class ReviewEventDao extends AbstractDao {
                 statement.setInt(1, userId);
                 try (var response = statement.executeQuery()) {
                     while (response.next()) {
-                        reviews.add(parseEventReview(response));
+                        reviews.add(mapFromResultSet(response));
                     }
                 }
 
@@ -91,15 +91,13 @@ public class ReviewEventDao extends AbstractDao {
         return reviews;
     }
 
-    private Review parseEventReview(ResultSet response) throws SQLException {
+    private Review mapFromResultSet(ResultSet resultSet) throws SQLException {
         Review review = new Review();
-
-        review.setId(response.getInt("review_id"));
-        review.setUserName(response.getString("username"));
-        review.setProfilePicture(response.getBytes("profile_picture"));
-        review.setReviewText(response.getString("review_text"));
-        review.setNumOfStars(response.getInt("num_stars"));
-
+        review.setId(resultSet.getInt("review_id"));
+        review.setUserName(resultSet.getString("username"));
+        review.setProfilePicture(resultSet.getBytes("profile_picture"));
+        review.setReviewText(resultSet.getString("review_text"));
+        review.setNumOfStars(resultSet.getInt("num_stars"));
         return review;
     }
 }
