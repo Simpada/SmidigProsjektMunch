@@ -24,7 +24,8 @@ const EventDetailsScreen = ({ route }) => {
           <View>
             <Image source={placeHolderImg} style={styles.eventImage}/>
           </View>
-          <View>
+          <View style={styles.descriptionContainer}>
+            <Text>About this event</Text>
             <Text style={styles.eventDesc}>
               {event.description}
             </Text>
@@ -54,7 +55,6 @@ const styles = StyleSheet.create({
     alignItems:"center",
   },
   eventDesc: {
-    marginTop:20,
     fontSize: 18,
     color: "white"
 },
@@ -106,6 +106,9 @@ const styles = StyleSheet.create({
     color: colors.red,
     fontSize: 16,
     textTransform: "uppercase"
+  },
+  descriptionContainer: {
+    marginVertical:30
   },
   eventDescription: {
     fontSize: 20, 
