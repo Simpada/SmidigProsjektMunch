@@ -3,6 +3,8 @@ import { Text, View, StyleSheet, Image, Touchable, TouchableOpacity } from 'reac
 import PlaceholderImg from '../assets/Images/PlaceholderImage.jpg';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import Review from './Review';
+import { colors } from '../Styles/theme';
 
 const Stack = createStackNavigator();
 
@@ -19,7 +21,10 @@ const EventItem = (props) => {
         <Text style={styles.eventDesc}>{description}</Text>
         <View style={styles.categoriesContainer}>
           {categories.map((category, index) => (
-            <Text key={index} style={styles.eventCat}>{category}</Text>
+            <React.Fragment key={index}>
+              <Text style={styles.eventCat}>{category}</Text>
+              {index !== categories.length -1 && <Text style={styles.comma}>, </Text>}
+            </React.Fragment>
           ))}
         </View>
       </View>
@@ -43,6 +48,12 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
         justifyContent:"space-between"
+    },
+    categoriesContainer:{
+      flexDirection: "row"
+    },
+    comma: {
+      color: colors.red
     },
     image: {
         width: "100%", 
