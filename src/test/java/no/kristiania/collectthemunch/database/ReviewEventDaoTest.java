@@ -23,6 +23,8 @@ public class ReviewEventDaoTest {
             var user = SampleData.sampleUser();
             var event = SampleData.sampleEvent();
             var eventReview = SampleData.sampleReview();
+            eventReview.setUserName(user.getUsername());
+            eventReview.setProfilePicture(user.getProfilePicture());
 
             userDao.save(user);
             eventDao.save(event);

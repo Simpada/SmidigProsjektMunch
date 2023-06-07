@@ -59,7 +59,7 @@ public class ReviewEventDao extends AbstractDao {
         List<Review> reviews = new ArrayList<>();
 
         try (var connection = dataSource.getConnection()) {
-            var query = "SELECT * FROM Event_Reviews WHERE event_id = ?";
+            var query = "SELECT * FROM Event_Reviews JOIN Users U on U.user_id = Event_Reviews.user_id WHERE event_id = ?";
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, eventId);
                 try (var response = statement.executeQuery()) {
@@ -77,7 +77,7 @@ public class ReviewEventDao extends AbstractDao {
         List<Review> reviews = new ArrayList<>();
 
         try (var connection = dataSource.getConnection()) {
-            var query = "SELECT * FROM Event_Reviews WHERE user_id = ?";
+            var query = "SELECT * FROM Event_Reviews JOIN Users U on U.user_id = Event_Reviews.user_id WHERE U.user_id = ?";
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
                 try (var response = statement.executeQuery()) {
@@ -95,6 +95,8 @@ public class ReviewEventDao extends AbstractDao {
         Review review = new Review();
 
         review.setId(response.getInt("review_id"));
+        review.setUserName(response.getString("username"));
+        review.setProfilePicture(response.getBytes("profile_picture"));
         review.setReviewText(response.getString("review_text"));
         review.setNumOfStars(response.getInt("num_stars"));
 
