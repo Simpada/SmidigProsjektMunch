@@ -30,6 +30,9 @@ public class UserDao extends AbstractDao {
     }
 
     private void saveUser(User user) throws SQLException {
+        if (user.getProfilePicture() == null) {
+            user.setProfilePicture(new byte[1]);
+        }
 
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
