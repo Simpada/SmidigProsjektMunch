@@ -13,14 +13,13 @@ import java.util.List;
 @Path("/events")
 public class EventEndPoint extends ApiEndPoint {
 
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Event> getAllEvents() {
         //TODO: handle exception better
         List<Event> allEvents = new ArrayList<>();
         try {
-            allEvents = eventDao.getAllEvents();
+            allEvents = eventDao.retrieveAllEvents();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -41,7 +40,7 @@ public class EventEndPoint extends ApiEndPoint {
     public List<Event> getFilteredEvents(@PathParam("userId") int userId) throws SQLException {
         List<String> tempPreferences = userDao.retrieveUserPreferences(userId);
 
-        return eventDao.getFilteredEvents(tempPreferences);
+        return eventDao.filterEvents(tempPreferences);
     }
 
     @Path("/{eventId}")
@@ -56,6 +55,6 @@ public class EventEndPoint extends ApiEndPoint {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Event> getEventsByCategory(@PathParam("category") String category) throws SQLException {
 
-        return eventDao.getEventsByCategory(category);
+        return eventDao.retrieveEventsByCategory(category);
     }
 }

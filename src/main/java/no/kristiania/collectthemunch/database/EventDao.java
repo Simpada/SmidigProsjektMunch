@@ -5,6 +5,7 @@ import jakarta.ws.rs.NotFoundException;
 import no.kristiania.collectthemunch.entities.Event;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -19,78 +20,6 @@ public class EventDao extends AbstractDao{
         super(dataSource);
     }
 
-
-    public List<Event> getAllEvents() throws SQLException {
-        try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Events";
-            try(var statement = connection.prepareStatement(query)) {
-                try(var resultSet = statement.executeQuery()) {
-                    List<Event> allEvents = new ArrayList<>();
-                    if (resultSet.next()) {
-                        while (resultSet.next()) {
-                            //TODO: return event with its list of categories?
-                            Event event = new Event();
-                            event.setId(resultSet.getInt("event_id"));
-                            event.setName(resultSet.getString("name"));
-                            event.setDescription(resultSet.getString("description"));
-                            event.setCategories(getCategoriesByEventId(event.getId()));
-                            allEvents.add(event);
-                        }
-                    } else {
-                        throw new NotFoundException("No events found in database.");
-                    }
-                    return allEvents;
-                }
-            }
-        }
-    }
-
-    public Event getEventById(int eventId) throws SQLException {
-        Event event = getEventByIdFromDatabase(eventId);
-        event.setCategories(getCategoriesByEventId(event.getId()));
-        return event;
-    }
-
-    private Event getEventByIdFromDatabase(int eventId) throws SQLException {
-        try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Events WHERE event_id = ?";
-            try(var statement = connection.prepareStatement(query)) {
-                statement.setInt(1, eventId);
-                try(var resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        Event event = new Event();
-                        event.setId(resultSet.getInt("event_id"));
-                        event.setName(resultSet.getString("name"));
-                        event.setDescription(resultSet.getString("description"));
-                        event.setEventPoster(resultSet.getBytes("poster"));
-                        return event;
-                    } else {
-                        // Event not found, throw a not found exception with eventid
-                        throw new NotFoundException("Event not found with ID: " + eventId);
-                    }
-                }
-            }
-        }
-    }
-
-    private List<String> getCategoriesByEventId(int eventId) throws SQLException {
-        try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Categories WHERE event_id = ?";
-            try(var statement = connection.prepareStatement(query)) {
-                statement.setInt(1, eventId);
-                try(var resultSet = statement.executeQuery()) {
-                    List<String> eventCategories = new ArrayList<>();
-
-                    while (resultSet.next()) {
-                        eventCategories.add(resultSet.getString("category"));
-                    }
-
-                    return eventCategories;
-                }
-            }
-        }
-    }
-
     public void save(Event event) throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Events (name, description, poster) VALUES (?, ?, ?)";
@@ -102,6 +31,99 @@ public class EventDao extends AbstractDao{
                 try(var generatedKeys = statement.getGeneratedKeys()) {
                     generatedKeys.next();
                     event.setId(generatedKeys.getInt(1));
+                }
+            }
+        }
+    }
+
+    public List<Event> getEventsByName(String userSearch) throws SQLException {
+        //TODO: set categories after retrieving events
+        List<Event> results = retrieveEventsByName(userSearch);
+        return results;
+    }
+
+    public List<Event> retrieveEventsByName(String userSearch) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Events WHERE LOWER(name) LIKE ?";
+            try (var statement = connection.prepareStatement(query)) {
+                // Search string to lower case and use wildcard on both sides to match
+                // a string in the middle of a event name
+                String searchPattern = "%" + userSearch.toLowerCase() + "%";
+                statement.setString(1, searchPattern);
+                try (var resultSet = statement.executeQuery()) {
+                    List<Event> result = new ArrayList<>();
+                    if (resultSet.next()) {
+                        do {
+                            result.add(mapFromResultSet(resultSet));
+                        } while (resultSet.next());
+                    } else {
+                        throw new NotFoundException("No events found by search string " + userSearch);
+                    }
+                    return result;
+                }
+            }
+        }
+    }
+
+    public Event getEventById(int eventId) throws SQLException {
+        Event event = retrieveEventById(eventId);
+        event.setCategories(retrieveCategoriesByEventId(event.getId()));
+        return event;
+    }
+
+    public List<Event> retrieveAllEvents() throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Events";
+            try(var statement = connection.prepareStatement(query)) {
+                try(var resultSet = statement.executeQuery()) {
+                    List<Event> allEvents = new ArrayList<>();
+                    if (resultSet.next()) {
+                        while (resultSet.next()) {
+                            allEvents.add(mapFromResultSet(resultSet));
+                        }
+                    } else {
+                        throw new NotFoundException("No events found in database.");
+                    }
+                    return allEvents;
+                }
+            }
+        }
+    }
+
+    private Event retrieveEventById(int eventId) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Events WHERE event_id = ?";
+            try(var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, eventId);
+                try(var resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return mapFromResultSet(resultSet);
+                    } else {
+                        // Event not found, throw a not found exception with eventid
+                        throw new NotFoundException("Event not found with ID: " + eventId);
+                    }
+                }
+            }
+        }
+    }
+
+    private List<String> retrieveCategoriesByEventId(int eventId) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Categories WHERE event_id = ?";
+            /*  TODO: Could work?
+                QueryRunner queryRunner = new QueryRunner();
+                return queryRunner.query(connection, query, new ColumnListHandler<>("category"), eventId);
+             */
+            try(var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, eventId);
+                try(var resultSet = statement.executeQuery()) {
+                    List<String> eventCategories = new ArrayList<>();
+
+                    while (resultSet.next()) {
+                        eventCategories.add(resultSet.getString("category"));
+                    }
+
+                    return eventCategories;
                 }
             }
         }
@@ -121,28 +143,7 @@ public class EventDao extends AbstractDao{
         }
     }
 
-    public List<Event> getFilteredEvents(List<String> preferences) {
-        // Retrieve all events from the database, will at most be an empty list for now
-        List<Event> eventCategories = new ArrayList<>();
-        try {
-            eventCategories = getAllEventCategories();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        List<Event> filteredEvents = new ArrayList<>();
-        if (eventCategories != null){
-            // Filter the events based on the provided preferences
-            try {
-                filteredEvents = getEventsByPreferences(preferences, eventCategories);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return filteredEvents;
-    }
-
-    public List<Event> getEventsByCategory(String category) throws SQLException {
+    public List<Event> retrieveEventsByCategory(String category) throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT *" +
                             "FROM Events E " +
@@ -153,13 +154,13 @@ public class EventDao extends AbstractDao{
                 try(var resultSet = statement.executeQuery()) {
                     List<Event> allEvents = new ArrayList<>();
                     while (resultSet.next()) {
-                        //TODO: return event with its list of categories?
+
                         Event event = new Event();
                         event.setId(resultSet.getInt("event_id"));
                         event.setName(resultSet.getString("name"));
                         event.setDescription(resultSet.getString("description"));
                         event.setEventPoster(resultSet.getBytes("poster"));
-                        event.setCategories(getCategoriesByEventId(event.getId()));
+                        event.setCategories(retrieveCategoriesByEventId(event.getId()));
                         allEvents.add(event);
                     }
                     if (allEvents.isEmpty()) {
@@ -171,7 +172,7 @@ public class EventDao extends AbstractDao{
         }
     }
 
-    public List<Event> getAllEventCategories() throws SQLException {
+    public List<Event> retrieveAllValidCategories() throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Categories";
             try(var statement = connection.prepareStatement(query)) {
@@ -201,7 +202,7 @@ public class EventDao extends AbstractDao{
         }
     }
 
-    public List<Event> getEventsByPreferences(List<String> preferences, List<Event> events) throws SQLException {
+    public List<Event> retrieveEventsByPreferences(List<String> preferences, List<Event> events) throws SQLException {
 
         List<Event> filteredEvents = filterEventsByPreferences(preferences, events);
         // Create a list of eventIds that we want to display
@@ -259,5 +260,35 @@ public class EventDao extends AbstractDao{
             }
         }
         return filteredEvents;
+    }
+
+    public List<Event> filterEvents(List<String> preferences) {
+        // Retrieve all events from the database, will at most be an empty list for now
+        List<Event> eventCategories = new ArrayList<>();
+        try {
+            eventCategories = retrieveAllValidCategories();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        List<Event> filteredEvents = new ArrayList<>();
+        if (eventCategories != null){
+            // Filter the events based on the provided preferences
+            try {
+                filteredEvents = retrieveEventsByPreferences(preferences, eventCategories);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return filteredEvents;
+    }
+
+    private Event mapFromResultSet(ResultSet resultSet) throws SQLException {
+        Event event = new Event();
+        event.setId(resultSet.getInt("event_id"));
+        event.setName(resultSet.getString("name"));
+        event.setDescription(resultSet.getString("description"));
+        event.setCategories(retrieveCategoriesByEventId(event.getId()));
+        return event;
     }
 }
