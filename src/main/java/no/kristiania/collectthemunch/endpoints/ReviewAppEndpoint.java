@@ -20,14 +20,14 @@ public class ReviewAppEndpoint extends ApiEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAppReviews(){
-        return handleRequest(() -> reviewAppDao.retrieveAllAppReviews();
+        return handleRequest(() -> reviewAppDao.retrieveAllAppReviews());
     }
 
     @Path("/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAppReviewById(@PathParam("userId") int userId){
-        return handleRequest(() -> reviewAppDao.retrieveAppReviewById(userId);
+        return handleRequest(() -> reviewAppDao.retrieveAppReviewById(userId));
     }
 
     @Path("/getByStars/{numStars}")
