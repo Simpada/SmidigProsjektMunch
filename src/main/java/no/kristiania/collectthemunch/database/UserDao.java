@@ -118,8 +118,9 @@ public class UserDao extends AbstractDao {
     private void retrievePoints(User user) throws SQLException {
 
         try (var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Points";
+            String query = "SELECT * FROM Points WHERE user_id = ?";
             try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, user.getUserId());
                 try (var resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         user.setCurrentPoints(resultSet.getInt("current_points"));
