@@ -15,14 +15,14 @@ public class Painting {
     private String rarity;
     private int points;
 
-    public String imagePath = "C:\\Users\\tobia\\Desktop\\wellwell";
+    public String imagePath = "C:\\Users\\tobia\\Desktop\\pizza";
     public String imageType = ".jpg";
 
     public Painting() {
 
     }
 
-    public byte[] loadImageAsByteArray(String imagePath, String imageType) {
+    public static byte[] convertImageToBytes(String imagePath, String imageType) {
         try {
             File imageFile = new File(imagePath + imageType);
 
