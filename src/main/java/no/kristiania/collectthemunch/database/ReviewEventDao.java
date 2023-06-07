@@ -30,7 +30,7 @@ public class ReviewEventDao extends AbstractDao {
 
                 try (var generatedKeys = statement.getGeneratedKeys()) {
                     generatedKeys.next();
-                    review.setId(generatedKeys.getInt(1));
+                    review.setUserId(generatedKeys.getInt(1));
                 }
             }
         }

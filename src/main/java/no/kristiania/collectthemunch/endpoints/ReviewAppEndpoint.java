@@ -32,7 +32,7 @@ public class ReviewAppEndpoint extends ApiEndPoint {
 
     @Path("/getByStars/{numStars}")
     @GET
-    @Produces()
+    @Produces(MediaType.APPLICATION_JSON)
     public Response getAppReviewsByStars(@PathParam("numStars") int numStars){
         return handleRequest(() -> reviewAppDao.retrieveAppReviewsByStars(numStars));
     }
@@ -40,23 +40,13 @@ public class ReviewAppEndpoint extends ApiEndPoint {
     @Path("/{userId}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createAppReview(Review review, @PathParam("userId") int userId){
+    public Response createAppReview(Review review, @PathParam("userId") int userId){
         try {
             reviewAppDao.save(review, userId);
-        } catch (SQLException e) {
-            //TODO: Send a fitting response to frontend.
-            //Example:
-            /*
-            String errorMessage = "An error occurred while saving the review.";
-            Response errorResponse = Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(errorMessage)
-                .build();
-            throw new WebApplicationException(errorResponse);
-             */
-            e.printStackTrace();
+            return Response.status(Response.Status.CREATED).build();
+        } catch (SQLException sqlE) {
+            sqlE.printStackTrace();
+            return Response.serverError().build();
         }
     }
-
-
-
 }

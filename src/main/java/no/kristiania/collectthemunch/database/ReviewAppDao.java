@@ -21,15 +21,14 @@ public class ReviewAppDao extends AbstractDao{
     public void save(Review review, int userId) throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "INSERT INTO App_Reviews (user_id, review_text, num_stars) VALUES(?, ?, ?)";
-            try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            try(var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
                 statement.setString(2, review.getReviewText());
                 statement.setInt(3, review.getNumOfStars());
-                statement.executeUpdate();
-                try(var generatedKeys = statement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        review.setId(generatedKeys.getInt(1));
-                    }
+                int rowsAffected = statement.executeUpdate();
+
+                if (rowsAffected == 0) {
+                    throw new SQLException("Failed to save the review for user id: " + userId);
                 }
             }
         }
@@ -91,7 +90,7 @@ public class ReviewAppDao extends AbstractDao{
 
     private Review mapFromResultSet(ResultSet resultSet) throws SQLException {
         var review = new Review();
-        review.setId(resultSet.getInt("user_id"));
+        review.setUserId(resultSet.getInt("user_id"));
         review.setUserName(resultSet.getString("username"));
         review.setProfilePicture(resultSet.getBytes("profile_picture"));
         review.setReviewText(resultSet.getString("review_text"));

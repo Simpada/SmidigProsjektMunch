@@ -148,14 +148,7 @@ public class EventDao extends AbstractDao{
                 try(var resultSet = statement.executeQuery()) {
                     List<Event> allEvents = new ArrayList<>();
                     while (resultSet.next()) {
-
-                        Event event = new Event();
-                        event.setId(resultSet.getInt("event_id"));
-                        event.setName(resultSet.getString("name"));
-                        event.setDescription(resultSet.getString("description"));
-                        event.setEventPoster(resultSet.getBytes("poster"));
-                        event.setCategories(retrieveCategoriesByEventId(event.getId()));
-                        allEvents.add(event);
+                        allEvents.add(mapFromResultSet(resultSet));
                     }
                     if (allEvents.isEmpty()) {
                         throw new NotFoundException("No events with category " + category + " found.");
@@ -282,6 +275,7 @@ public class EventDao extends AbstractDao{
         event.setId(resultSet.getInt("event_id"));
         event.setName(resultSet.getString("name"));
         event.setDescription(resultSet.getString("description"));
+        event.setEventPoster(resultSet.getBytes("poster"));
         event.setCategories(retrieveCategoriesByEventId(event.getId()));
         return event;
     }
