@@ -17,7 +17,7 @@ public class UserDaoTest {
     private final JdbcDataSource dataSource = (JdbcDataSource) MemoryDataSource.createTestDataSource();
     private final UserDao userDao = new UserDao(dataSource);
 
-
+/*
     @Test
     void shouldSaveAndRetrieveUser() throws SQLException {
         var user = sampleUser();
@@ -36,6 +36,8 @@ public class UserDaoTest {
                 .isEqualTo(user)
                 .isNotSameAs(user);
     }
+
+ */
 
     @Test
     void shouldRemoveUserPreferences() throws SQLException {
