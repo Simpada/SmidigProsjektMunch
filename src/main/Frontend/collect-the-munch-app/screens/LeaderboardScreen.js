@@ -1,25 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, Image } from 'react-native';
+import axios from 'axios'
 import { colors } from '../Styles/theme';
 
 const LeaderboardScreen = () => {
   const [leaderboard, setLeaderBoard] = useState([]);
 
   useEffect(() => {
-    const initialLeaderboard = [
-      { id: 1, fullName: 'Lily Pilly', userName: 'lily23', points: 2468, profileImage: require('../assets/Images/lily.jpg') },
-      { id: 2, fullName: 'Jackson Hubert', userName: 'Jackson_H', points: 1882, profileImage: require('../assets/Images/samuel.png') },
-      { id: 3, fullName: 'Shockdoggo', userName: 'shockdoggo47', points: 1532, profileImage: require('../assets/Images/shockdoggo.jpg') },
-      { id: 4, fullName: 'John Smithies', userName: 'JohnSmithies66', points: 1521, profileImage: require('../assets/Images/profile1.png') },
-      { id: 5, fullName: 'Arnold Schwarzenegger', userName: 'Arnold', points: 1511, profileImage: require('../assets/Images/profile1.png') },
-      { id: 6, fullName: 'Carly Harley', userName: 'iCarly3', points: 1501, profileImage: require('../assets/Images/profile1.png') },
-      { id: 7, fullName: 'Jesper Hansen', userName: 'jSper_00', points: 1493, profileImage: require('../assets/Images/profile1.png') },
-      { id: 8, fullName: 'Isak Einarsen', userName: 'Izzy', points: 1492, profileImage: require('../assets/Images/profile1.png') },
-      { id: 9, fullName: 'Alex Dragon', userName: 'DRAGONALEX44', points: 1451, profileImage: require('../assets/Images/profile1.png') },
-      { id: 10, fullName: 'Karen Haren', userName: 'karen_haren', points: 1447, profileImage: require('../assets/Images/profile1.png') },
-    ];
+      const fetchUsers = async () => {
 
-    setLeaderBoard(initialLeaderboard);
+        try {
+          const response = await axios.get('https://findthemunchgame.azurewebsites.net/api/user');
+          const data = response.data;
+          console.log(data)
+          setLeaderBoard(data);
+        } catch (error) {
+          console.error('Error fetching leaderboard:', error);
+        }
+      };  
+      fetchUsers();
+      
   }, []);
 
   return (
@@ -53,8 +53,8 @@ const LeaderboardScreen = () => {
           <Text style={styles.circleTopThreeText}>{index + 1}</Text>
         </View>
       </View>
-      <Text style={styles.winnerName}>{item.fullName}</Text>
-      <Text style={styles.winnerPoints}>{item.points} points</Text>
+      <Text style={styles.winnerName}>{item.username}</Text>
+      <Text style={styles.winnerPoints}>{item.dateOfBirth} points</Text>
     </View>
   ))}
 </ScrollView>
@@ -80,11 +80,11 @@ const LeaderboardScreen = () => {
       <Image source={item.profileImage} style={styles.profileImageRest} />
     </View>
     <View style={[styles.nameContainer, styles.flex2]}>
-      <Text style={styles.fullName}>{item.fullName}</Text>
-      <Text style={styles.userName}>@{item.userName}</Text>
+      <Text style={styles.fullName}>{item.username}</Text>
+      <Text style={styles.userName}>@{item.username}</Text>
     </View>
     <View style={[styles.cell, styles.flex1]}>
-      <Text style={styles.pointsColor}>{item.points}</Text>
+      <Text style={styles.pointsColor}>{item.dateOfBirth}</Text>
       <Text style={styles.pointsColor}> pts</Text>
     </View>
   </View>
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#946110',
   },
   pointsColor: {
-    fontSize: 20,
+    fontSize: 13,
     color:"white"
   },
   flex1: {
