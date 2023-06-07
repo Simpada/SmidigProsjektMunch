@@ -3,6 +3,8 @@ package no.kristiania.collectthemunch.entities;
 public class Review {
 
     private int id;
+    private String userName;
+    private byte[] profilePicture;
     private String reviewText;
     private int numOfStars;
 
@@ -18,6 +20,22 @@ public class Review {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public String getReviewText() {

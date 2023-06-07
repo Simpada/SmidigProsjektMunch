@@ -37,7 +37,7 @@ public class ReviewAppDao extends AbstractDao{
 
     public List<Review> retrieveAllAppReviews() throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM App_Reviews";
+            String query = "SELECT * FROM App_Reviews, Users";
             try(var statement = connection.prepareStatement(query)){
                 try(var resultSet = statement.executeQuery()) {
                     List<Review> resultReviews = new ArrayList<>();
@@ -56,7 +56,7 @@ public class ReviewAppDao extends AbstractDao{
 
     public Review retrieveAppReviewById(int userId) throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM App_Reviews WHERE user_id = ?";
+            String query = "SELECT * FROM App_Reviews JOIN Users U on U.user_id = App_Reviews.user_id WHERE U.user_id = ?";
             try(var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
                 try(var resultSet = statement.executeQuery()) {
@@ -73,7 +73,7 @@ public class ReviewAppDao extends AbstractDao{
 
     public List<Review> retrieveAppReviewsByStars(int numStars) throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * From App_Reviews WHERE num_stars = ?";
+            String query = "SELECT * From App_Reviews JOIN Users U on U.user_id = App_Reviews.user_id WHERE num_stars = ?";
             try(var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, numStars);
                 try(var resultSet = statement.executeQuery()) {
@@ -94,6 +94,8 @@ public class ReviewAppDao extends AbstractDao{
     private Review mapFromResultSet(ResultSet resultSet) throws SQLException {
         var review = new Review();
         review.setId(resultSet.getInt("user_id"));
+        review.setUserName(resultSet.getString("username"));
+        review.setProfilePicture(resultSet.getBytes("profile_picture"));
         review.setReviewText(resultSet.getString("review_text"));
         review.setNumOfStars(resultSet.getInt("num_stars"));
         return review;
