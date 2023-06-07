@@ -27,10 +27,10 @@ public class ReviewAppEndpoint extends ApiEndPoint {
         }
     }
 
-    @Path("/{user_id}")
+    @Path("/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAppReviewById(@PathParam("user_id") int userId){
+    public Response getAppReviewById(@PathParam("userId") int userId){
         //TODO: Test if using a response works better for exception handling
         // 200 = OK with json review object.
         // 404 = notfound with json containing message
@@ -78,10 +78,10 @@ public class ReviewAppEndpoint extends ApiEndPoint {
     }
 
 
-    @Path("/getByStars/{num_stars}")
+    @Path("/getByStars/{numStars}")
     @GET
     @Produces()
-    public Response getAppReviewsByStars(@PathParam("num_stars") int numStars){
+    public Response getAppReviewsByStars(@PathParam("numStars") int numStars){
         try {
             var appReviewsSorted = reviewAppDao.retrieveAppReviewsByStars(numStars);
             return Response.ok(appReviewsSorted).build();
