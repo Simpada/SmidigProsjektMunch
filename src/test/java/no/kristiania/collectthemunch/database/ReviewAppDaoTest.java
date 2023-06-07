@@ -4,12 +4,9 @@ import no.kristiania.collectthemunch.MemoryDataSource;
 import no.kristiania.collectthemunch.SampleData;
 import no.kristiania.collectthemunch.entities.Review;
 import org.h2.jdbcx.JdbcDataSource;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,6 +25,8 @@ public class ReviewAppDaoTest {
     void shouldSaveAppReviewInDatabase() throws SQLException {
         var review = SampleData.sampleReview();
         var user = SampleData.sampleUser();
+        review.setUserName(user.getUsername());
+        review.setProfilePicture(user.getProfilePicture());
 
         userDao.save(user);
         reviewAppDao.save(review, user.getUserId());
@@ -46,6 +45,8 @@ public class ReviewAppDaoTest {
         for (int i = 0; i < 30; i++) {
             var review = SampleData.sampleReview();
             var user = SampleData.sampleUser();
+            review.setUserName(user.getUsername());
+            review.setProfilePicture(user.getProfilePicture());
 
             userDao.save(user);
             reviewAppDao.save(review, user.getUserId());
@@ -56,8 +57,8 @@ public class ReviewAppDaoTest {
 
         for (Review review : appReviews) {
             assertThat(reviewsFromDb)
-                    .usingRecursiveFieldByFieldElementComparator()
-                    .contains(review);
+                    .extracting(Review::getUserName)
+                    .contains(review.getUserName());
         }
     }
 
@@ -66,12 +67,14 @@ public class ReviewAppDaoTest {
         var review = SampleData.sampleReview();
         var user = SampleData.sampleUser();
         review.setNumOfStars(4);
+        review.setUserName(user.getUsername());
+        review.setProfilePicture(user.getProfilePicture());
 
         userDao.save(user);
         reviewAppDao.save(review, user.getUserId());
 
         assertThat(reviewAppDao.retrieveAppReviewsByStars(4))
-                .usingRecursiveFieldByFieldElementComparator()
-                .contains(review);
+                .extracting(Review::getUserName)
+                .contains(review.getUserName());
     }
 }

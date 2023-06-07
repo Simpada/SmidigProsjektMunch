@@ -48,7 +48,7 @@ public class SampleData {
                 + "@munch.com";
 
         List<String> preferences = new ArrayList<>();
-        int preferenceCount = random.nextInt(4) + 1;
+        var preferenceCount = random.nextInt(4) + 1;
         for (int i = 0; i < preferenceCount; i++) {
 
             int category = random.nextInt(6);
@@ -87,12 +87,17 @@ public class SampleData {
             }
         }
 
+        byte[] randomBytes = new byte[random.nextInt(10) + 2];
+
+        new Random().nextBytes(randomBytes);
+
         var user = new User();
         user.setUsername(name);
         user.setPassword(password);
         user.setDateOfBirth(dateOfBirth);
         user.setEmail(email);
         user.setPreferences(preferences);
+        user.setProfilePicture(randomBytes);
 
         return user;
     }
