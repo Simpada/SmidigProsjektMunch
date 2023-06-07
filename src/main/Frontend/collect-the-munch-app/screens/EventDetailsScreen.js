@@ -1,27 +1,38 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { colors } from '../Styles/theme';
 import Review from '../components/Review';
+import placeHolderImg from '../assets/Images/samuel.png' 
 const EventDetailsScreen = ({ route }) => {
   const { event } = route.params;
 
 
   return (
 
-    <View style={styles.container}>
-      <View style={styles.eventContent}>
-        {!event.name ? <Text>No event title</Text> : <Text style={styles.eventTitle}>{event.name}</Text>}
-        <View style={styles.categoriesContainer}>
-        {event.categories.map((category, index) => (
-            <React.Fragment key={index}>
-              <Text style={styles.eventCat}>{category}</Text>
-              {index !== event.categories.length -1 && <Text style={styles.comma}>, </Text>}
-            </React.Fragment>
-          ))}
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.eventContent}>
+          {!event.name ? <Text>No event title</Text> : <Text style={styles.eventTitle}>{event.name}</Text>}
+          <View style={styles.categoriesContainer}>
+          {event.categories.map((category, index) => (
+              <React.Fragment key={index}>
+                <Text style={styles.eventCat}>{category}</Text>
+                {index !== event.categories.length -1 && <Text style={styles.comma}>, </Text>}
+              </React.Fragment>
+            ))}
+          </View>
+          <View>
+            <Image source={placeHolderImg} style={styles.eventImage}/>
+          </View>
+          <View>
+            <Text style={styles.eventDesc}>
+              {event.description}
+            </Text>
+          </View>
         </View>
+        <Review />
       </View>
-      <Review />
-    </View>
+    </ScrollView>
   );
 };
 
@@ -30,8 +41,8 @@ export default EventDetailsScreen;
 const styles = StyleSheet.create({
   // Page styles
   container: {
-    flex: 1,
     backgroundColor: colors.navy,
+    marginBottom: 200
   }, 
   headerContainer: {
     borderWidth:1,
@@ -42,6 +53,11 @@ const styles = StyleSheet.create({
     justifyContent:"center",
     alignItems:"center",
   },
+  eventDesc: {
+    marginTop:20,
+    fontSize: 18,
+    color: "white"
+},
   headerText: {
     fontSize: 90,
     borderWidth:1,
@@ -58,6 +74,12 @@ const styles = StyleSheet.create({
     textTransform:"capitalize",
     fontWeight:"700", 
     fontSize: 20
+  },
+  eventImage:{
+    marginTop: 30,
+    width: "100%", 
+    height: 300,  
+    resizeMode: "cover"
   },
   comma:{
     color: colors.red,

@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 10,
     height: 300,
+    backgroundColor: colors.white,
     alignItems: "center",
   },
   reviewText: {
