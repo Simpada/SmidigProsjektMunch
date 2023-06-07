@@ -93,7 +93,7 @@ public class ReviewEventDao extends AbstractDao {
 
     private Review mapFromResultSet(ResultSet resultSet) throws SQLException {
         Review review = new Review();
-        review.setId(resultSet.getInt("review_id"));
+        review.setUserId(resultSet.getInt("review_id"));
         review.setUserName(resultSet.getString("username"));
         review.setProfilePicture(resultSet.getBytes("profile_picture"));
         review.setReviewText(resultSet.getString("review_text"));

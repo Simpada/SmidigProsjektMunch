@@ -3,6 +3,7 @@ package no.kristiania.collectthemunch.endpoints;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import no.kristiania.collectthemunch.database.ItemNotSavedException;
 import no.kristiania.collectthemunch.entities.Review;
 
 import java.sql.SQLException;
@@ -44,9 +45,15 @@ public class ReviewAppEndpoint extends ApiEndPoint {
         try {
             reviewAppDao.save(review, userId);
             return Response.status(Response.Status.CREATED).build();
+        } catch (ItemNotSavedException insE) {
+            insE.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(insE.getMessage())
+                    .build();
         } catch (SQLException sqlE) {
-            sqlE.printStackTrace();
-            return Response.serverError().build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                .entity(sqlE.getMessage())
+                .build();
         }
     }
 }

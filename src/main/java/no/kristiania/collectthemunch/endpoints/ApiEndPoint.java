@@ -35,10 +35,30 @@ public abstract class ApiEndPoint {
                     .entity(nfe.getMessage())
                     .build();
         } catch (SQLException sqlE) {
-            sqlE.printStackTrace();
-            return Response.serverError().build();
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                    .entity(sqlE.getMessage())
+                    .build();
         } catch (Exception e) {
             //TODO: .call() throws Exception, handle that together with SQLExceptions?
+            e.printStackTrace();
+            return Response.serverError().build();
+        }
+    }
+
+    protected Response handleSubmit(Callable<Void> daoCall) {
+        try {
+            daoCall.call();
+            return Response.status(Response.Status.CREATED).build();
+        } catch (ItemNotSavedException insE) {
+            insE.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(insE.getMessage())
+                    .build();
+        } catch (SQLException sqlE) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                    .entity(sqlE.getMessage())
+                    .build();
+        } catch (Exception e) {
             e.printStackTrace();
             return Response.serverError().build();
         }

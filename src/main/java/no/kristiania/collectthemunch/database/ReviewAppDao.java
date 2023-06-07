@@ -18,18 +18,22 @@ public class ReviewAppDao extends AbstractDao{
         super(dataSource);
     }
 
-    public void save(Review review, int userId) throws SQLException {
+    public void save(Review review, int userId) throws SQLException, ItemNotSavedException {
         try(var connection = dataSource.getConnection()) {
             String query = "INSERT INTO App_Reviews (user_id, review_text, num_stars) VALUES(?, ?, ?)";
-            try(var statement = connection.prepareStatement(query)) {
+            try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setInt(1, userId);
                 statement.setString(2, review.getReviewText());
                 statement.setInt(3, review.getNumOfStars());
-                int rowsAffected = statement.executeUpdate();
-
-                if (rowsAffected == 0) {
-                    throw new SQLException("Failed to save the review for user id: " + userId);
+                statement.executeUpdate();
+                try(var generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        review.setUserId(generatedKeys.getInt(1));
+                    } else {
+                        throw new ItemNotSavedException("Review for user with id: " + userId + " not saved");
+                    }
                 }
+
             }
         }
     }
