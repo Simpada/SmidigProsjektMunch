@@ -36,12 +36,6 @@ public class EventDao extends AbstractDao{
         }
     }
 
-    public List<Event> getEventsByName(String userSearch) throws SQLException {
-        //TODO: set categories after retrieving events
-        List<Event> results = retrieveEventsByName(userSearch);
-        return results;
-    }
-
     public List<Event> retrieveEventsByName(String userSearch) throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Events WHERE LOWER(name) LIKE ?";

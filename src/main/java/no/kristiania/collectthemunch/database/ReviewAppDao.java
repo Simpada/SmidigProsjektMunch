@@ -40,15 +40,14 @@ public class ReviewAppDao extends AbstractDao{
             String query = "SELECT * FROM App_Reviews";
             try(var statement = connection.prepareStatement(query)){
                 try(var resultSet = statement.executeQuery()) {
-                    List<Review> resultReviews = new ArrayList<>();
-                    if (resultSet.next()) {
-                        do {
-                            resultReviews.add(mapFromResultSet(resultSet));
-                        } while (resultSet.next());
-                        return resultReviews;
-                    } else {
+                    List<Review> result = new ArrayList<>();
+                    while (resultSet.next()) {
+                        result.add(mapFromResultSet(resultSet));
+                    }
+                    if (result.isEmpty()) {
                         throw new NotFoundException("No reviews registered for this app");
                     }
+                    return result;
                 }
             }
         }
@@ -77,15 +76,14 @@ public class ReviewAppDao extends AbstractDao{
             try(var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, numStars);
                 try(var resultSet = statement.executeQuery()) {
-                    List<Review> resultReviews = new ArrayList<>();
-                    if (resultSet.next()) {
-                        do {
-                            resultReviews.add(mapFromResultSet(resultSet));
-                        } while (resultSet.next());
-                        return resultReviews;
-                    } else {
+                    List<Review> result = new ArrayList<>();
+                    while (resultSet.next()) {
+                        result.add(mapFromResultSet(resultSet));
+                    }
+                    if (result.isEmpty()) {
                         throw new NotFoundException("No reviews with " + numStars + " stars found.");
                     }
+                    return result;
                 }
             }
         }
@@ -98,5 +96,4 @@ public class ReviewAppDao extends AbstractDao{
         review.setNumOfStars(resultSet.getInt("num_stars"));
         return review;
     }
-
 }

@@ -6,55 +6,35 @@ import jakarta.ws.rs.core.Response;
 import no.kristiania.collectthemunch.entities.Review;
 
 import java.sql.SQLException;
+import java.util.concurrent.Callable;
 
+/**
+ Test if using a response works better for exception handling
+ 200 = OK with json review object.
+ 404 = notfound with json containing message
+ 500 = SQL exception with json containing generic internal server error message
+*/
 @Path("/review/app")
 public class ReviewAppEndpoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllAppReviews(){
-        try {
-            var appReviews = reviewAppDao.retrieveAllAppReviews();
-            return Response.ok(appReviews).build();
-        } catch (NotFoundException nfe) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(nfe.getMessage())
-                    .build();
-        } catch (SQLException sqlE) {
-            sqlE.printStackTrace();
-
-            return Response.serverError().build();
-        }
+        return handleRequest(() -> reviewAppDao.retrieveAllAppReviews();
     }
 
     @Path("/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAppReviewById(@PathParam("userId") int userId){
-        //TODO: Test if using a response works better for exception handling
-        // 200 = OK with json review object.
-        // 404 = notfound with json containing message
-        // 500 = SQL exception with json containing generic internal server error message
-        // - frontend has to account for other response codes than 200.
-        // -
-        // - other approach: for somplicity and concise code but without error code handking
-        /*
-            return Optional.ofNullable(reviewAppDao.retrieveReviewById(userId))
-            .orElseThrow(() -> new NotFoundException("Review not found"));
-         */
+        return handleRequest(() -> reviewAppDao.retrieveAppReviewById(userId);
+    }
 
-        try {
-            var appReview = reviewAppDao.retrieveAppReviewById(userId);
-            return Response.ok(appReview).build();
-        } catch (NotFoundException e) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(e.getMessage())
-                    .build();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            // Handle or log the exception
-            return Response.serverError().build();
-        }
+    @Path("/getByStars/{numStars}")
+    @GET
+    @Produces()
+    public Response getAppReviewsByStars(@PathParam("numStars") int numStars){
+        return handleRequest(() -> reviewAppDao.retrieveAppReviewsByStars(numStars));
     }
 
     @Path("/{userId}")
@@ -78,21 +58,5 @@ public class ReviewAppEndpoint extends ApiEndPoint {
     }
 
 
-    @Path("/getByStars/{numStars}")
-    @GET
-    @Produces()
-    public Response getAppReviewsByStars(@PathParam("numStars") int numStars){
-        try {
-            var appReviewsSorted = reviewAppDao.retrieveAppReviewsByStars(numStars);
-            return Response.ok(appReviewsSorted).build();
-        } catch (NotFoundException nfe) {
-            return Response.status(Response.Status.NOT_FOUND)
-                    .entity(nfe.getMessage())
-                    .build();
-        } catch (SQLException sqlE) {
-            sqlE.printStackTrace();
 
-            return Response.serverError().build();
-        }
-    }
 }

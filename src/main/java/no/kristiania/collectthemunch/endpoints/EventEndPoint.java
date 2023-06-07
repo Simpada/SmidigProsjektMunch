@@ -2,6 +2,7 @@ package no.kristiania.collectthemunch.endpoints;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import no.kristiania.collectthemunch.entities.Event;
 
 import java.sql.SQLException;
@@ -15,15 +16,18 @@ public class EventEndPoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getAllEvents() {
-        //TODO: handle exception better
-        List<Event> allEvents = new ArrayList<>();
+    public Response getAllEvents() {
         try {
-            allEvents = eventDao.retrieveAllEvents();
-        } catch (SQLException e) {
-            e.printStackTrace();
+            var result = eventDao.retrieveAllEvents();
+            return Response.ok(result).build();
+        } catch (NotFoundException nfe) {
+            return Response.status(Response.Status.NOT_FOUND)
+                    .entity(nfe.getMessage())
+                    .build();
+        } catch (SQLException sqlE) {
+            sqlE.printStackTrace();
+            return Response.serverError().build();
         }
-        return allEvents;
     }
 
     @POST
