@@ -10,6 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ReviewAppDaoTest {
@@ -23,19 +24,28 @@ public class ReviewAppDaoTest {
 
     @Test
     void shouldSaveAppReviewInDatabase() throws SQLException {
-        var review = SampleData.sampleReview();
-        var user = SampleData.sampleUser();
-        review.setUserName(user.getUsername());
-        review.setProfilePicture(user.getProfilePicture());
 
-        userDao.save(user);
-        reviewAppDao.save(review, user.getUserId());
+        for (int i = 0; i < 1000; i++) {
 
-        assertThat(reviewAppDao.retrieveAppReviewById(user.getUserId()))
-                .hasNoNullFieldsOrProperties()
-                .usingRecursiveComparison()
-                .isNotSameAs(review)
-                .isEqualTo(review);
+            var review = SampleData.sampleReview();
+            var user = SampleData.sampleUser();
+            review.setUserName(user.getUsername());
+            review.setProfilePicture(user.getProfilePicture());
+
+            userDao.save(user);
+            reviewAppDao.save(review, user.getUserId());
+
+            System.out.println(Arrays.toString(review.getProfilePicture()));
+
+            System.out.println(Arrays.toString(reviewAppDao.retrieveAppReviewById(user.getUserId()).getProfilePicture()));
+
+            assertThat(reviewAppDao.retrieveAppReviewById(user.getUserId()))
+                    .hasNoNullFieldsOrProperties()
+                    .usingRecursiveComparison()
+                    .isNotSameAs(review)
+                    .isEqualTo(review);
+
+        }
     }
 
     @Test

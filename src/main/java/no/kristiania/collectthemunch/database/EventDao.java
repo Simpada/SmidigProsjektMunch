@@ -19,24 +19,22 @@ public class EventDao extends AbstractDao{
         super(dataSource);
     }
 
-
     public List<Event> getAllEvents() throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Events";
             try(var statement = connection.prepareStatement(query)) {
                 try(var resultSet = statement.executeQuery()) {
                     List<Event> allEvents = new ArrayList<>();
-                    if (resultSet.next()) {
-                        while (resultSet.next()) {
-                            //TODO: return event with its list of categories?
-                            Event event = new Event();
-                            event.setId(resultSet.getInt("event_id"));
-                            event.setName(resultSet.getString("name"));
-                            event.setDescription(resultSet.getString("description"));
-                            event.setCategories(getCategoriesByEventId(event.getId()));
-                            allEvents.add(event);
-                        }
-                    } else {
+                    while (resultSet.next()) {
+                        //TODO: return event with its list of categories?
+                        Event event = new Event();
+                        event.setId(resultSet.getInt("event_id"));
+                        event.setName(resultSet.getString("name"));
+                        event.setDescription(resultSet.getString("description"));
+                        event.setCategories(getCategoriesByEventId(event.getId()));
+                        allEvents.add(event);
+                    }
+                    if (allEvents.isEmpty()) {
                         throw new NotFoundException("No events found in database.");
                     }
                     return allEvents;
