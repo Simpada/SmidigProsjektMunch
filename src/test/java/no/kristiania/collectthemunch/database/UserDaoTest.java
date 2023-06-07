@@ -71,4 +71,19 @@ public class UserDaoTest {
         assertEquals(user.getPreferences().size(), 2);
         assertFalse(originalPreferences.containsAll(user.getPreferences()));
     }
+
+    @Test
+    void shouldFailLogin() throws SQLException {
+        var user = sampleUser();
+        userDao.save(user);
+
+        assertNotNull(userDao.login(user.getUsername(), user.getPassword()));
+
+
+        user.setUsername("Test");
+        user.setPassword("Test");
+
+        userDao.save(user);
+        assertNull(userDao.login("NoUser", "WrongPassword"));
+    }
 }

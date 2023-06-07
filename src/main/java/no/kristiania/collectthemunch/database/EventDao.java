@@ -12,7 +12,7 @@ import java.util.List;
 
 //TODO: getEventsByName
 
-public class EventDao extends AbstractDao{
+public class EventDao extends AbstractDao {
 
     @Inject
     public EventDao(DataSource dataSource) {
@@ -20,10 +20,10 @@ public class EventDao extends AbstractDao{
     }
 
     public List<Event> getAllEvents() throws SQLException {
-        try(var connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Events";
-            try(var statement = connection.prepareStatement(query)) {
-                try(var resultSet = statement.executeQuery()) {
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
                     List<Event> allEvents = new ArrayList<>();
                     while (resultSet.next()) {
                         //TODO: return event with its list of categories?
@@ -50,11 +50,11 @@ public class EventDao extends AbstractDao{
     }
 
     private Event getEventByIdFromDatabase(int eventId) throws SQLException {
-        try(var connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Events WHERE event_id = ?";
-            try(var statement = connection.prepareStatement(query)) {
+            try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, eventId);
-                try(var resultSet = statement.executeQuery()) {
+                try (var resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         Event event = new Event();
                         event.setId(resultSet.getInt("event_id"));
@@ -72,11 +72,11 @@ public class EventDao extends AbstractDao{
     }
 
     private List<String> getCategoriesByEventId(int eventId) throws SQLException {
-        try(var connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Categories WHERE event_id = ?";
-            try(var statement = connection.prepareStatement(query)) {
+            try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, eventId);
-                try(var resultSet = statement.executeQuery()) {
+                try (var resultSet = statement.executeQuery()) {
                     List<String> eventCategories = new ArrayList<>();
 
                     while (resultSet.next()) {
@@ -90,14 +90,14 @@ public class EventDao extends AbstractDao{
     }
 
     public void save(Event event) throws SQLException {
-        try(var connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Events (name, description, poster) VALUES (?, ?, ?)";
-            try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, event.getName());
                 statement.setString(2, event.getDescription());
                 statement.setBytes(3, event.getEventPoster());
                 statement.executeUpdate();
-                try(var generatedKeys = statement.getGeneratedKeys()) {
+                try (var generatedKeys = statement.getGeneratedKeys()) {
                     generatedKeys.next();
                     event.setId(generatedKeys.getInt(1));
                 }
@@ -106,9 +106,9 @@ public class EventDao extends AbstractDao{
     }
 
     public void saveEventCategories(Event event) throws SQLException {
-        try(var connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Categories (event_id, category) VALUES (?,?)";
-            try(var statement = connection.prepareStatement(query)) {
+            try (var statement = connection.prepareStatement(query)) {
 
                 for (String category : event.getCategories()) {
                     statement.setInt(1, event.getId());
@@ -129,7 +129,7 @@ public class EventDao extends AbstractDao{
         }
 
         List<Event> filteredEvents = new ArrayList<>();
-        if (eventCategories != null){
+        if (eventCategories != null) {
             // Filter the events based on the provided preferences
             try {
                 filteredEvents = getEventsByPreferences(preferences, eventCategories);
@@ -141,14 +141,14 @@ public class EventDao extends AbstractDao{
     }
 
     public List<Event> getEventsByCategory(String category) throws SQLException {
-        try(var connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             String query = "SELECT *" +
-                            "FROM Events E " +
-                            "JOIN Categories C ON E.event_id = C.event_id " +
-                            "WHERE C.category = ?";
-            try(var statement = connection.prepareStatement(query)) {
+                    "FROM Events E " +
+                    "JOIN Categories C ON E.event_id = C.event_id " +
+                    "WHERE C.category = ?";
+            try (var statement = connection.prepareStatement(query)) {
                 statement.setString(1, category);
-                try(var resultSet = statement.executeQuery()) {
+                try (var resultSet = statement.executeQuery()) {
                     List<Event> allEvents = new ArrayList<>();
                     while (resultSet.next()) {
                         //TODO: return event with its list of categories?
@@ -170,10 +170,10 @@ public class EventDao extends AbstractDao{
     }
 
     public List<Event> getAllEventCategories() throws SQLException {
-        try(var connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Categories";
-            try(var statement = connection.prepareStatement(query)) {
-                try(var resultSet = statement.executeQuery()) {
+            try (var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
 
                     List<Event> eventList = new ArrayList<>();
                     Event currentEvent = null;
@@ -208,12 +208,15 @@ public class EventDao extends AbstractDao{
             eventIds.add(event.getId());
         }
 
-        try(var connection = dataSource.getConnection()) {
+        try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Events WHERE event_id IN (?)";
-            try(var statement = connection.prepareStatement(query)) {
+            try (var statement = connection.prepareStatement(query)) {
                 // Set the list of event IDs as a parameter to the query
-                statement.setArray(1, connection.createArrayOf("INT", eventIds.toArray()));
-                try(var resultSet = statement.executeQuery()) {
+                for (int i = 0; i < eventIds.size(); i++) {
+                    statement.setInt(1, eventIds.get(i));
+                }
+
+                try (var resultSet = statement.executeQuery()) {
                     // The final list of events that will be returned to the frontend
                     List<Event> resultEvents = new ArrayList<>();
 
@@ -229,7 +232,6 @@ public class EventDao extends AbstractDao{
                                 event.setCategories(filteredEvent.getCategories());
                             }
                         }
-
                         resultEvents.add(event);
                     }
                     return resultEvents;

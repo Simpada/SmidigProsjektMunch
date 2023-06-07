@@ -35,14 +35,14 @@ public class ServerTest {
     }
 
     protected static void createTestUser(HttpURLConnection postUserConnection, String username) throws IOException {
-        String json = "{"+
-                    "    \"name\":\""+ username +"\","+
-                    "    \"password\":\"MunchMaster\","+
-                    "    \"dateOfBirth\":\"10102010\","+
-                    "    \"email\":\"munch@munch.munch\","+
-                    "    \"preferences\": [\"PARTY\", \"EXHIBITION\"]"+
-                    "    \"profilePicture\": \"an image\""+
-                    "}";
+        String json = "{" +
+                "    \"name\":\"" + username + "\"," +
+                "    \"password\":\"MunchMaster\"," +
+                "    \"dateOfBirth\":\"10102010\"," +
+                "    \"email\":\"munch@munch.munch\"," +
+                "    \"preferences\": [\"PARTY\", \"EXHIBITION\"]" +
+                "    \"profilePicture\": \"[1]\"" +
+                "}";
 
         postUserConnection.getOutputStream().write(json.getBytes(StandardCharsets.UTF_8));
     }
@@ -61,7 +61,8 @@ public class ServerTest {
             }
         }
 
-        json += "]" +
+        json += "]," +
+                "\"eventPoster\":\"[1]\"," +
                 "}";
 
         postEventConnection.getOutputStream().write(json.getBytes(StandardCharsets.UTF_8));
