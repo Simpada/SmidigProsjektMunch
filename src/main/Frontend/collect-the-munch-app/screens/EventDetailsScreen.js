@@ -25,7 +25,7 @@ const EventDetailsScreen = ({ route }) => {
             <Image source={placeHolderImg} style={styles.eventImage}/>
           </View>
           <View style={styles.descriptionContainer}>
-            <Text>About this event</Text>
+            <Text style={styles.eventDescTitle}>About this event</Text>
             <Text style={styles.eventDesc}>
               {event.description}
             </Text>
@@ -96,8 +96,14 @@ const styles = StyleSheet.create({
     textAlign:"center",
     fontSize: 35, 
     color: colors.white,
-    fontFamily: "GirottMunch-BoldBackslant", 
+    fontFamily: "GirottMunch-BoldSlant", 
 
+  },
+  eventDescTitle:{
+    fontSize: 25,
+    paddingVertical:10,
+    color: colors.white, 
+    fontFamily: "GirottMunch-BoldSlant"
   },
   eventCategory: {
     marginVertical: 10,
