@@ -207,7 +207,8 @@ item: {
 listText: {
   color: colors.white,
   fontSize: 16,
-},
+  },
+
 userInfoContainer: {
   flex: 1,
 },
@@ -218,25 +219,25 @@ profileImageContainerSmall: {
   alignItems: 'center',
   marginRight: 10,
   position:'relative',
-  overflow: 'hidden',
+  overflow: '',
 },
 numberLabel: {
   position: 'absolute',
-  left: 18,
-  top: 32,
+  left: 16,
+  top: 33,
 },
 numberLabelBackground: {
   backgroundColor: 'white',
-  width: 14,
-  height: 14,
+  width: 16,
+  height: 16,
   borderRadius: 2,
   justifyContent: 'center',
   alignItems: 'center',
   transform: [{ rotate: '45deg' }],
   borderWidth: 1.5,
+  position: 'absolute',
 },
 numberLabelText: {
-  position: 'absolute',
   transform: [{ rotate: '-45deg' }],
   fontWeight: 'bold',
   fontSize:'9px',
