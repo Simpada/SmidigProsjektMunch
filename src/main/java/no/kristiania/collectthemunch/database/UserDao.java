@@ -51,6 +51,28 @@ public class UserDao extends AbstractDao {
         }
     }
 
+    public User updateUser(User updatedUser) throws SQLException {
+        updateUserData(updatedUser);
+        return retrieve(updatedUser.getUserId());
+    }
+
+    private void updateUserData(User updatedUser) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            String query = "UPDATE Users SET username=?, password=?, date_of_birth=?, email=?, profile_picture=? WHERE user_id=?";
+
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, updatedUser.getUsername());
+                statement.setString(2, updatedUser.getPassword());
+                statement.setString(3, updatedUser.getDateOfBirth());
+                statement.setString(4, updatedUser.getEmail());
+                statement.setBytes(5, updatedUser.getProfilePicture());
+                statement.setInt(6, updatedUser.getUserId());
+
+                statement.executeUpdate();
+            }
+        }
+    }
+
     public void saveUserPreferences(User user) throws SQLException {
         if (user.getPreferences() == null) {
             return;
