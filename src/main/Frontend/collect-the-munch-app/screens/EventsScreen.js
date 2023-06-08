@@ -5,6 +5,8 @@ import Header from '../components/Header';
 import Filter from '../components/Filter';
 import { colors } from '../Styles/theme';
 import { useNavigation } from '@react-navigation/native';
+import Review from '../components/Review'
+import axios from 'axios';
 
 const EventsScreen = () => {
   const navigation = useNavigation();
@@ -16,18 +18,25 @@ const EventsScreen = () => {
   };
 
   useEffect(() => {
-    const initialEvents = [{id: 1, title: "Unveiling History", category: "historical", description: "Join us on a captivating journey through time as we unveil the mysteries of ancient civilizations."},
-    {id: 2, title: "Brushstrokes and Beyond", category: "thematic", description: "Ignite your creativity and delve into the world of art with our Brushstrokes and Beyond workshop."},
-    {id: 3, title: "From Curators to Connoisseurs", category: "historical", description: "Embark on a fascinating journey of scientific discovery at our interactive Science Lab Explorations."},
-    {id: 4, title: "Tales and Treasures", category: "photography", description: "Gather the whole family for a day of enchantment and exploration at our Tales and Treasures event."},];
-
-    setEvents(initialEvents);
-    setFilteredEvents(initialEvents);
+    const fetchEvents = async () => {
+      try {
+        const response = await axios.get('https://findthemunchgame.azurewebsites.net/api/events');
+        const data = response.data;
+        console.log(data)
+        setEvents(data);
+        
+        setFilteredEvents(data);
+      } catch (error) {
+        console.error('Error fetching events:', error);
+      }
+    };
+    fetchEvents();
+    
   }, []);
 
   const handleSearch = (text) => {
     const filtered = events.filter((event) =>
-      event.title.toLowerCase().includes(text.toLowerCase())
+      event.name.toLowerCase().includes(text.toLowerCase())
     );
     setFilteredEvents(filtered);
   };
@@ -39,7 +48,8 @@ const EventsScreen = () => {
         <View style={styles.eventTitleContainer}>
           <Text style={styles.eventTitle}>New Events</Text>
         </View>
-        <EventList
+
+        <EventList 
           style={styles.list}
           events={filteredEvents}
           handleEventPress={handleEventPress}
@@ -62,7 +72,7 @@ const styles = StyleSheet.create({
   },
   eventTitle: {
     fontSize: 25,
-    fontWeight: 800,
+    fontWeight: '800',
     paddingLeft: 10,
     color: colors.red,
     fontFamily: 'GirottMunch-BoldBackslant',
@@ -76,3 +86,46 @@ const styles = StyleSheet.create({
 });
 
 export default EventsScreen;
+
+    
+    /*
+        const postEvents = async () => {
+          try {
+            const eventsToPost = [
+              {
+                description:
+                  'Discover the mysteries of ancient civilizations through a captivating exhibition showcasing rare artifacts and their historical significance.',
+                eventPoster: [],
+                id: 6,
+                name: 'Ancient Artifacts Exhibition',
+              },
+              {
+                description:
+                  'Embark on a hands-on journey of scientific discovery at our interactive science lab, where you can conduct experiments and learn about the wonders of the natural world.',
+                eventPoster: [],
+                id: 7,
+                name: 'Interactive Science Lab',
+              },
+              {
+                description:
+                  'Unleash your creativity and learn the art of painting landscapes with our skilled artists. Join us for an immersive workshop that will bring out the artist in you.',
+                eventPoster: [],
+                id: 8,
+                name: 'Art Workshop: Painting Landscapes',
+              },
+            ];
+            const postRequests = eventsToPost.map((event) =>
+            axios.post('https://findthemunchgame.azurewebsites.net/api/events', event)
+            );
+            
+            await Promise.all(postRequests);
+            
+            console.log('Events posted successfully');
+          } catch (error) {
+            console.error('Error posting events:', error);
+          }
+        };
+        
+    */
+    
+    //postEvents();

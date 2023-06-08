@@ -2,17 +2,40 @@ package no.kristiania.collectthemunch.entities;
 
 public class Review {
 
-    private int id;
-
+    private int userId;
+    private String userName;
+    private byte[] profilePicture;
     private String reviewText;
     private int numOfStars;
 
-    public int getId() {
-        return id;
+    public Review() {
+        this.userId = 0;
+        this.reviewText = "";
+        this.numOfStars = 0;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public byte[] getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(byte[] profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public String getReviewText() {

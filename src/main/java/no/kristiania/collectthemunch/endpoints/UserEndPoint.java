@@ -2,15 +2,15 @@ package no.kristiania.collectthemunch.endpoints;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import no.kristiania.collectthemunch.entities.Category;
+import jakarta.ws.rs.core.Response;
+import no.kristiania.collectthemunch.entities.Painting;
 import no.kristiania.collectthemunch.entities.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-@Path("/users")
+@Path("/user")
 public class UserEndPoint extends ApiEndPoint {
 
     @GET
@@ -19,10 +19,30 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.retrieveAll();
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public User updateUser(User updatedUser) throws SQLException {
+        return userDao.updateUser(updatedUser);
+    }
+
+    @Path("/login/{username}/{password}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public User login(@PathParam("username") String username, @PathParam("password") String password) throws SQLException {
+        return userDao.login(username, password);
+    }
+
+    @Path("/register")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void addUser(User user) throws SQLException {
-        userDao.save(user);
+    public Response addUser(User user) throws SQLException {
+        if (userDao.save(user)) {
+            return Response.status(201).build();
+        } else {
+            return Response.status(400).build();
+        }
+
     }
 
     @Path("/{userId}")
@@ -32,28 +52,25 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.retrieve(userId);
     }
 
-    @Path("/name/{userName}")
+
+    @Path("/username/{userName}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public User retrieveUserByUsername(@PathParam("userName") String username) throws SQLException {
         return userDao.retrieve(username);
     }
 
-
     @Path("/{userId}/preferences")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void updateUserPreferences(@PathParam("userId") int userId, ArrayList<String> preferences) throws SQLException {
-        List<Category> pref = parseCategory(preferences);
-        userDao.updatePreferences(userId, pref);
+        userDao.updatePreferences(userId, preferences);
     }
 
-
-    //Parse Category as string from frontend to Category enums.
-    public static List<Category> parseCategory(ArrayList<String> preferences) {
-        preferences.replaceAll(String::toUpperCase);
-
-        return preferences.stream()
-                .map(Category::valueOf).toList();
+    @Path("/inventory/{userId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Painting> getPaintingsForUser(@PathParam("userId") int userId) throws SQLException {
+        return paintingDao.retrieveAllForUser(userId);
     }
 }

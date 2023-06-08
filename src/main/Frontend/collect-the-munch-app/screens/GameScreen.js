@@ -1,12 +1,11 @@
 import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import SubmitCamera from './SubmitCamera'
-
+import * as Font from 'expo-font';
 
 const GameScreen = () => {
   return (
     <View style={styles.container}>
-      <SubmitCamera/>
+        <Text>Game Screen</Text>
     </View>
   )
 }

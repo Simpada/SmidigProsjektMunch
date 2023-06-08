@@ -1,16 +1,21 @@
 package no.kristiania.collectthemunch.entities;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class User {
 
     private int userId;
-    private String userName;
+    private String username;
     private String password;
     private String dateOfBirth;
     private String email;
-    private List<Category> preferences;
-    private String profilePicture = "an image";  //temp datatype until we know how to parse
+    private List<String> preferences;
+    private byte[] profilePicture;  //temp datatype until we know how to parse
+    private int currentPoints;
+    private int weeklyPoints;
+    private int monthlyPoints;
+    private int allTimePoints;
 
     public User() {
 
@@ -18,7 +23,7 @@ public class User {
 
     public User(int userId, String userName, String password, String dateOfBirth, String email) {
         this.userId = userId;
-        this.userName = userName;
+        this.username = userName;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.email = email;
@@ -27,18 +32,18 @@ public class User {
     @Override
     public String toString() {
         return "ID: " + this.userId + "\n" +
-                "Name: " + this.userName + "\n" +
+                "Name: " + this.username + "\n" +
                 "password: " + this.password + "\n" +
                 "Date of birth: " + this.dateOfBirth + "\n" +
                 "Mail: " + this.email + "\n" +
-                "Profile picture: " + this.profilePicture;
+                "Profile picture: " + Arrays.toString(this.profilePicture);
     }
 
     public void printPreferences() {
         System.out.println("Preferences: ");
 
-        for (Category c : this.preferences) {
-            System.out.println(c + " ");
+        for (String s : this.preferences) {
+            System.out.println(s + " ");
         }
     }
 
@@ -50,12 +55,12 @@ public class User {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -82,20 +87,53 @@ public class User {
         this.email = email;
     }
 
-    public List<Category> getPreferences() {
+    public List<String> getPreferences() {
         return preferences;
     }
 
-    public void setPreferences(List<Category> preferences) {
+    public void setPreferences(List<String> preferences) {
         this.preferences = preferences;
     }
 
-
-    public String getProfilePicture() {
+    public byte[] getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePicture(String profilePicture) {
+    public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
     }
+
+    public int getCurrentPoints() {
+        return currentPoints;
+    }
+
+    public void setCurrentPoints(int currentPoints) {
+        this.currentPoints = currentPoints;
+    }
+
+    public int getWeeklyPoints() {
+        return weeklyPoints;
+    }
+
+    public void setWeeklyPoints(int weeklyPoints) {
+        this.weeklyPoints = weeklyPoints;
+    }
+
+    public int getMonthlyPoints() {
+        return monthlyPoints;
+    }
+
+    public void setMonthlyPoints(int monthlyPoints) {
+        this.monthlyPoints = monthlyPoints;
+    }
+
+    public int getAllTimePoints() {
+        return allTimePoints;
+    }
+
+    public void setAllTimePoints(int allTimePoints) {
+        this.allTimePoints = allTimePoints;
+    }
+
+
 }

@@ -2,16 +2,14 @@ package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.NotFoundException;
-import no.kristiania.collectthemunch.entities.Category;
 import no.kristiania.collectthemunch.entities.Event;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-//TODO: getEventsByName
 
 public class EventDao extends AbstractDao{
 
@@ -20,69 +18,128 @@ public class EventDao extends AbstractDao{
         super(dataSource);
     }
 
-    public Event getEventById(int eventId) throws SQLException {
-        Event event = new Event();
-        event = getEventByIdFromDatabase(eventId);
-        event.setCategories(getCategoriesByEventId(event.getId()));
-        return event;
-    }
-
-    public List<Event> getFilteredEventsFromDatabase(List<String> preferences) {
-        // Retrieve all events from the database, will at most be an empty list for now
-        List<Event> eventCategories = new ArrayList<>();
-        try {
-            eventCategories = getAllEventCategories();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        List<Event> filteredEvents = new ArrayList<>();;
-        if (eventCategories != null){
-            // Filter the events based on the provided preferences
-            try {
-                filteredEvents = getEventsByPreferences(preferences, eventCategories);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return filteredEvents;
-    }
-
-    public void save(Event event) throws SQLException {
+    public void save(Event event) throws SQLException, ItemNotSavedException {
         try(var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Events (description) VALUES (?)";
+            String query = "INSERT INTO Events (name, description, poster) VALUES (?, ?, ?)";
             try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-                statement.setString(1, event.getDescription());
+                statement.setString(1, event.getName());
+                statement.setString(2, event.getDescription());
+                statement.setBytes(3, event.getEventPoster());
                 statement.executeUpdate();
                 try(var generatedKeys = statement.getGeneratedKeys()) {
-                    generatedKeys.next();
-                    event.setId(generatedKeys.getInt(1));
+                    if (generatedKeys.next()) {
+                        event.setId(generatedKeys.getInt(1));
+                    } else {
+                        throw new ItemNotSavedException("Event " + event.getName() + " was not saved.");
+                    }
                 }
             }
         }
     }
 
-    public List<Event> getEventsByCategoryFromDatabase(String category) throws SQLException {
+    public List<Event> retrieveEventsByName(String userSearch) throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT E.event_id, E.description, C.category " +
+            String query = "SELECT * FROM Events WHERE LOWER(name) LIKE ?";
+            try (var statement = connection.prepareStatement(query)) {
+                // Search string to lower case and use wildcard on both sides to match
+                // a string in the middle of a event name
+                String searchPattern = "%" + userSearch.toLowerCase() + "%";
+                statement.setString(1, searchPattern);
+                try (var resultSet = statement.executeQuery()) {
+                    List<Event> result = new ArrayList<>();
+                    if (resultSet.next()) {
+                        do {
+                            result.add(mapFromResultSet(resultSet));
+                        } while (resultSet.next());
+                    } else {
+                        throw new NotFoundException("No events found by search string " + userSearch);
+                    }
+                    return result;
+                }
+            }
+        }
+    }
+
+    public List<Event> retrieveAllEvents() throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Events";
+            try(var statement = connection.prepareStatement(query)) {
+                try(var resultSet = statement.executeQuery()) {
+                    List<Event> result = new ArrayList<>();
+                    while (resultSet.next()) {
+                        result.add(mapFromResultSet(resultSet));
+                    }
+                    if(result.isEmpty()) {
+                        throw new NotFoundException("No events found in database.");
+                    }
+                    return result;
+                }
+            }
+        }
+    }
+
+    private Event retrieveEventById(int eventId) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Events WHERE event_id = ?";
+            try(var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, eventId);
+                try(var resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return mapFromResultSet(resultSet);
+                    } else {
+                        throw new NotFoundException("Event not found with ID: " + eventId);
+                    }
+                }
+            }
+        }
+    }
+    //TODO: Should there be events without categories?
+    private List<String> retrieveCategoriesByEventId(int eventId) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Categories WHERE event_id = ?";
+            try(var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, eventId);
+                try(var resultSet = statement.executeQuery()) {
+                    List<String> result = new ArrayList<>();
+                    while (resultSet.next()) {
+                        result.add(resultSet.getString("category"));
+                    }
+                    if (result.isEmpty()) {
+                        throw new NotFoundException("No categories found for event with id: " + eventId);
+                    }
+                    return result;
+                }
+            }
+        }
+    }
+
+    private void saveEventCategories(Event event) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "INSERT INTO Categories (event_id, category) VALUES (?,?)";
+            try(var statement = connection.prepareStatement(query)) {
+                for (String category : event.getCategories()) {
+                    statement.setInt(1, event.getId());
+                    statement.setString(2, category);
+                    statement.executeUpdate();
+                }
+            }
+        }
+    }
+
+    public List<Event> retrieveEventsByCategory(String category) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT *" +
                             "FROM Events E " +
                             "JOIN Categories C ON E.event_id = C.event_id " +
                             "WHERE C.category = ?";
             try(var statement = connection.prepareStatement(query)) {
                 statement.setString(1, category);
-                statement.executeUpdate();
                 try(var resultSet = statement.executeQuery()) {
                     List<Event> allEvents = new ArrayList<>();
-                    if (resultSet.next()) {
-                        while (resultSet.next()) {
-                            //TODO: return event with its list of categories?
-                            Event event = new Event();
-                            event.setId(resultSet.getInt("event_id"));
-                            event.setDescription(resultSet.getString("description"));
-                            allEvents.add(event);
-                        }
-                    } else {
+                    while (resultSet.next()) {
+                        allEvents.add(mapFromResultSet(resultSet));
+                    }
+                    if (allEvents.isEmpty()) {
                         throw new NotFoundException("No events with category " + category + " found.");
                     }
                     return allEvents;
@@ -90,75 +147,31 @@ public class EventDao extends AbstractDao{
             }
         }
     }
+    /*
+    public List<Event> getFilteredEventsByUserPreference(List<String> preferences) {
+        // Retrieve all events from the database, will at most be an empty list for now
+        List<Event> eventCategories = new ArrayList<>();
+        try {
+            eventCategories = retrieveAllValidCategories();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-    public List<Event> getAllEventsFromDatabase() throws SQLException {
-        try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Events";
-            try(var statement = connection.prepareStatement(query)) {
-                try(var resultSet = statement.executeQuery()) {
-                    List<Event> allEvents = new ArrayList<>();
-                    if (resultSet.next()) {
-                        while (resultSet.next()) {
-                            //TODO: return event with its list of categories?
-                            Event event = new Event();
-                            event.setId(resultSet.getInt("event_id"));
-                            event.setDescription(resultSet.getString("description"));
-                            allEvents.add(event);
-                        }
-                    } else {
-                        throw new NotFoundException("No events found in database.");
-                    }
-                    return allEvents;
-                }
+        List<Event> filteredEvents = new ArrayList<>();
+        if (eventCategories != null){
+            // Filter the events based on the provided preferences
+            try {
+                filteredEvents = retrieveEventsByPreferences(preferences, eventCategories);
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
+        return filteredEvents;
     }
 
-    private Event getEventByIdFromDatabase(int eventId) throws SQLException {
+    public List<Event> retrieveAllValidCategories() throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Events WHERE event_id = ?";
-            try(var statement = connection.prepareStatement(query)) {
-                statement.setInt(1, eventId);
-                try(var resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        Event event = new Event();
-                        event.setId(resultSet.getInt("event_id"));
-                        event.setDescription(resultSet.getString("description"));
-                        return event;
-                    } else {
-                        // Event not found, throw a not found exception with eventid
-                        throw new NotFoundException("Event not found with ID: " + eventId);
-                    }
-                }
-            }
-        }
-    }
-
-    private List<Category> getCategoriesByEventId(int eventId) throws SQLException {
-        try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Categories WHERE event_id = ?";
-            try(var statement = connection.prepareStatement(query)) {
-                statement.setInt(1, eventId);
-                try(var resultSet = statement.executeQuery()) {
-                    List<Category> eventCategories = new ArrayList<>();
-
-                    if (resultSet.next()) {
-                        while (resultSet.next()) {
-                            eventCategories.add(Category.valueOf(resultSet.getString("category")));
-                        }
-                    } else {
-                        // Event not found, throw a not found exception with eventid
-                        throw new NotFoundException("No categories found for event with ID: " + eventId);
-                    }
-                    return eventCategories;
-                }
-            }
-        }
-    }
-
-    public List<Event> getAllEventCategories() throws SQLException {
-        try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Categories";
+            String query = "SELECT * FROM CATEGORIES";
             try(var statement = connection.prepareStatement(query)) {
                 try(var resultSet = statement.executeQuery()) {
 
@@ -178,16 +191,15 @@ public class EventDao extends AbstractDao{
                         }
 
                         // Add the category to the current event's list of categories
-                        currentEvent.getCategories().add(Category.valueOf(category));
+                        currentEvent.getCategories().add(category);
                     }
-
                     return eventList;
                 }
             }
         }
     }
 
-    public List<Event> getEventsByPreferences(List<String> preferences, List<Event> events) throws SQLException {
+    public List<Event> retrieveEventsByPreferences(List<String> preferences, List<Event> events) throws SQLException {
 
         List<Event> filteredEvents = filterEventsByPreferences(preferences, events);
         // Create a list of eventIds that we want to display
@@ -210,7 +222,6 @@ public class EventDao extends AbstractDao{
                         // and add its corresponding categories from the filtered events
                         Event event = new Event();
                         int id = resultSet.getInt("event_id");
-                        String description = resultSet.getString("description");
 
                         //TODO: Do the event objects returned to the frontend need the categories?
                         for (Event filteredEvent : filteredEvents) {
@@ -233,17 +244,11 @@ public class EventDao extends AbstractDao{
 
         for (Event event : events) {
             // A temporary list of the events categories
-            List<Category> eventCategories = event.getCategories();
-
-            // Convert the preferences retrieved from the user that are in
-            // strings to valid enums.
-            // TODO: Strings toUpperCase?
-            List<Category> preferenceCategories = preferences.stream()
-                    .map(Category::valueOf).toList();
+            List<String> eventCategories = event.getCategories();
 
             // Check if eventCategories contains any of the user preferences
             boolean hasMatchingPreference = eventCategories.stream()
-                    .anyMatch(preferenceCategories::contains);
+                    .anyMatch(preferences::contains);
             // If any of the categories in the event matches any
             // of the categories the user has as a preference:
             // Add that event
@@ -252,5 +257,73 @@ public class EventDao extends AbstractDao{
             }
         }
         return filteredEvents;
+    }
+    */
+    public List<Event> testFilteredEvents(List<String> preferences) throws SQLException {
+        List<Integer> eventIds = getEventsThatMatchPreferences(preferences);
+        List<Event> eventsByFilteredIds = getEventsByFilteredIds(eventIds);
+        return eventsByFilteredIds;
+    }
+
+    private List<Integer> getEventsThatMatchPreferences(List<String> preferences) throws SQLException {
+        List<Integer> eventIds = new ArrayList<>();
+
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT DISTINCT event_id FROM Categories WHERE category IN (?)";
+            try(var statement = connection.prepareStatement(query)) {
+                // Convert the categories list to a SQL array
+                statement.setArray(1, connection.createArrayOf("VARCHAR", preferences.toArray()));
+                try (var resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        int eventId = resultSet.getInt("event_id");
+                        eventIds.add(eventId);
+                    }
+                }
+            }
+        }
+
+        return eventIds;
+    }
+
+    private List<Event> getEventsByFilteredIds(List<Integer> eventIds) throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Events WHERE event_id IN (?)";
+            try(var statement = connection.prepareStatement(query)) {
+                // Set the list of event IDs as a parameter to the query
+                statement.setArray(1, connection.createArrayOf("INT", eventIds.toArray()));
+                try(var resultSet = statement.executeQuery()) {
+                    // The final list of events that will be returned to the frontend
+                    List<Event> result = new ArrayList<>();
+                    while(resultSet.next()) {
+                        result.add(mapFromResultSet(resultSet));
+                    }
+                    if (result.isEmpty()) {
+                        throw new NotFoundException("No events found with users preferences");
+                    }
+                    return result;
+                }
+            }
+        }
+    }
+
+    public void saveEvent(Event event) throws SQLException, ItemNotSavedException {
+        save(event);
+        saveEventCategories(event);
+    }
+
+    public Event getEventById(int eventId) throws SQLException {
+        Event event = retrieveEventById(eventId);
+        event.setCategories(retrieveCategoriesByEventId(event.getId()));
+        return event;
+    }
+
+    private Event mapFromResultSet(ResultSet resultSet) throws SQLException {
+        Event event = new Event();
+        event.setId(resultSet.getInt("event_id"));
+        event.setName(resultSet.getString("name"));
+        event.setDescription(resultSet.getString("description"));
+        event.setEventPoster(resultSet.getBytes("poster"));
+        event.setCategories(retrieveCategoriesByEventId(event.getId()));
+        return event;
     }
 }

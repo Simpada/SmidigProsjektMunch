@@ -1,6 +1,5 @@
 package no.kristiania.collectthemunch;
 
-
 import no.kristiania.collectthemunch.entities.*;
 
 import java.util.ArrayList;
@@ -13,12 +12,12 @@ public class SampleData {
     public static User sampleUser() {
 
         var name = (pickOne(
-                "Meme_guy",
-                "MUNCHmaster",
-                "Screamy",
-                "OlaNordmann",
-                "EventGoer"
-        )) + random.nextInt(1000000);
+                "Meme",
+                "MUNCH",
+                "Scream",
+                "Ola",
+                "Event"
+        )) + random.nextInt(100000000);
 
         var password = (pickOne(
                 "1234",
@@ -45,55 +44,60 @@ public class SampleData {
                 "Brrrgrrr",
                 "ILikeMunch",
                 "fdawdngoe"
-        ))  + random.nextInt(10000000)
-            + "@munch.com";
+        )) + random.nextInt(10000000)
+                + "@munch.com";
 
-        List<Category> preferences = new ArrayList<>();
-        int preferenceCount = random.nextInt(4) + 1;
+        List<String> preferences = new ArrayList<>();
+        var preferenceCount = random.nextInt(4) + 1;
         for (int i = 0; i < preferenceCount; i++) {
 
             int category = random.nextInt(6);
 
             switch (category) {
                 case 0 -> {
-                    if (!preferences.contains(Category.PARTY)) {
-                        preferences.add(Category.PARTY);
+                    if (!preferences.contains(String.valueOf(Category.PARTY))) {
+                        preferences.add(String.valueOf(Category.PARTY));
                     }
                 }
                 case 1 -> {
-                    if (!preferences.contains(Category.EXHIBITION)) {
-                        preferences.add(Category.EXHIBITION);
+                    if (!preferences.contains(String.valueOf(Category.EXHIBITION))) {
+                        preferences.add(String.valueOf(Category.EXHIBITION));
                     }
                 }
                 case 2 -> {
-                    if (!preferences.contains(Category.KIDS)) {
-                        preferences.add(Category.KIDS);
+                    if (!preferences.contains(String.valueOf(Category.KIDS))) {
+                        preferences.add(String.valueOf(Category.KIDS));
                     }
                 }
                 case 3 -> {
-                    if (!preferences.contains(Category.FAMILY)) {
-                        preferences.add(Category.FAMILY);
+                    if (!preferences.contains(String.valueOf(Category.FAMILY))) {
+                        preferences.add(String.valueOf(Category.FAMILY));
                     }
                 }
                 case 4 -> {
-                    if (!preferences.contains(Category.NEW)) {
-                        preferences.add(Category.NEW);
+                    if (!preferences.contains(String.valueOf(Category.NEW))) {
+                        preferences.add(String.valueOf(Category.NEW));
                     }
                 }
                 case 5 -> {
-                    if (!preferences.contains(Category.GAMES)) {
-                        preferences.add(Category.GAMES);
+                    if (!preferences.contains(String.valueOf(Category.GAMES))) {
+                        preferences.add(String.valueOf(Category.GAMES));
                     }
                 }
             }
         }
 
+        byte[] randomBytes = new byte[random.nextInt(10) + 2];
+
+        new Random().nextBytes(randomBytes);
+
         var user = new User();
-        user.setUserName(name);
+        user.setUsername(name);
         user.setPassword(password);
         user.setDateOfBirth(dateOfBirth);
         user.setEmail(email);
         user.setPreferences(preferences);
+        user.setProfilePicture(randomBytes);
 
         return user;
     }
@@ -117,7 +121,7 @@ public class SampleData {
                 "Create great memories"
         ));
 
-        List<Category> categories = new ArrayList<>();
+        List<String> categories = new ArrayList<>();
         int categoryCount = random.nextInt(4) + 1;
         for (int i = 0; i < categoryCount; i++) {
 
@@ -125,33 +129,33 @@ public class SampleData {
 
             switch (category) {
                 case 0 -> {
-                    if (!categories.contains(Category.PARTY)) {
-                        categories.add(Category.PARTY);
+                    if (!categories.contains(String.valueOf(Category.PARTY))) {
+                        categories.add(String.valueOf(Category.PARTY));
                     }
                 }
                 case 1 -> {
-                    if (!categories.contains(Category.EXHIBITION)) {
-                        categories.add(Category.EXHIBITION);
+                    if (!categories.contains(String.valueOf(Category.EXHIBITION))) {
+                        categories.add(String.valueOf(Category.EXHIBITION));
                     }
                 }
                 case 2 -> {
-                    if (!categories.contains(Category.KIDS)) {
-                        categories.add(Category.KIDS);
+                    if (!categories.contains(String.valueOf(Category.KIDS))) {
+                        categories.add(String.valueOf(Category.KIDS));
                     }
                 }
                 case 3 -> {
-                    if (!categories.contains(Category.FAMILY)) {
-                        categories.add(Category.FAMILY);
+                    if (!categories.contains(String.valueOf(Category.FAMILY))) {
+                        categories.add(String.valueOf(Category.FAMILY));
                     }
                 }
                 case 4 -> {
-                    if (!categories.contains(Category.NEW)) {
-                        categories.add(Category.NEW);
+                    if (!categories.contains(String.valueOf(Category.NEW))) {
+                        categories.add(String.valueOf(Category.NEW));
                     }
                 }
                 case 5 -> {
-                    if (!categories.contains(Category.GAMES)) {
-                        categories.add(Category.GAMES);
+                    if (!categories.contains(String.valueOf(Category.GAMES))) {
+                        categories.add(String.valueOf(Category.GAMES));
                     }
                 }
             }
@@ -191,6 +195,47 @@ public class SampleData {
 
         var painting = new Painting();
 
+        var name = (pickOne(
+                "Scream",
+                "Oh noo",
+                "Banana",
+                "Masterchef"
+        )) + random.nextInt(1000);
+
+        var author = (pickOne(
+                "Edvard Munch",
+                "Vincent Van Gogh",
+                "Darude",
+                "Claude Monet"
+        ));
+
+        var artInformation = (pickOne(
+                "Vibrant swirls evoke introspection, capturing the essence of human emotion",
+                "Expressive brushstrokes reveal haunting figures amidst a landscape of melancholy",
+                "Bold colors collide, conveying the intensity of raw passion and inner turmoil",
+                "Ethereal forms emerge, blurring the line between reality and the subconscious"
+        ));
+
+        var rarity = (pickOne(
+                "COMMON",
+                "RARE",
+                "EPIC",
+                "LEGENDARY"
+        ));
+
+        var points = (pickOne(
+                100,
+                250,
+                500,
+                1000
+        ));
+
+        painting.setName(name);
+        painting.setAuthor(author);
+        painting.setArtInformation(artInformation);
+        painting.setRarity(rarity);
+        painting.setPoints(points);
+
         return painting;
     }
 
@@ -198,5 +243,8 @@ public class SampleData {
         return alternatives[random.nextInt(alternatives.length)];
     }
 
+    private static int pickOne(int... alternatives) {
+        return alternatives[random.nextInt(alternatives.length)];
+    }
 
 }

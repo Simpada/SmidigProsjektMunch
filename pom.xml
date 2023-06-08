@@ -12,6 +12,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>repository-id</id>
+            <url>https://github.com/Simpada/SmidigProsjektMunch</url>
+        </repository>
+    </distributionManagement>
+
     <build>
         <finalName>app</finalName>
         <plugins>
@@ -67,7 +74,7 @@
                 <configuration>
                     <schemaVersion>v2</schemaVersion>
                     <resourceGroup>${project.groupId}</resourceGroup>
-                    <appName>FindTheMUNCH</appName>
+                    <appName>FindTheMUNCHGame</appName>
                     <pricingTier>F1</pricingTier>
                     <region>norwayeast</region>
                     <runtime>
@@ -83,15 +90,15 @@
                                     <include>${project.build.finalName}.jar</include>
                                 </includes>
                             </resource>
+                            <resource>
+                                <type>static</type>
+                                <directory>${project.basedir}/src/main/azure</directory>
+                                <includes>
+                                    <include>*.properties</include>
+                                </includes>
+                                <targetPath>/site/wwwroot</targetPath>
+                            </resource>
                         </resources>
-                        <resource>
-                            <type>static</type>
-                            <directory>${project.basedir}/src/main/azure</directory>
-                            <includes>
-                                <include>*.properties</include>
-                            </includes>
-                            <targetPath>/site/wwwroot</targetPath>
-                        </resource>
                     </deployment>
                 </configuration>
             </plugin>
