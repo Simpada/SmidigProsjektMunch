@@ -4,12 +4,13 @@ import * as Font from 'expo-font';
 import { colors } from '../Styles/theme';
 import HeaderImg from '../assets/Images/munch-museet.avif';
 import { Entypo, Feather, FontAwesome5, AntDesign } from '@expo/vector-icons';
-import reviewicon1 from "../assets/Images/samuel.png"
-
+import reviewicon1 from "../assets/Images/samuel.png";
+import axios from 'axios';
 
 const HomeScreen = () => {
   useEffect(() => {
     loadFonts();
+    fetchReviews();
   }, []);
 
   const loadFonts = async () => {
@@ -22,6 +23,7 @@ const HomeScreen = () => {
 
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Option 1');
+  const [reviews, setReviews] = useState([]);
 
   const handleOptionChange = (value) => {
     setSelectedOption(value);
@@ -49,28 +51,21 @@ const HomeScreen = () => {
     }
   };
 
-  const menuItems = ['User', 'The Collection', 'Inventory', 'Leaderboards', 'Settings'];
-
-  const reviews = [
-    {
-      id: '1',
-      user: 'Jenni',
-      rating: 5,
-      text: 'Great app! I love collecting Munch artworks.',
-    },
-    {
-      id: '2',
-      user: 'Rafael',
-      rating: 5,
-      text: 'The best art collection game out there. Highly recommended!',
-    },
-    {
-      id: '3',
-      user: 'Mathias',
-      rating: 5,
-      text: 'Good concept, I want to bring all my friends!',
-    },
-  ];
+  const fetchReviews = async () => {
+    try {
+      const response = await axios.get('https://findthemunchgame.azurewebsites.net/api/review/app/');
+      const reviewsData = response.data;
+      const reviewArray = reviewsData.map((review) => ({
+        user: review.user_id,
+        text: review.review_text,
+        stars: review.num_stars,
+        profilePicture: review.profilePicture,
+      }));
+      setReviews(reviewArray);
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+    }
+  };
 
   const ReviewItem = ({ item }) => (
     <View style={styles.reviewContainer}>
@@ -125,14 +120,20 @@ const HomeScreen = () => {
       <TouchableOpacity style={styles.reviewButton}>
         <Text style={styles.reviewButtonText}>Review the app!</Text>
       </TouchableOpacity>
-      
+
       <View style={[styles.reviewsBackground, { width: '100%' }]}>
         <Text style={styles.reviewsTitle}>Reviews</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          {reviews.map((item) => (
-            <ReviewItem key={item.id} item={item} />
-          ))}
-        </ScrollView>
+        {reviews.length > 0 ? (
+          <FlatList
+            data={reviews}
+            renderItem={({ item }) => <ReviewItem item={item} />}
+            keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        ) : (
+          <Text style={styles.noReviewsText}>No reviews available</Text>
+        )}
       </View>
     </ScrollView>
   );
@@ -143,9 +144,8 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: colors.navy,
     alignItems: 'center',
-    paddingBottom: 100
+    paddingBottom: 100,
   },
-
   munchImageContainer: {
     width: '100%',
     height: 400,
@@ -281,6 +281,13 @@ const styles = StyleSheet.create({
   },
   star: {
     marginHorizontal: 1,
+  },
+  noReviewsText: {
+    color: colors.white,
+    fontSize: 16,
+    fontFamily: 'GirottMunch-Bold',
+    textAlign: 'center',
+    marginTop: 10,
   },
 });
 
