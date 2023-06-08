@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import * as Font from 'expo-font';
-import { useNavigation } from '@react-navigation/native';
-import MenuModal from '../components/MenuModal';
-
+import NavigationComponent from '../components/NavigationComponent';
 import popImage from '../assets/Images/pop.jpg';
 import leaderboardImage from '../assets/Images/leaderboard.png';
 
-const PlayGameScreen = () => {
+const PlayGameScreen = ({ navigation }) => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  const navigation = useNavigation();
 
   useEffect(() => {
     loadFonts();
@@ -25,13 +22,13 @@ const PlayGameScreen = () => {
     setFontsLoaded(true);
   };
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
   const navigateToCreateTeam = () => {
     navigation.navigate('CreateTeam');
   };
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <ScrollView style={styles.container}>
@@ -74,12 +71,10 @@ const PlayGameScreen = () => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Play Solo</Text>
-          </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={navigateToCreateTeam}>
-            <Text style={styles.buttonText}>Create A Party</Text>
+            <Text style={styles.buttonText}>Create a Party</Text>
           </TouchableOpacity>
+          <NavigationComponent navigation={navigation} />
         </View>
       </View>
     </ScrollView>

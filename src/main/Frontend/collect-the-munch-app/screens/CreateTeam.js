@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+
 import * as Font from 'expo-font';
 
 const CreateTeam = () => {
@@ -12,7 +13,7 @@ const CreateTeam = () => {
       'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.ttf'),
       'GirottMunch-BoldSlant': require('../assets/fonts/GirottMunch-BoldSlant.ttf'),
       'GirottMunch-Bold': require('../assets/fonts/GirottMunch-Bold.ttf'),
-    });
+    }); 
   };
 
   return (
