@@ -23,7 +23,7 @@ public class UserDaoTest {
         var user = sampleUser();
         userDao.save(user);
 
-        var user2 = userDao.retrieve(user.getUserId());
+        var user2 = userDao.retrieveUserById(user.getUserId());
 
         System.out.println(user);
         user.printPreferences();
@@ -47,7 +47,7 @@ public class UserDaoTest {
         }
 
         userDao.removeUserPreferences(user.getUserId());
-        user = userDao.retrieve(user.getUserId());
+        user = userDao.retrieveUserById(user.getUserId());
 
         assertEquals(user.getPreferences().size(), 0);
     }
@@ -65,7 +65,7 @@ public class UserDaoTest {
         userDao.updatePreferences(user.getUserId(), user.getPreferences());
 
 
-        user = userDao.retrieve(user.getUserId());
+        user = userDao.retrieveUserById(user.getUserId());
 
 
         assertEquals(user.getPreferences().size(), 2);

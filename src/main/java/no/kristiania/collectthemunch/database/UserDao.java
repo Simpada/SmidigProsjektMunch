@@ -1,6 +1,7 @@
 package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import no.kristiania.collectthemunch.entities.User;
 
 import javax.sql.DataSource;
@@ -15,8 +16,6 @@ public class UserDao extends AbstractDao {
     public UserDao(DataSource dataSource) {
         super(dataSource);
     }
-
-
 
     public Boolean save(User user) throws SQLException {
         if (validateUniqueUser(user.getUsername(), user.getEmail())) {
@@ -53,7 +52,7 @@ public class UserDao extends AbstractDao {
 
     public User updateUser(User updatedUser) throws SQLException {
         updateUserData(updatedUser);
-        return retrieve(updatedUser.getUserId());
+        return retrieveUserById(updatedUser.getUserId());
     }
 
     private void updateUserData(User updatedUser) throws SQLException {
@@ -145,7 +144,7 @@ public class UserDao extends AbstractDao {
     }
 
     public User login(String username, String password) throws SQLException {
-        User user = retrieve(username);
+        User user = retrieveUserByName(username);
 
         if (user == null || !password.equals(user.getPassword())) {
             System.out.println("No user or wrong login/password");
@@ -155,10 +154,9 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public List<User> retrieveAll() throws SQLException {
+    public List<User> retrieveAllUsers() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Users";
-
             try (var statement = connection.prepareStatement(query)) {
                 try (var resultSet = statement.executeQuery()) {
                     List<User> users = new ArrayList<>();
@@ -168,17 +166,18 @@ public class UserDao extends AbstractDao {
                         user.setPreferences(retrieveUserPreferences(user.getUserId()));
                         users.add(user);
                     }
+                    if (users.isEmpty()) {
+                        throw new NotFoundException("No users found in database");
+                    }
                     return users;
                 }
             }
         }
     }
 
-    //Retrieve by id
-    public User retrieve(int userId) throws SQLException {
+    public User retrieveUserById(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Users WHERE user_id = ?";
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
 
@@ -187,11 +186,9 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    //Retrieve by username
-    public User retrieve(String username) throws SQLException {
+    public User retrieveUserByName(String username) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Users WHERE username = ?";
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setString(1, username);
 
@@ -208,7 +205,7 @@ public class UserDao extends AbstractDao {
 
                 return user;
             } else {
-                return null;
+                throw new NotFoundException("User not found");
             }
         }
     }
@@ -241,7 +238,6 @@ public class UserDao extends AbstractDao {
     }
 
     public List<String> retrieveUserPreferences(int userId) throws SQLException {
-
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT *
@@ -250,10 +246,8 @@ public class UserDao extends AbstractDao {
                         ON Users.user_id = Preferences.user_id
                     WHERE preferences.user_id = ?
                     """;
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
-
                 try (var resultSet = statement.executeQuery()) {
                     List<String> preferences = new ArrayList<>();
 

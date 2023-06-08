@@ -15,8 +15,8 @@ public class UserEndPoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllUsers() throws SQLException {
-        return userDao.retrieveAll();
+    public Response getAllUsers() {
+        return handleRequest(() -> userDao.retrieveAllUsers());
     }
 
     @PUT
@@ -26,11 +26,11 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.updateUser(updatedUser);
     }
 
-    @Path("/login/{username}/{password}")
+    @Path("/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public User login(@PathParam("username") String username, @PathParam("password") String password) throws SQLException {
-        return userDao.login(username, password);
+    public Response retrieveUserById(@PathParam("userId") int userId) throws SQLException {
+        return handleRequest(() -> userDao.retrieveUserById(userId));
     }
 
     @Path("/register")
@@ -42,22 +42,13 @@ public class UserEndPoint extends ApiEndPoint {
         } else {
             return Response.status(400).build();
         }
-
     }
-
-    @Path("/{userId}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public User retrieveUserById(@PathParam("userId") int userId) throws SQLException {
-        return userDao.retrieve(userId);
-    }
-
 
     @Path("/username/{userName}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public User retrieveUserByUsername(@PathParam("userName") String username) throws SQLException {
-        return userDao.retrieve(username);
+    public Response retrieveUserByUsername(@PathParam("userName") String username) throws SQLException {
+        return handleRequest(() -> userDao.retrieveUserByName(username));
     }
 
     @Path("/{userId}/preferences")
@@ -72,5 +63,12 @@ public class UserEndPoint extends ApiEndPoint {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Painting> getPaintingsForUser(@PathParam("userId") int userId) throws SQLException {
         return paintingDao.retrieveAllForUser(userId);
+    }
+
+    @Path("/login/{username}/{password}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public User login(@PathParam("username") String username, @PathParam("password") String password) throws SQLException {
+        return userDao.login(username, password);
     }
 }
