@@ -34,7 +34,6 @@ public class EventEndPoint extends ApiEndPoint {
         eventDao.saveEventCategories(event);
     }
 
-
     @Path("/userfilteredevents/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
