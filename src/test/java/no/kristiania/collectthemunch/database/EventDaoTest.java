@@ -17,15 +17,14 @@ public class EventDaoTest {
     }
 
     @Test
-    void shouldSaveEventInDatabase() throws SQLException {
+    void shouldSaveEventInDatabase() throws SQLException, ItemNotSavedException {
         // Verifies that the getAllEventsFromDatabase() method retrieves events from
         // the database and correctly maps them to Event objects with their corresponding categories.
 
         for (int i = 0; i < 20; i++) {
             var event = SampleData.sampleEvent();
 
-            eventDao.save(event);
-            eventDao.saveEventCategories(event);
+            eventDao.saveEvent(event);
 
             var returnedEvent = eventDao.getEventById(event.getId());
             System.out.println(returnedEvent.getName());
