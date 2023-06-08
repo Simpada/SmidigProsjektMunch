@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import axios from 'axios';
 import * as Font from 'expo-font';
-import { imageToByteArray } from '../components/ImageToByteArray';
-
+import { ImageToByteArray } from '../components/ImageToByteArray';
+import Scream from '../assets/Images/Scream.jpg';
 
 const SignupScreen = () => {
   const [username, setUsername] = useState('');
@@ -46,8 +46,8 @@ const SignupScreen = () => {
     }
   
 
-    try {
-      const byteArray = [1, 2, 3, 4, 5]
+    try { 
+      const byteArray = await ImageToByteArray(Scream);
       const response = await axios.post('https://findthemunchgame.azurewebsites.net/api/user/register', {
         username,
         password,
