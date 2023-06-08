@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, ScrollView, Image } from 'react-native';
+import { Text, View, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { colors } from '../Styles/theme';
 
@@ -7,6 +7,7 @@ const defaultProfileImage = require('../assets/Images/profile1.png');
 
 const LeaderboardScreen = () => {
   const [leaderboard, setLeaderBoard] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('Monthly');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -22,26 +23,61 @@ const LeaderboardScreen = () => {
     fetchUsers();
   }, []);
 
-  // Sort the leaderboard in descending order based on currentPoints
-  const sortedLeaderboard = [...leaderboard].sort((a, b) => b.currentPoints - a.currentPoints);
+  // Sort the leaderboard in descending order based on the selected category
+  const sortLeaderboard = () => {
+    let sortedLeaderboard = [];
+    switch (selectedCategory) {
+      case 'Weekly':
+        sortedLeaderboard = [...leaderboard].sort((a, b) => b.weeklyPoints - a.weeklyPoints);
+        break;
+      case 'Monthly':
+        sortedLeaderboard = [...leaderboard].sort((a, b) => b.monthlyPoints - a.monthlyPoints);
+        break;
+      case 'All Time':
+        sortedLeaderboard = [...leaderboard].sort((a, b) => b.allTimePoints - a.allTimePoints);
+        break;
+      default:
+        sortedLeaderboard = [...leaderboard];
+    }
+    return sortedLeaderboard;
+  };
+
+  const handleCategoryPress = (category) => {
+    setSelectedCategory(category);
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.categorycontainer}>
-        <View style={styles.category}>
-          <Text style={styles.categoryText}>Monthly</Text>
-        </View>
-        <View style={styles.category}>
-          <Text style={styles.categoryText}>Weekly</Text>
-        </View>
-        <View style={styles.category}>
-          <Text style={styles.categoryText}>All Time</Text>
-        </View>
+        <TouchableOpacity
+          style={styles.category}
+          onPress={() => handleCategoryPress('Monthly')}
+        >
+          <Text style={[styles.categoryText, selectedCategory === 'Monthly' && styles.selectedCategory]}>
+            Monthly
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.category}
+          onPress={() => handleCategoryPress('Weekly')}
+        >
+          <Text style={[styles.categoryText, selectedCategory === 'Weekly' && styles.selectedCategory]}>
+            Weekly
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.category}
+          onPress={() => handleCategoryPress('All Time')}
+        >
+          <Text style={[styles.categoryText, selectedCategory === 'All Time' && styles.selectedCategory]}>
+            All Time
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.headerContainer}>
         <ScrollView horizontal>
-          {sortedLeaderboard.slice(0, 3).map((item, index) => (
+          {sortLeaderboard().slice(0, 3).map((item, index) => (
             <View style={styles.winnerContainer} key={item.id}>
               <View style={[
                 styles.profileImageContainer,
@@ -58,7 +94,7 @@ const LeaderboardScreen = () => {
                 </View>
               </View>
               <Text style={styles.winnerName}>{item.username}</Text>
-              <Text style={styles.winnerPoints}>{item.currentPoints} points</Text>
+              <Text style={styles.winnerPoints}>{item[selectedCategory.toLowerCase() + 'Points']} points</Text>
             </View>
           ))}
         </ScrollView>
@@ -66,7 +102,7 @@ const LeaderboardScreen = () => {
 
       <ScrollView>
         <View style={styles.table}>
-          {sortedLeaderboard.slice(3, leaderboard.length).map((item, index) => (
+          {sortLeaderboard().slice(3, leaderboard.length).map((item, index) => (
             <View
               style={
                 index !== leaderboard.length - 1
@@ -86,7 +122,7 @@ const LeaderboardScreen = () => {
                 <Text style={styles.userName}>@{item.username}</Text>
               </View>
               <View style={[styles.cell, styles.flex1]}>
-                <Text style={styles.pointsColor}>{item.currentPoints}</Text>
+                <Text style={styles.pointsColor}>{item[selectedCategory.toLowerCase() + 'Points']}</Text>
                 <Text style={styles.pointsColor}> pts</Text>
               </View>
             </View>
@@ -138,6 +174,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: colors.white,
   },
+  selectedCategory: {
+    textDecorationLine: 'underline',
+  },
   headerContainer: {
     marginTop: 0,
     marginBottom: 20,
@@ -167,7 +206,7 @@ const styles = StyleSheet.create({
   profileImageRest: {
     width: 55,
     height: 55,
-    borderRadius: "50%",
+    borderRadius: 27.5,
   },
   winnerName: {
     color: colors.white,
