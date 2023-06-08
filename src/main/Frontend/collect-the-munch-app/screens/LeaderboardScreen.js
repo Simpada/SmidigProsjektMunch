@@ -1,95 +1,96 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, ScrollView, Image } from 'react-native';
-import axios from 'axios'
+import axios from 'axios';
 import { colors } from '../Styles/theme';
+
+const defaultProfileImage = require('../assets/Images/profile1.png');
 
 const LeaderboardScreen = () => {
   const [leaderboard, setLeaderBoard] = useState([]);
 
   useEffect(() => {
-      const fetchUsers = async () => {
-
-        try {
-          const response = await axios.get('https://findthemunchgame.azurewebsites.net/api/user');
-          const data = response.data;
-          console.log(data)
-          setLeaderBoard(data);
-        } catch (error) {
-          console.error('Error fetching leaderboard:', error);
-        }
-      };  
-      fetchUsers();
-      
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('https://findthemunchgame.azurewebsites.net/api/user');
+        const data = response.data;
+        console.log(data);
+        setLeaderBoard(data);
+      } catch (error) {
+        console.error('Error fetching leaderboard:', error);
+      }
+    };
+    fetchUsers();
   }, []);
+
+  // Sort the leaderboard in descending order based on currentPoints
+  const sortedLeaderboard = [...leaderboard].sort((a, b) => b.currentPoints - a.currentPoints);
 
   return (
     <View style={styles.container}>
       <View style={styles.categorycontainer}>
         <View style={styles.category}>
-          <Text style={styles.categoryText}>Weekly</Text>
-        </View>
-        <View style={styles.category}>
           <Text style={styles.categoryText}>Monthly</Text>
         </View>
         <View style={styles.category}>
-          <Text style={styles.categoryText}>All-time</Text>
+          <Text style={styles.categoryText}>Weekly</Text>
+        </View>
+        <View style={styles.category}>
+          <Text style={styles.categoryText}>All Time</Text>
         </View>
       </View>
 
       <View style={styles.headerContainer}>
-     
-
-<ScrollView horizontal>
-  {leaderboard.slice(0, 3).map((item, index) => (
-    <View style={styles.winnerContainer} key={item.id}>
-      <View style={[
-        styles.profileImageContainer,
-        index === 0 && styles.gold,
-        index === 1 && styles.silver,
-        index === 2 && styles.bronze,
-      ]}>
-        <Image source={item.profileImage} style={styles.profileImage} />
-        <View style={styles.circleTopThree}>
-          <Text style={styles.circleTopThreeText}>{index + 1}</Text>
-        </View>
+        <ScrollView horizontal>
+          {sortedLeaderboard.slice(0, 3).map((item, index) => (
+            <View style={styles.winnerContainer} key={item.id}>
+              <View style={[
+                styles.profileImageContainer,
+                index === 0 && styles.gold,
+                index === 1 && styles.silver,
+                index === 2 && styles.bronze,
+              ]}>
+                <Image
+                  source={item.profileImage || defaultProfileImage}
+                  style={styles.profileImage}
+                />
+                <View style={styles.circleTopThree}>
+                  <Text style={styles.circleTopThreeText}>{index + 1}</Text>
+                </View>
+              </View>
+              <Text style={styles.winnerName}>{item.username}</Text>
+              <Text style={styles.winnerPoints}>{item.currentPoints} points</Text>
+            </View>
+          ))}
+        </ScrollView>
       </View>
-      <Text style={styles.winnerName}>{item.username}</Text>
-      <Text style={styles.winnerPoints}>{item.dateOfBirth} points</Text>
-    </View>
-  ))}
-</ScrollView>
-
-
-
-</View>
 
       <ScrollView>
         <View style={styles.table}>
-        
-      
-        {leaderboard.slice(3, leaderboard.length).map((item, index) => (
-  <View
-    style={
-      index !== leaderboard.length - 1
-        ? styles.tableRowWithBorder
-        : styles.tableRow
-    }
-    key={item.id}
-  >
-    <View style={[styles.flex1, styles.imageContainer]}>
-      <Image source={item.profileImage} style={styles.profileImageRest} />
-    </View>
-    <View style={[styles.nameContainer, styles.flex2]}>
-      <Text style={styles.fullName}>{item.username}</Text>
-      <Text style={styles.userName}>@{item.username}</Text>
-    </View>
-    <View style={[styles.cell, styles.flex1]}>
-      <Text style={styles.pointsColor}>{item.dateOfBirth}</Text>
-      <Text style={styles.pointsColor}> pts</Text>
-    </View>
-  </View>
-))}
-
+          {sortedLeaderboard.slice(3, leaderboard.length).map((item, index) => (
+            <View
+              style={
+                index !== leaderboard.length - 1
+                  ? styles.tableRowWithBorder
+                  : styles.tableRow
+              }
+              key={item.id}
+            >
+              <View style={[styles.flex1, styles.imageContainer]}>
+                <Image
+                  source={item.profileImage || defaultProfileImage}
+                  style={styles.profileImageRest}
+                />
+              </View>
+              <View style={[styles.nameContainer, styles.flex2]}>
+                <Text style={styles.fullName}>{item.username}</Text>
+                <Text style={styles.userName}>@{item.username}</Text>
+              </View>
+              <View style={[styles.cell, styles.flex1]}>
+                <Text style={styles.pointsColor}>{item.currentPoints}</Text>
+                <Text style={styles.pointsColor}> pts</Text>
+              </View>
+            </View>
+          ))}
         </View>
       </ScrollView>
     </View>
@@ -277,8 +278,6 @@ const styles = StyleSheet.create({
   flex2: {
     flex:2
   }
- 
-
 });
 
 export default LeaderboardScreen;
