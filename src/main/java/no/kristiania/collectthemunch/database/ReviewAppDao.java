@@ -33,7 +33,6 @@ public class ReviewAppDao extends AbstractDao{
                         throw new ItemNotSavedException("Review for user with id: " + userId + " not saved");
                     }
                 }
-
             }
         }
     }
