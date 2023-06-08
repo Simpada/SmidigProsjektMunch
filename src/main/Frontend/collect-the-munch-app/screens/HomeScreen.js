@@ -56,17 +56,17 @@ const HomeScreen = () => {
       const response = await axios.get('https://findthemunchgame.azurewebsites.net/api/review/app/');
       const reviewsData = response.data;
       const reviewArray = reviewsData.map((review) => ({
-        user: review.user_id,
-        text: review.review_text,
-        stars: review.num_stars,
-        profilePicture: review.profilePicture,
+        user: review.userName,
+        text: review.reviewText,
+        stars: review.numOfStars,
       }));
       setReviews(reviewArray);
     } catch (error) {
       console.error('Error fetching reviews:', error);
     }
   };
-
+  
+  
   const ReviewItem = ({ item }) => (
     <View style={styles.reviewContainer}>
       <View style={styles.profilePicture}>
@@ -81,15 +81,16 @@ const HomeScreen = () => {
               key={star}
               name="star"
               size={12}
-              color={colors.yellow}
-              solid yellow
+              color={star <= item.stars ? colors.yellow : colors.grey}
+              solid={star <= item.stars}
               style={styles.starIcon}
             />
           ))}
         </View>
       </View>
     </View>
-  );
+  );  
+  
 
   return (
     <ScrollView contentContainerStyle={styles.midPageContainer}>
