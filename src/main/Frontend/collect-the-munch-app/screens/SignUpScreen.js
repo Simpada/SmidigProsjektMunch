@@ -47,7 +47,7 @@ const SignupScreen = () => {
   
 
     try {
-      const byteArray = await imageToByteArray("https://i.imgur.com/NShlFdV.jpg")
+      const byteArray = [1, 2, 3, 4, 5]
       const response = await axios.post('https://findthemunchgame.azurewebsites.net/api/user/register', {
         username,
         password,
