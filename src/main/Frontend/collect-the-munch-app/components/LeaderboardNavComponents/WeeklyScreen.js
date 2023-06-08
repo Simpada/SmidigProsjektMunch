@@ -1,72 +1,62 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView } from 'react-native';
+import { View, Text, Button, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import { colors } from '../../Styles/theme';
+import ImagePicker from 'react-native-image-picker';
 
 function WeeklyScreen() {
-  const initialLeaderboard = [
-    { id: 1, fullName: 'Lily Pilly', userName: 'lily23', points: 2468, profileImage: require('../../assets/Images/Dalle.png') },
-    { id: 2, fullName: 'Jackson Hubert', userName: 'Jackson_H', points: 1882, profileImage: require('../../assets/Images/Dalle.png') },
-    { id: 3, fullName: 'Shockdoggo', userName: 'shockdoggo47', points: 1450, profileImage: require('../../assets/Images/Dalle.png') },
-    { id: 4, fullName: 'User 4', userName: 'User 4', points: 285 },
-    { id: 5, fullName: 'User 5', userName: 'User 5', points: 692 },
-    { id: 6, fullName: 'User 6', userName: 'User 6', points: 492 },
-    { id: 7, fullName: 'User 7', userName: 'User 7', points: 247 },
-    { id: 8, fullName: 'User 8', userName: 'User 8', points: 90 },
-    { id: 9, fullName: 'User 9', userName: 'User 9', points: 120 },
-    { id: 10, fullName: 'User 10', userName: 'User 10', points: 957 },
-    { id: 11, fullName: 'User 11', userName: 'User 11', points: 670 },
-    { id: 12, fullName: 'User 12', userName: 'User 12', points: 970 },
-    { id: 13, fullName: 'User 50', userName: 'User 50', points: 1 },
-    { id: 14, fullName: 'User 29', userName: 'User 29', points: 830 },
-    { id: 15, fullName: 'User 57', userName: 'User 57', points: 200 },
-    { id: 16, fullName: 'User 72', userName: 'User 72', points: 390 },
-    { id: 17, fullName: 'User 62', userName: 'User 62', points: 160 },
-    { id: 18, fullName: 'User 10', userName: 'User 10', points: 582 },
-    { id: 19, fullName: 'User 11', userName: 'User 11', points: 500 },
-    { id: 20, fullName: 'User 12', userName: 'User 12', points: 60 },
-    { id: 21, fullName: 'Number one', userName: 'User 50', points: 1053 },
-  ]
-  .sort((a, b) => b.points - a.points)  
-  .map((item, index) => ({
-    ...item,
-    profileImage: index < 3 ? item.profileImage : undefined,
-  }));
-
-  let topThree = initialLeaderboard.slice(0, 3);
-
-  topThree = [
-    topThree[1], // Second becomes first
-    topThree[0], // First becomes second
-    topThree[2], // Third stays the same
-  ];
-
-  const [currentPage] = useState(1);
+  const [selectedImage, setSelectedImage] = useState({ uri: 'http://placeholder.com/placeholder.png' });
+  const [pointsType] = useState('weeklyPoints');
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState([]);
+  const [topThree, setTopThree] = useState([]);
 
   useEffect(() => {
     setIsLoading(true);
-    // Uncomment the following lines when the API is ready
-    /*
-    axios.get(`https://your-api-url/weekly?page=${currentPage}`)
-      .then(response => {
-        setData(prevData => [...prevData, ...response.data]);
-        setIsLoading(false);
-      })
-      .catch(error => {
-        console.error(error);
-        setIsLoading(false);
-      });
-    */
-    setIsLoading(false);
+    axios.get(`https://findthemunchgame.azurewebsites.net/api/user?page=${currentPage}`)
+    .then(response => {
+      const leaderboardData = response.data
+        .map(user => ({
+          id: user.userId,
+          fullName: user.username,
+          userName: user.username,
+          points: user[pointsType],
+          profileImage: {uri: user.profileImageUrl},
+        }))
+        .sort((a, b) => b.points - a.points)
+        .map((item, index) => ({
+          ...item,
+          profileImage: index < 3 ? item.profileImage : undefined,
+        }));
+
+      const topThreeData = [
+        leaderboardData[1], // Second becomes first
+        leaderboardData[0], // First becomes second
+        leaderboardData[2], // Third stays the same
+      ];
+
+      setTopThree(topThreeData);
+      setData(leaderboardData);
+      setIsLoading(false);
+    })
+    .catch(error => {
+      console.error(error);
+      Alert.alert('Failed to load data');
+      setIsLoading(false);
+    });
   }, [currentPage]);
+
+  function loadMore() {
+    setCurrentPage(currentPage + 1);
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.topThreeContainer}>
         <ScrollView horizontal contentContainerStyle={{ justifyContent: 'space-around', flexDirection: 'row' }}>
-          {topThree.map((item, index) => (
+          {topThree && topThree.map((item, index) => (
+            item && // added
             <View style={[styles.winnerContainer, index === 1 && styles.goldMargin]} key={item.id}>
               <View
                 style={[
@@ -76,66 +66,85 @@ function WeeklyScreen() {
                   index === 2 && styles.bronze,
                 ]}
               >
-                <Image source={item.profileImage} style={styles.profileImage} />
+                <Image source={item.profileImage ? {uri: item.profileImage} : selectedImage} style={styles.profileImage} />
+
                 <View style={styles.circleTopThree}>
                   <Text style={styles.circleTopThreeText}>{index === 1 ? '1' : (index === 0 ? '2' : '3')}</Text>
                 </View>
               </View>
-              <Text style={[styles.winnerName, index === 1 && styles.goldText, index === 0 && styles.silverText, index === 2 && styles.bronzeText]}>{item.fullName}</Text>
+              <Text style={[styles.winnerName, index === 1 && styles.goldText, index === 0 && styles.silverText, index === 2 && styles.bronzeText]}>{item.fullName} 
+              {'\n'}
+              <Text style={styles.userName}>{item.userName}</Text>
+              {'\n'}
+              </Text>
               <Text style={[styles.winnerPoints, index === 1 && styles.goldText, index === 0 && styles.silverText, index === 2 && styles.bronzeText]}>{item.points} points</Text>
             </View>
           ))}
-        </ScrollView>
+          </ScrollView>
+        </View>
+        <View style={styles.listContainer}>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#0000ff" />
+          ) : (
+            <FlatList
+              data={data.slice(3)}
+              keyExtractor={item => item.id.toString()}
+              renderItem={({ item, index }) => (
+                <View style={styles.item}>
+                  <View style={styles.profileImageContainerSmall}>
+                    <Image source={item.profileImage ? {uri: item.profileImage} : selectedImage} style={styles.profileImageSmall} />
+                    <Text style={styles.numberLabel}>
+                      <View style={styles.numberLabelBackground}>
+                        <Text style={styles.numberLabelText}>{index + 4}</Text>
+                      </View>
+                    </Text>
+                  </View>
+                  <View style={styles.userInfoContainer}>
+                    <Text style={styles.listText}>
+                      {item.fullName}
+                      {'\n'}
+                      <Text style={styles.userName}>{item.userName}</Text>
+                    </Text>
+                  </View>
+                  <Text style={styles.listText}>{item.points} points</Text>
+                </View>
+              )}
+              onEndReached={loadMore}
+              onEndReachedThreshold={0}
+            />
+          )}
+        </View>
       </View>
-      <View style={styles.listContainer}>
-        {isLoading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
-        ) : (
-          <FlatList
-            data={initialLeaderboard.slice(3)}
-            keyExtractor={item => item.id.toString()}
-            renderItem={({ item, index }) => (
-              <View style={styles.item}>
-                <Text style={styles.listText}>{index + 4}</Text>
-                <Text style={styles.listText}>{item.fullName}</Text>
-                {/* <Text style={styles.listText}>{item.userName}</Text> */}
-                <Text style={styles.listText}>{item.points} points</Text>
-              </View>
-            )}
-          />
-        )}
-      </View>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-container: {
-flex: 1,
-justifyContent: 'center',
-padding: 20,
-backgroundColor: colors.navy,
-},
-  topThreeContainer: {
-    height: 200,
-    alignItems:'center',
-  },
-  listContainer: {
-    flex: 1,
-  },
-winnerContainer: {
-alignItems: 'center',
-marginRight: 10,
-},
-profileImageContainer: {
-position: 'relative',
-width: 80,
-height: 80,
-borderRadius: 40,
-backgroundColor: 'white',
-justifyContent: 'center',
-alignItems: 'center',
-},
+    );
+  }
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      padding: 20,
+      backgroundColor: colors.navy,
+    },
+    topThreeContainer: {
+      height: 180,
+      alignItems:'center',
+    },
+    listContainer: {
+      flex: 1,
+    },
+    winnerContainer: {
+      alignItems: 'center',
+      marginRight: 10,
+    },
+    profileImageContainer: {
+      position: 'relative',
+      width: 80,
+      height: 80,
+      borderRadius: 40,
+      backgroundColor: 'white',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    
 profileImage: {
 width: 70,
 height: 70,
@@ -188,15 +197,66 @@ backgroundColor: '#946110',
 marginTop:45,
 },
 item: {
-flexDirection: 'row',
-justifyContent: 'space-between',
-alignItems: 'center',
-padding: 24,
-borderBottomColor: '#ccc',
-borderBottomWidth: 1,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  padding: 10,
+  borderBottomWidth: 0.5,
+  borderBottomColor: '#d6d7da',
 },
 listText: {
   color: colors.white,
+  fontSize: 16,
+},
+userInfoContainer: {
+  flex: 1,
+},
+profileImageContainerSmall: {
+  borderRadius: 40,
+  backgroundColor: 'white',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 10,
+  position:'relative',
+  overflow: 'hidden',
+},
+numberLabel: {
+  position: 'absolute',
+  left: 18,
+  top: 32,
+},
+numberLabelBackground: {
+  backgroundColor: 'white',
+  width: 14,
+  height: 14,
+  borderRadius: 2,
+  justifyContent: 'center',
+  alignItems: 'center',
+  transform: [{ rotate: '45deg' }],
+  borderWidth: 1.5,
+},
+numberLabelText: {
+  position: 'absolute',
+  transform: [{ rotate: '-45deg' }],
+  fontWeight: 'bold',
+  fontSize:'9px',
+  color: colors.navy,
+},
+profileImageSmall: {
+  width: 50,
+  height: 50,
+  borderRadius: 25,
+},
+fullName: {
+  fontSize:20,
+  color: 'white',
+  fontWeight: 'bold',
+},
+userName: {
+  alignItems:'center',
+  fontSize: 10,
+  color: 'grey',
+  fontStyle: '',
 },
 
 });
