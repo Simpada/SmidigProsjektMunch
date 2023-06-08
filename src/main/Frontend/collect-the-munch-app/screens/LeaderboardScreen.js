@@ -7,8 +7,9 @@ const defaultProfileImage = require('../assets/Images/profile1.png');
 
 const LeaderboardScreen = () => {
   const [leaderboard, setLeaderBoard] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('Monthly');
+  const [selectedCategory, setSelectedCategory] = useState('Current');
 
+  //Retrieves API data
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -27,13 +28,16 @@ const LeaderboardScreen = () => {
   const sortLeaderboard = () => {
     let sortedLeaderboard = [];
     switch (selectedCategory) {
+      case 'Current':
+        sortedLeaderboard = [...leaderboard].sort((a, b) => b.currentPoints - a.currentPoints);
+        break;
       case 'Weekly':
         sortedLeaderboard = [...leaderboard].sort((a, b) => b.weeklyPoints - a.weeklyPoints);
         break;
       case 'Monthly':
         sortedLeaderboard = [...leaderboard].sort((a, b) => b.monthlyPoints - a.monthlyPoints);
         break;
-      case 'All Time':
+      case 'AllTime':
         sortedLeaderboard = [...leaderboard].sort((a, b) => b.allTimePoints - a.allTimePoints);
         break;
       default:
@@ -49,31 +53,39 @@ const LeaderboardScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.categorycontainer}>
-        <TouchableOpacity
-          style={styles.category}
-          onPress={() => handleCategoryPress('Monthly')}
-        >
-          <Text style={[styles.categoryText, selectedCategory === 'Monthly' && styles.selectedCategory]}>
-            Monthly
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.category}
-          onPress={() => handleCategoryPress('Weekly')}
-        >
-          <Text style={[styles.categoryText, selectedCategory === 'Weekly' && styles.selectedCategory]}>
-            Weekly
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.category}
-          onPress={() => handleCategoryPress('All Time')}
-        >
-          <Text style={[styles.categoryText, selectedCategory === 'All Time' && styles.selectedCategory]}>
-            All Time
-          </Text>
-        </TouchableOpacity>
-      </View>
+  <TouchableOpacity
+    style={styles.category}
+    onPress={() => handleCategoryPress('Current')}
+  >
+    <Text style={[styles.categoryText, selectedCategory === 'Current' && styles.selectedCategory]}>
+      Current
+    </Text>
+  </TouchableOpacity>
+  <TouchableOpacity
+    style={styles.category}
+    onPress={() => handleCategoryPress('Weekly')}
+  >
+    <Text style={[styles.categoryText, selectedCategory === 'Weekly' && styles.selectedCategory]}>
+      Weekly
+    </Text>
+  </TouchableOpacity>
+  <TouchableOpacity
+    style={styles.category}
+    onPress={() => handleCategoryPress('Monthly')}
+  >
+    <Text style={[styles.categoryText, selectedCategory === 'Monthly' && styles.selectedCategory]}>
+      Monthly
+    </Text>
+  </TouchableOpacity>
+  <TouchableOpacity
+    style={styles.category}
+    onPress={() => handleCategoryPress('All Time')}
+  >
+    <Text style={[styles.categoryText, selectedCategory === 'All Time' && styles.selectedCategory]}>
+      All Time
+    </Text>
+  </TouchableOpacity>
+</View>
 
       <View style={styles.headerContainer}>
         <ScrollView horizontal>
