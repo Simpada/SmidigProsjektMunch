@@ -109,8 +109,8 @@ function WeeklyScreen() {
                   <Text style={styles.listText}>{item.points} points</Text>
                 </View>
               )}
-              onEndReached={loadMore}
-              onEndReachedThreshold={0}
+             // onEndReached={loadMore}
+             // onEndReachedThreshold={0}
             />
           )}
         </View>
@@ -125,7 +125,7 @@ function WeeklyScreen() {
       backgroundColor: colors.navy,
     },
     topThreeContainer: {
-      height: 180,
+      height: 220,
       alignItems:'center',
     },
     listContainer: {
