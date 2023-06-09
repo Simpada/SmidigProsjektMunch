@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     padding: 20,
     width: '100%',
     gap: 10,
-    height: 300,
+    height: "100%",
     backgroundColor: colors.white,
     alignItems: 'center',
   },

@@ -135,7 +135,9 @@ const HomeScreen = () => {
           ))}
         </ScrollView>
       </View>
-      <Review reviewType="app"/>
+      <View style={styles.leaveReviewContainer}>
+        <Review reviewType="app"/>
+      </View>
     </ScrollView>
   );
 };
@@ -284,6 +286,13 @@ const styles = StyleSheet.create({
   star: {
     marginHorizontal: 1,
   },
+
+  // Review styles
+  leaveReviewContainer:{
+    marginTop:20,
+    height: 500,
+    width: '100%',
+  }
 });
 
 export default HomeScreen;
