@@ -3,6 +3,7 @@ import { View, Text, Button, StyleSheet, FlatList, ActivityIndicator, Image, Scr
 import axios from 'axios';
 import { colors } from '../../Styles/theme';
 import ImagePicker from 'react-native-image-picker';
+import {convertToImage} from "../ImageToByteArray";
 
 function WeeklyScreen() {
   const [selectedImage, setSelectedImage] = useState({ uri: 'http://placeholder.com/placeholder.png' });
@@ -22,7 +23,7 @@ function WeeklyScreen() {
           fullName: user.username,
           userName: user.username,
           points: user[pointsType],
-          profileImage: {uri: user.profileImageUrl},
+          profileImage: {uri: convertToImage(user.profilePicture)},
         }))
         .sort((a, b) => b.points - a.points)
         .map((item, index) => ({
