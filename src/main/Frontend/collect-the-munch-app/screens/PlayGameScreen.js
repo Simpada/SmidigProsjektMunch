@@ -56,7 +56,7 @@ const PlayGameScreen = () => {
           </View>
         </View>
         <View style={styles.additionalTextContainer}>
-          <Text style={styles.additionalText}>2 - Swipe to collect the card</Text>
+          <Text style={styles.additionalText}>2 - Collect the card!</Text>
           <View style={styles.photoContainer}>
             <View style={styles.overlayContainer}>
               <Image source={popImage} style={styles.photo} />

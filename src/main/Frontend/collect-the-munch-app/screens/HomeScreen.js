@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: colors.navy,
     alignItems: 'center',
-    paddingBottom: 100
+
   },
 
   munchImageContainer: {
