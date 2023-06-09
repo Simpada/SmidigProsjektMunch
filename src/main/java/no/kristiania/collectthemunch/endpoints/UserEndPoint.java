@@ -30,7 +30,7 @@ public class UserEndPoint extends ApiEndPoint {
     @Path("/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveUserById(@PathParam("userId") int userId) throws SQLException {
+    public Response retrieveUserById(@PathParam("userId") int userId) {
         return handleRequest(() -> userDao.retrieveUserById(userId));
     }
 
@@ -56,7 +56,7 @@ public class UserEndPoint extends ApiEndPoint {
     @Path("/username/{userName}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response retrieveUserByUsername(@PathParam("userName") String username) throws SQLException {
+    public Response retrieveUserByUsername(@PathParam("userName") String username) {
         return handleRequest(() -> userDao.retrieveUserByName(username));
     }
 
