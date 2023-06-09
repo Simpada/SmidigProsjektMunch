@@ -1,22 +1,26 @@
 import * as FileSystem from 'expo-file-system';
+import test from "../assets/Images/test.png";
 
-export const loadImageAndConvertToByteArray = async (imageUri) => {
-  try {
-    const response = await fetch(imageUri);
-    const imageBlob = await response.blob();
-    const reader = new FileReader();
-    const bytePromise = new Promise((resolve, reject) => {
-      reader.onloadend = () => {
-        const arrayBuffer = reader.result;
-        const byteArray = new Uint8Array(arrayBuffer);
-        resolve(byteArray);
-      };
-      reader.onerror = reject;
-    });
-    reader.readAsArrayBuffer(imageBlob);
-    return bytePromise;
-  } catch (error) {
-    console.log('Error loading image:', error);
-    throw new Error('Error loading image: ' + error.message);
-  }
+export const loadImageAndConvertToByteArray = async () => {
+    try {
+        const imageUri = test; // Update with the correct image path
+
+        const fileUri = FileSystem.cacheDirectory + imageUri;
+        await FileSystem.downloadAsync(imageUri, fileUri);
+
+        const fileContent = await FileSystem.readAsStringAsync(fileUri, {
+            encoding: FileSystem.EncodingType.Base64,
+        });
+
+        const byteCharacters = atob(fileContent);
+        const byteNumbers = new Uint8Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+
+        return byteNumbers;
+    } catch (error) {
+        console.log('Error loading image:', error);
+        throw new Error('Error loading image: ' + error.message);
+    }
 };

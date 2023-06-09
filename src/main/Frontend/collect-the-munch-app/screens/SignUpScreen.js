@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
 import axios from 'axios';
 import * as Font from 'expo-font';
-import {loadImageAndConvertToByteArray} from "../components/ImageToByteArray";
+import {loadImageAndConvertToByteArray} from '../components/ImageToByteArray';
 
 const SignupScreen = () => {
   const [username, setUsername] = useState('2e1sd');
@@ -10,12 +10,44 @@ const SignupScreen = () => {
   const [dateOfBirth, setDateOfBirth] = useState('11111111');
   const [email, setEmail] = useState('fdsff@gofgo.com');
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [profilePicture, setProfilePicture] = useState([]);
+
+  useEffect(() => {
+    loadCustomFont();
+  }, []);
+
+  const loadCustomFont = async () => {
+    await Font.loadAsync({
+      'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.otf'),
+    });
+    setFontLoaded(true);
+  };
 
   const handleSignup = async () => {
+    // Validate input values
+    if (!validateEmail(email)) {
+      Alert.alert('Invalid Email', 'Please enter a valid email address');
+      return;
+    }
+
+    if (!validateBirthDate(dateOfBirth)) {
+      Alert.alert('Invalid Birth Date', 'Please enter a valid birth date');
+      return;
+    }
+
+    if (!validateUsername(username)) {
+      Alert.alert('Invalid Username', 'Username should not exceed 20 characters');
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      Alert.alert('Invalid Password', 'Password should not exceed 30 characters');
+      return;
+    }
+
+
     try {
-      const byteArray = await loadImageAndConvertToByteArray('https://i.imgur.com/ZzVx1hk.png');
-      setProfilePicture(byteArray);
+      const profilePicture = await loadImageAndConvertToByteArray();
+
       const response = await axios.post('https://findthemunchgame.azurewebsites.net/api/user/register', {
         username,
         password,
@@ -28,10 +60,10 @@ const SignupScreen = () => {
       console.log(response.data);
 
       // Clear the input fields
-      setUsername('efefefefsdf');
-      setPassword('d12d1d');
-      setDateOfBirth('11111111');
-      setEmail('23fscv@gjf.com');
+      setUsername('2r2r2r');
+      setPassword('asdsad');
+      setDateOfBirth('11111111g');
+      setEmail('greg34g@hdfig.com');
 
       // Show a success message or navigate to a new screen
       Alert.alert('Signup Successful', 'You have successfully signed up!');
@@ -42,47 +74,72 @@ const SignupScreen = () => {
     }
   };
 
+  const validateEmail = (email) => {
+    // Simple email validation using regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateBirthDate = (birthDate) => {
+    // Birth date validation: should only contain numbers
+    const birthDateRegex = /^[0-9]+$/;
+    return birthDateRegex.test(birthDate);
+  };
+
+  const validateUsername = (username) => {
+    // Username validation: should not exceed 20 characters
+    return username.length <= 20;
+  };
+
+  const validatePassword = (password) => {
+    // Password validation: should not exceed 30 characters
+    return password.length <= 30;
+  };
+
+  if (!fontLoaded) {
+    return null; // Render nothing until the custom font is loaded
+  }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.headline}>
-        <Text style={styles.headlineText}>MUNCH</Text>
+      <View style={styles.container}>
+        <View style={styles.headline}>
+          <Text style={styles.headlineText}>MUNCH</Text>
+        </View>
+        <TextInput
+            style={[styles.input, { color: 'white' }]}
+            placeholder="Username"
+            placeholderTextColor={'white'}
+            value={username}
+            onChangeText={setUsername}
+            autoCapitalize="none"
+        />
+        <TextInput
+            style={[styles.input, { color: 'white' }]}
+            placeholder="Password"
+            placeholderTextColor={'white'}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+        />
+        <TextInput
+            style={[styles.input, { color: 'white' }]}
+            placeholder="Date of Birth"
+            placeholderTextColor={'white'}
+            value={dateOfBirth}
+            onChangeText={setDateOfBirth}
+        />
+        <TextInput
+            style={[styles.input, { color: 'white' }]}
+            placeholder="Email"
+            placeholderTextColor={'white'}
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+        />
+        <TouchableOpacity style={styles.button} onPress={handleSignup}>
+          <Text style={styles.buttonText}> Signup</Text>
+        </TouchableOpacity>
       </View>
-      <TextInput
-        style={[styles.input, { color: 'white' }]}
-        placeholder="Username"
-        placeholderTextColor={'white'}
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={[styles.input, { color: 'white' }]}
-        placeholder="Password"
-        placeholderTextColor={'white'}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TextInput
-        style={[styles.input, { color: 'white' }]}
-        placeholder="Date of Birth"
-        placeholderTextColor={'white'}
-        value={dateOfBirth}
-        onChangeText={setDateOfBirth}
-      />
-      <TextInput
-        style={[styles.input, { color: 'white' }]}
-        placeholder="Email"
-        placeholderTextColor={'white'}
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSignup}>
-        <Text style={styles.buttonText}> Signup</Text>
-      </TouchableOpacity>
-    </View>
   );
 };
 
