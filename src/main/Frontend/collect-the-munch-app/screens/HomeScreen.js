@@ -5,6 +5,7 @@ import { colors } from '../Styles/theme';
 import HeaderImg from '../assets/Images/munch-museet.avif';
 import { Entypo, Feather, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import reviewicon1 from "../assets/Images/samuel.png"
+import Review from '../components/Review';
 
 
 const HomeScreen = () => {
@@ -134,6 +135,7 @@ const HomeScreen = () => {
           ))}
         </ScrollView>
       </View>
+      <Review reviewType="app"/>
     </ScrollView>
   );
 };
