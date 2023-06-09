@@ -45,9 +45,9 @@ public abstract class ApiEndPoint {
         }
     }
 
-    protected Response handleSubmit(Callable<Void> daoCall) {
+    protected Response handleSubmit(HandleSubmit daoCall) {
         try {
-            daoCall.call();
+            daoCall.execute();
             return Response.status(Response.Status.CREATED).build();
         } catch (ItemNotSavedException insE) {
             insE.printStackTrace();

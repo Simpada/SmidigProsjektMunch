@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EventDao extends AbstractDao{
 
@@ -115,7 +116,7 @@ public class EventDao extends AbstractDao{
             }
         }
     }
-    //TODO: Should there be events without categories?
+
     private List<String> retrieveCategoriesByEventId(int eventId) throws SQLException {
         try(var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Categories WHERE event_id = ?";
@@ -148,17 +149,19 @@ public class EventDao extends AbstractDao{
         }
     }
 
-    private List<Integer> retrieveUserSpecificEventIds(List<String> preferences) throws SQLException {
+    public List<Event> retrieveUserSpecificEvents(List<String> preferences) throws SQLException {
+        String stringPreferences = "(" + preferences.stream()
+                .map(s -> "'" + s + "'")
+                .collect(Collectors.joining(", ")) + ")";
+                System.out.println(stringPreferences);
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT DISTINCT event_id FROM Categories WHERE category IN (?)";
+            String query = "SELECT Distinct E.* FROM Events E join Categories C on E.event_id = C.event_id WHERE category IN " + stringPreferences;
             try(var statement = connection.prepareStatement(query)) {
-                // Convert the categories list to a SQL array
-                statement.setArray(1, connection.createArrayOf("VARCHAR", preferences.toArray()));
+                //statement.setString(1, stringPreferences);
                 try (var resultSet = statement.executeQuery()) {
-                    List<Integer> result = new ArrayList<>();
+                    List<Event> result = new ArrayList<>();
                     while (resultSet.next()) {
-                        int eventId = resultSet.getInt("event_id");
-                        result.add(eventId);
+                        result.add(mapFromResultSet(resultSet));
                     }
                     if (result.isEmpty()) {
                         throw new NotFoundException("No events found that match the users preferences");
@@ -167,33 +170,6 @@ public class EventDao extends AbstractDao{
                 }
             }
         }
-    }
-
-    private List<Event> retrieveEventsByUserPreferences(List<Integer> eventIds) throws SQLException {
-        try(var connection = dataSource.getConnection()) {
-            String query = "SELECT * FROM Events WHERE event_id IN (?)";
-            try(var statement = connection.prepareStatement(query)) {
-                // Set the list of event IDs as a parameter to the query
-                statement.setArray(1, connection.createArrayOf("INT", eventIds.toArray()));
-                try(var resultSet = statement.executeQuery()) {
-                    // The final list of events that will be returned to the frontend
-                    List<Event> result = new ArrayList<>();
-                    while(resultSet.next()) {
-                        result.add(mapFromResultSet(resultSet));
-                    }
-                    if (result.isEmpty()) {
-                        throw new NotFoundException("No events found with users preferences");
-                    }
-                    return result;
-                }
-            }
-        }
-    }
-
-    public List<Event> retrieveFilteredEventsByUserPreference(List<String> preferences) throws SQLException {
-        //TODO: retrieve all events if preferences is empty?
-        List<Integer> eventIds = retrieveUserSpecificEventIds(preferences);
-        return retrieveEventsByUserPreferences(eventIds);
     }
 
     public void saveEvent(Event event) throws SQLException, ItemNotSavedException {

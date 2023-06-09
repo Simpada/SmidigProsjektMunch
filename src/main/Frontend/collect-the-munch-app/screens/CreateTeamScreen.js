@@ -1,18 +1,26 @@
 import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import * as Font from 'expo-font';
 
-const CreateTeam = () => {
+const CreateTeamScreen = () => {
+  const navigation = useNavigation();
+  
   useEffect(() => {
     loadFonts();
   }, []);
+
+  const actionOnPress = () => {
+    navigation.navigate('Play Game');
+  };
+
 
   const loadFonts = async () => {
     await Font.loadAsync({
       'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.ttf'),
       'GirottMunch-BoldSlant': require('../assets/fonts/GirottMunch-BoldSlant.ttf'),
       'GirottMunch-Bold': require('../assets/fonts/GirottMunch-Bold.ttf'),
-    });
+    }); 
   };
 
   return (
@@ -62,9 +70,9 @@ const CreateTeam = () => {
             />
           </View>
         </View>
-        <TouchableOpacity style={styles.playButton}>
-          <Text style={styles.playButtonText}>Play</Text>
-        </TouchableOpacity>
+        <TouchableOpacity style={styles.playButton} onPress={actionOnPress}>
+            <Text style={styles.playButtonText}>Play</Text>
+          </TouchableOpacity>
       </View>
     </View>
   );
@@ -74,6 +82,7 @@ const styles = StyleSheet.create({
     munchHeadline: {
         fontFamily: 'GirottMunch-BoldBackslant',
         fontSize: 70,
+        paddingHorizontal: 30,
         color: 'black',
         alignSelf: 'center',
     },
@@ -100,13 +109,14 @@ const styles = StyleSheet.create({
   },
   searchBar: {
     flex: 1,
-    height: 50,
+    height: 40,
     backgroundColor: '#FFFFFF',
     borderRadius: 5,
     paddingHorizontal: 10,
   },
   inviteButton: {
     marginLeft: 10,
+    height: 40,
     backgroundColor: 'red',
     paddingHorizontal: 15,
     paddingVertical: 10,
@@ -157,7 +167,7 @@ const styles = StyleSheet.create({
   },
   playButton: {
     backgroundColor: 'red',
-    paddingHorizontal: 30,
+    paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 5,
     alignSelf: 'center',
@@ -166,8 +176,9 @@ const styles = StyleSheet.create({
   playButtonText: {
     color: 'white',
     fontSize: 20,
+    paddingHorizontal: 10,
     fontFamily: 'GirottMunch-BoldSlant',
   },
 });
 
-export default CreateTeam;
+export default CreateTeamScreen;

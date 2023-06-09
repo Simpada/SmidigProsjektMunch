@@ -5,7 +5,7 @@ import { colors } from '../Styles/theme';
 import axios from 'axios';
 
 const Review = ({ reviewType, eventId }) => {
-  const userId = 17;
+  const userId = 20;
   let endpoint = '';
 
   if (reviewType === 'event') {
@@ -61,8 +61,8 @@ const Review = ({ reviewType, eventId }) => {
       />
       <TextInput
         style={styles.input}
-        multiline
         value={comment}
+        maxLength={200}
         onChangeText={handleCommentChange}
         placeholder="Write a comment..."
         onKeyPress={handleKeyPress}
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     padding: 20,
     width: '100%',
     gap: 10,
-    height: 300,
+    height: "100%",
     backgroundColor: colors.white,
     alignItems: 'center',
   },

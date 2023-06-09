@@ -16,6 +16,7 @@ public class EventDaoTest {
 
     private final JdbcDataSource dataSource = (JdbcDataSource) MemoryDataSource.createTestDataSource();
     private final EventDao eventDao = new EventDao(dataSource);
+    private final UserDao userDao = new UserDao(dataSource);
 
     public EventDaoTest() {
     }
@@ -62,6 +63,16 @@ public class EventDaoTest {
 //            System.out.println(e.getId());
 //        }
 //    }
+
+    @Test
+    void shouldRetrieveEventsByUserPreferences() throws SQLException, ItemNotSavedException {
+        var user = SampleData.sampleUser();
+        userDao.saveUser(user);
+
+        List<Event> result = eventDao.retrieveUserSpecificEvents(user.getPreferences());
+
+        assertThat(result).isNotNull();
+    }
 
 
 }

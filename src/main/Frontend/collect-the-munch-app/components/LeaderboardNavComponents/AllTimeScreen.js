@@ -175,26 +175,26 @@ backgroundColor: 'white',
 justifyContent: 'center',
 alignItems: 'center',
 bottom: -5,
-transform: [{ rotate: '45deg' }],
+transform: "rotate(45deg)",
 borderWidth: 1.5,
 },
 circleTopThreeText: {
-position: 'absolute',
-transform: [{ rotate: '-45deg' }],
-fontWeight: 'bold',
-color:colors.navy,
+  position: 'absolute',
+  transform: "rotate(-45deg)",
+  fontWeight: 'bold',
+  color:colors.navy,
 },
 gold: {
-backgroundColor: 'gold',
-marginTop:0,
+  backgroundColor: 'gold',
+  marginTop:0,
 },
 silver: {
-backgroundColor: 'silver',
-marginTop:45,
+  backgroundColor: 'silver',
+  marginTop:45,
 },
 bronze: {
-backgroundColor: '#946110',
-marginTop:45,
+  backgroundColor: '#946110',
+  marginTop:45,
 },
 item: {
   flexDirection: 'row',
@@ -207,7 +207,7 @@ item: {
 listText: {
   color: colors.white,
   fontSize: 16,
-  },
+},
 
 userInfoContainer: {
   flex: 1,
@@ -233,14 +233,14 @@ numberLabelBackground: {
   borderRadius: 2,
   justifyContent: 'center',
   alignItems: 'center',
-  transform: [{ rotate: '45deg' }],
+  transform: "rotate(45deg)",
   borderWidth: 1.5,
   position: 'absolute',
 },
 numberLabelText: {
-  transform: [{ rotate: '-45deg' }],
+  transform: "rotate(-45deg)",
   fontWeight: 'bold',
-  fontSize:'9px',
+  fontSize:9,
   color: colors.navy,
 },
 profileImageSmall: {
@@ -257,7 +257,6 @@ userName: {
   alignItems:'center',
   fontSize: 10,
   color: 'grey',
-  fontStyle: '',
 },
 
 });
