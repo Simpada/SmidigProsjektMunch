@@ -35,10 +35,6 @@ public class ReviewAppDaoTest {
             userDao.saveUser(user);
             reviewAppDao.save(review, user.getUserId());
 
-            System.out.println(Arrays.toString(review.getProfilePicture()));
-
-            System.out.println(Arrays.toString(reviewAppDao.retrieveAppReviewById(user.getUserId()).getProfilePicture()));
-
             assertThat(reviewAppDao.retrieveAppReviewById(user.getUserId()))
                     .hasNoNullFieldsOrProperties()
                     .usingRecursiveComparison()

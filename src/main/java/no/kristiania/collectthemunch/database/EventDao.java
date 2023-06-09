@@ -18,7 +18,7 @@ public class EventDao extends AbstractDao{
         super(dataSource);
     }
 
-    public void save(Event event) throws SQLException, ItemNotSavedException {
+    private void save(Event event) throws SQLException, ItemNotSavedException {
         try(var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Events (name, description, poster) VALUES (?, ?, ?)";
             try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {

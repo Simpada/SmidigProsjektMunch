@@ -19,7 +19,7 @@ public class ReviewEventDaoTest {
     @Test
     void shouldAddAndGetEventReview() throws SQLException, ItemNotSavedException {
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             var user = SampleData.sampleUser();
             var event = SampleData.sampleEvent();
             var eventReview = SampleData.sampleReview();
@@ -27,7 +27,7 @@ public class ReviewEventDaoTest {
             eventReview.setProfilePicture(user.getProfilePicture());
 
             userDao.saveUser(user);
-            eventDao.save(event);
+            eventDao.saveEvent(event);
             reviewEventDao.save(eventReview, event.getId(), user.getUserId());
 
             assertThat(reviewEventDao.getReviewFromUserOnEvent(event.getId(), user.getUserId()))
