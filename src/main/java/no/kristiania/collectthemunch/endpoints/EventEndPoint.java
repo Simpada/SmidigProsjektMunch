@@ -3,7 +3,6 @@ package no.kristiania.collectthemunch.endpoints;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import no.kristiania.collectthemunch.database.ItemNotSavedException;
 import no.kristiania.collectthemunch.entities.Event;
 
 import java.sql.SQLException;
@@ -21,19 +20,7 @@ public class EventEndPoint extends ApiEndPoint {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createEvent(Event event) {
-        try {
-            eventDao.saveEvent(event);
-            return Response.status(Response.Status.CREATED).build();
-        } catch (ItemNotSavedException insE) {
-            insE.printStackTrace();
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(insE.getMessage())
-                    .build();
-        } catch (SQLException sqlE) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                    .entity(sqlE.getMessage())
-                    .build();
-        }
+        return handleSubmit(() -> eventDao.saveEvent(event));
     }
 
     @Path("/{eventId}")
@@ -55,7 +42,7 @@ public class EventEndPoint extends ApiEndPoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getFilteredEvents(@PathParam("userId") int userId) throws SQLException {
         List<String> userPreferences = userDao.retrieveUserPreferences(userId);
-        return handleRequest(() -> eventDao.retrieveFilteredEventsByUserPreference(userPreferences));
+        return handleRequest(() -> eventDao.retrieveUserSpecificEvents(userPreferences));
     }
 
     @Path("/category/{category}")

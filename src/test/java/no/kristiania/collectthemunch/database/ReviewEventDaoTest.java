@@ -27,12 +27,11 @@ public class ReviewEventDaoTest {
             eventReview.setProfilePicture(user.getProfilePicture());
 
             userDao.saveUser(user);
+            eventReview.setUserId(user.getUserId());
             eventDao.saveEvent(event);
             reviewEventDao.save(eventReview, event.getId(), user.getUserId());
 
-            eventReview.setUserId(user.getUserId());
-
-            assertThat(reviewEventDao.getReviewFromUserOnEvent(event.getId(), user.getUserId()))
+            assertThat(reviewEventDao.retrieveReviewFromUserOnEvent(event.getId(), user.getUserId()))
                     .hasNoNullFieldsOrProperties()
                     .usingRecursiveComparison()
                     .isEqualTo(eventReview)
