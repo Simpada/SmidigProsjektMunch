@@ -5,7 +5,7 @@ import { colors } from '../Styles/theme';
 import axios from 'axios';
 
 const Review = ({ reviewType, eventId }) => {
-  const userId = 17;
+  const userId = 19;
   let endpoint = '';
 
   if (reviewType === 'event') {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     padding: 20,
     width: '100%',
     gap: 10,
-    height: 300,
+    height: "100%",
     backgroundColor: colors.white,
     alignItems: 'center',
   },

@@ -5,7 +5,6 @@ import jakarta.ws.rs.NotFoundException;
 import no.kristiania.collectthemunch.entities.Review;
 
 import javax.sql.DataSource;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -44,7 +43,7 @@ public class ReviewAppDao extends AbstractDao{
                 try(var resultSet = statement.executeQuery()) {
                     List<Review> result = new ArrayList<>();
                     while (resultSet.next()) {
-                        result.add(mapFromResultSet(resultSet));
+                        result.add(ReviewResultMapping.mapReviews(resultSet));
                     }
                     if (result.isEmpty()) {
                         throw new NotFoundException("No reviews registered for this app");
@@ -62,7 +61,7 @@ public class ReviewAppDao extends AbstractDao{
                 statement.setInt(1, userId);
                 try(var resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        return mapFromResultSet(resultSet);
+                        return ReviewResultMapping.mapReviews(resultSet);
                     } else {
                         // Review not found, throw a not found exception with user id
                         throw new NotFoundException("Review not found with ID: " + userId);
@@ -80,7 +79,7 @@ public class ReviewAppDao extends AbstractDao{
                 try(var resultSet = statement.executeQuery()) {
                     List<Review> result = new ArrayList<>();
                     while (resultSet.next()) {
-                        result.add(mapFromResultSet(resultSet));
+                        result.add(ReviewResultMapping.mapReviews(resultSet));
                     }
                     if (result.isEmpty()) {
                         throw new NotFoundException("No reviews with " + numStars + " stars found.");
@@ -89,15 +88,5 @@ public class ReviewAppDao extends AbstractDao{
                 }
             }
         }
-    }
-
-    private Review mapFromResultSet(ResultSet resultSet) throws SQLException {
-        var review = new Review();
-        review.setUserId(resultSet.getInt("user_id"));
-        review.setUserName(resultSet.getString("username"));
-        review.setProfilePicture(resultSet.getBytes("profile_picture"));
-        review.setReviewText(resultSet.getString("review_text"));
-        review.setNumOfStars(resultSet.getInt("num_stars"));
-        return review;
     }
 }
