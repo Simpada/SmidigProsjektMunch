@@ -1,5 +1,3 @@
-// EventList.js
-
 import React from 'react';
 import { FlatList, View, StyleSheet, TouchableOpacity } from 'react-native';
 import EventItem from './EventItem';
@@ -15,8 +13,8 @@ const EventList = ({ events, handleEventPress }) => {
             <EventItem
               id={item.id}
               description={item.description}
-              title={item.title}
-              category={item.category}
+              name={item.name}
+              categories={item.categories}
             />
           </TouchableOpacity>
         )}
@@ -35,4 +33,3 @@ const styles = StyleSheet.create({
 });
 
 export default EventList;
-

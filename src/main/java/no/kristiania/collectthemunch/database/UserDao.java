@@ -1,6 +1,7 @@
 package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import no.kristiania.collectthemunch.entities.User;
 
 import javax.sql.DataSource;
@@ -9,8 +10,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static no.kristiania.collectthemunch.entities.Category.validateCategoryEnum;
-
 public class UserDao extends AbstractDao {
 
     @Inject
@@ -18,19 +17,10 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
-    public Boolean save(User user) throws SQLException {
-        if (validateUniqueUser(user.getUsername(), user.getEmail())) {
-           // if (validatePreferences(user.getPreferences())) {
-                saveUser(user);
-                saveUserPreferences(user);
-           // }
-            return true;
+    private void save(User user) throws SQLException {
+        if (user.getProfilePicture() == null) {
+            user.setProfilePicture(new byte[1]);
         }
-        return false;
-    }
-
-    private void saveUser(User user) throws SQLException {
-        user.setProfilePicture(new byte[]{1});
 
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
@@ -51,7 +41,28 @@ public class UserDao extends AbstractDao {
         }
     }
 
+    private void updateUserData(User updatedUser) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            String query = "UPDATE Users SET username=?, password=?, date_of_birth=?, email=?, profile_picture=? WHERE user_id=?";
+
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, updatedUser.getUsername());
+                statement.setString(2, updatedUser.getPassword());
+                statement.setString(3, updatedUser.getDateOfBirth());
+                statement.setString(4, updatedUser.getEmail());
+                statement.setBytes(5, updatedUser.getProfilePicture());
+                statement.setInt(6, updatedUser.getUserId());
+
+                statement.executeUpdate();
+            }
+        }
+    }
+
     public void saveUserPreferences(User user) throws SQLException {
+        if (user.getPreferences() == null) {
+            return;
+        }
+
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Preferences (user_id, preference) VALUES (?, ?)";
 
@@ -65,83 +76,51 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public Boolean validateUniqueUser(String username, String email) throws SQLException {
-        List<String> existingUsernames = retrieveUsernames();
-        List<String> existingEmails = retrieveEmails();
-
-        for (String s : existingUsernames) {
-            if (username.equals(s)) {
-                return false;
-            }
-        }
-
-        for (String s : existingEmails) {
-            if (email.equals(s)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public List<String> retrieveUsernames() throws SQLException {
+    private void validateUniqueUsername(String username) throws SQLException, ItemNotSavedException {
         try (var connection = dataSource.getConnection()) {
-            String query = "SELECT username FROM users";
-
+            String query = "SELECT COUNT(*) FROM Users WHERE username = ?";
             try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, username);
                 try (var resultSet = statement.executeQuery()) {
-                    List<String> usernames = new ArrayList<>();
-
-                    while (resultSet.next()) {
-                        usernames.add(resultSet.getString("username"));
+                    if (resultSet.next()) {
+                        if (resultSet.getInt(1) > 0) {
+                            throw new ItemNotSavedException("Username " + username + " already exists in database");
+                        }
                     }
-                    return usernames;
                 }
             }
         }
     }
 
-    public List<String> retrieveEmails() throws SQLException {
+    private void validateUniqueEmail(String email) throws SQLException, ItemNotSavedException {
         try (var connection = dataSource.getConnection()) {
-            String query = "SELECT email FROM users";
-
+            String query = "SELECT COUNT(*) FROM Users WHERE email = ?";
             try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, email);
                 try (var resultSet = statement.executeQuery()) {
-                    List<String> emails = new ArrayList<>();
-
-                    while (resultSet.next()) {
-                        emails.add(resultSet.getString("email"));
+                    if (resultSet.next()) {
+                        if (resultSet.getInt(1) > 0) {
+                            throw new ItemNotSavedException("User with email " + email + " already exists in database");
+                        }
                     }
-                    return emails;
                 }
             }
         }
-    }
-
-    public Boolean validatePreferences(List<String> preferences) {
-        for (String s : preferences) {
-            if (!validateCategoryEnum(s)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     public User login(String username, String password) throws SQLException {
-        User user = retrieve(username);
+        User user = retrieveUserByName(username);
 
         if (user == null || !password.equals(user.getPassword())) {
-            System.out.println("No user or wrong login/password");
             return null;
         } else {
             return user;
         }
     }
 
-    public List<User> retrieveAll() throws SQLException {
+    public List<User> retrieveAllUsers() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Users";
-
             try (var statement = connection.prepareStatement(query)) {
                 try (var resultSet = statement.executeQuery()) {
                     List<User> users = new ArrayList<>();
@@ -151,17 +130,18 @@ public class UserDao extends AbstractDao {
                         user.setPreferences(retrieveUserPreferences(user.getUserId()));
                         users.add(user);
                     }
+                    if (users.isEmpty()) {
+                        throw new NotFoundException("No users found in database");
+                    }
                     return users;
                 }
             }
         }
     }
 
-    //Retrieve by id
-    public User retrieve(int userId) throws SQLException {
+    public User retrieveUserById(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Users WHERE user_id = ?";
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
 
@@ -170,11 +150,9 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    //Retrieve by username
-    public User retrieve(String username) throws SQLException {
+    public User retrieveUserByName(String username) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Users WHERE username = ?";
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setString(1, username);
 
@@ -191,7 +169,7 @@ public class UserDao extends AbstractDao {
 
                 return user;
             } else {
-                return null;
+                throw new NotFoundException("User not found");
             }
         }
     }
@@ -223,20 +201,7 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    private User mapFromResultSet(ResultSet resultSet) throws SQLException {
-        var user = new User();
-        user.setUserId(resultSet.getInt("user_id"));
-        user.setUsername(resultSet.getString("username"));
-        user.setPassword(resultSet.getString("password"));
-        user.setDateOfBirth(resultSet.getString("date_of_birth"));
-        user.setEmail(resultSet.getString("email"));
-        user.setProfilePicture(resultSet.getBytes("profile_picture"));
-        return user;
-    }
-
-
     public List<String> retrieveUserPreferences(int userId) throws SQLException {
-
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT *
@@ -245,10 +210,8 @@ public class UserDao extends AbstractDao {
                         ON Users.user_id = Preferences.user_id
                     WHERE preferences.user_id = ?
                     """;
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
-
                 try (var resultSet = statement.executeQuery()) {
                     List<String> preferences = new ArrayList<>();
 
@@ -261,7 +224,44 @@ public class UserDao extends AbstractDao {
         }
     }
 
+    private void retrievePoints(User user) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Points WHERE user_id = ?";
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, user.getUserId());
+                try (var resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        user.setCurrentPoints(resultSet.getInt("current_points"));
+                        user.setWeeklyPoints(resultSet.getInt("weekly_points"));
+                        user.setMonthlyPoints(resultSet.getInt("monthly_points"));
+                        user.setAllTimePoints(resultSet.getInt("alltime_points"));
+                    }
+                }
+            }
+        }
+    }
 
+    public User updateUser(User updatedUser) throws SQLException {
+        updateUserData(updatedUser);
+        return retrieveUserById(updatedUser.getUserId());
+    }
+
+    public void saveUser(User user) throws SQLException, ItemNotSavedException {
+        validateUniqueUsername(user.getUsername());
+        validateUniqueEmail(user.getEmail());
+        save(user);
+        saveUserPreferences(user);
+    }
+
+    private User mapFromResultSet(ResultSet resultSet) throws SQLException {
+        var user = new User();
+        user.setUserId(resultSet.getInt("user_id"));
+        user.setUsername(resultSet.getString("username"));
+        user.setPassword(resultSet.getString("password"));
+        user.setDateOfBirth(resultSet.getString("date_of_birth"));
+        user.setEmail(resultSet.getString("email"));
+        user.setProfilePicture(resultSet.getBytes("profile_picture"));
+        retrievePoints(user);
+        return user;
+    }
 }
-
-

@@ -6,6 +6,9 @@ import LoginScreen from './screens/LoginScreenJWT';
 
 
 
+
+
+
 export default function App() {
 
 
@@ -17,7 +20,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 0,
-    backgroundColor: '#fff',
+    backgroundColor: '#0f2335',
     alignItems: 'center',
     justifyContent: 'center',
   },

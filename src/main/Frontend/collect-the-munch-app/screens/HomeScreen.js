@@ -4,13 +4,13 @@ import * as Font from 'expo-font';
 import { colors } from '../Styles/theme';
 import HeaderImg from '../assets/Images/munch-museet.avif';
 import { Entypo, Feather, FontAwesome5, AntDesign } from '@expo/vector-icons';
-import reviewicon1 from "../assets/Images/samuel.png";
-import axios from 'axios';
+import reviewicon1 from "../assets/Images/samuel.png"
+import Review from '../components/Review';
+
 
 const HomeScreen = () => {
   useEffect(() => {
     loadFonts();
-    fetchReviews();
   }, []);
 
   const loadFonts = async () => {
@@ -23,7 +23,6 @@ const HomeScreen = () => {
 
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Option 1');
-  const [reviews, setReviews] = useState([]);
 
   const handleOptionChange = (value) => {
     setSelectedOption(value);
@@ -51,22 +50,29 @@ const HomeScreen = () => {
     }
   };
 
-  const fetchReviews = async () => {
-    try {
-      const response = await axios.get('https://findthemunchgame.azurewebsites.net/api/review/app/');
-      const reviewsData = response.data;
-      const reviewArray = reviewsData.map((review) => ({
-        user: review.userName,
-        text: review.reviewText,
-        stars: review.numOfStars,
-      }));
-      setReviews(reviewArray);
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-    }
-  };
-  
-  
+  const menuItems = ['User', 'The Collection', 'Inventory', 'Leaderboards', 'Settings'];
+
+  const reviews = [
+    {
+      id: '1',
+      user: 'Jenni',
+      rating: 5,
+      text: 'Great app! I love collecting Munch artworks.',
+    },
+    {
+      id: '2',
+      user: 'Rafael',
+      rating: 5,
+      text: 'The best art collection game out there. Highly recommended!',
+    },
+    {
+      id: '3',
+      user: 'Mathias',
+      rating: 5,
+      text: 'Good concept, I want to bring all my friends!',
+    },
+  ];
+
   const ReviewItem = ({ item }) => (
     <View style={styles.reviewContainer}>
       <View style={styles.profilePicture}>
@@ -81,16 +87,15 @@ const HomeScreen = () => {
               key={star}
               name="star"
               size={12}
-              color={star <= item.stars ? colors.yellow : colors.grey}
-              solid={star <= item.stars}
+              color={colors.yellow}
+              solid yellow
               style={styles.starIcon}
             />
           ))}
         </View>
       </View>
     </View>
-  );  
-  
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.midPageContainer}>
@@ -118,23 +123,17 @@ const HomeScreen = () => {
         <Text style={styles.playButtonText}>Play Collect the MUNCH</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.reviewButton}>
-        <Text style={styles.reviewButtonText}>Review the app!</Text>
-      </TouchableOpacity>
-
+      
       <View style={[styles.reviewsBackground, { width: '100%' }]}>
         <Text style={styles.reviewsTitle}>Reviews</Text>
-        {reviews.length > 0 ? (
-          <FlatList
-            data={reviews}
-            renderItem={({ item }) => <ReviewItem item={item} />}
-            keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          />
-        ) : (
-          <Text style={styles.noReviewsText}>No reviews available</Text>
-        )}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          {reviews.map((item) => (
+            <ReviewItem key={item.id} item={item} />
+          ))}
+        </ScrollView>
+      </View>
+      <View style={styles.leaveReviewContainer}>
+        <Review reviewType="app"/>
       </View>
     </ScrollView>
   );
@@ -145,8 +144,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: colors.navy,
     alignItems: 'center',
-    paddingBottom: 100,
+
   },
+
   munchImageContainer: {
     width: '100%',
     height: 400,
@@ -193,15 +193,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   playDescription: {
-    backgroundColor: colors.navy,
-    padding: 35,
+    textAlign: 'left',
     marginVertical: 10,
     marginHorizontal: 20,
-    borderRadius: 25,
   },
   playDescriptionText: {
     color: colors.white,
     fontSize: 20,
+    lineHeight: 30,
     fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',
   },
@@ -283,13 +282,13 @@ const styles = StyleSheet.create({
   star: {
     marginHorizontal: 1,
   },
-  noReviewsText: {
-    color: colors.white,
-    fontSize: 16,
-    fontFamily: 'GirottMunch-Bold',
-    textAlign: 'center',
-    marginTop: 10,
-  },
+
+  // Review styles
+  leaveReviewContainer:{
+    marginTop:20,
+    height: 500,
+    width: '100%',
+  }
 });
 
 export default HomeScreen;
