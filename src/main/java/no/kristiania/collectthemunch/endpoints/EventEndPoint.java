@@ -2,45 +2,48 @@ package no.kristiania.collectthemunch.endpoints;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import no.kristiania.collectthemunch.database.ItemNotSavedException;
 import no.kristiania.collectthemunch.entities.Event;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
-//TODO: getEventsByName, getEventsByCategory
 
 @Path("/events")
 public class EventEndPoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getAllEvents() {
-        //TODO: handle exception better
-        List<Event> allEvents = new ArrayList<>();
-        try {
-            allEvents = eventDao.getAllEvents();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return allEvents;
+    public Response getAllEvents() {
+        return handleRequest(() -> eventDao.retrieveAllEvents());
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void createEvent(Event event) throws SQLException {
-        eventDao.save(event);
-        eventDao.saveEventCategories(event);
+    public Response createEvent(Event event) {
+        try {
+            eventDao.saveEvent(event);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (ItemNotSavedException insE) {
+            insE.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(insE.getMessage())
+                    .build();
+        } catch (SQLException sqlE) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                    .entity(sqlE.getMessage())
+                    .build();
+        }
     }
-
 
     @Path("/userfilteredevents/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Event> getFilteredEvents(@PathParam("userId") int userId) throws SQLException {
-        List<String> tempPreferences = userDao.retrieveUserPreferences(userId);
+        List<String> userPreferences = userDao.retrieveUserPreferences(userId);
 
-        return eventDao.getFilteredEvents(tempPreferences);
+
+        return eventDao.testFilteredEvents(userPreferences);
     }
 
     @Path("/{eventId}")
@@ -55,6 +58,6 @@ public class EventEndPoint extends ApiEndPoint {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Event> getEventsByCategory(@PathParam("category") String category) throws SQLException {
 
-        return eventDao.getEventsByCategory(category);
+        return eventDao.retrieveEventsByCategory(category);
     }
 }

@@ -6,7 +6,6 @@ import jakarta.ws.rs.core.Response;
 import no.kristiania.collectthemunch.entities.Painting;
 import no.kristiania.collectthemunch.entities.User;
 
-import javax.print.attribute.standard.Media;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,13 @@ public class UserEndPoint extends ApiEndPoint {
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getAllUsers() throws SQLException {
         return userDao.retrieveAll();
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public User updateUser(User updatedUser) throws SQLException {
+        return userDao.updateUser(updatedUser);
     }
 
     @Path("/login/{username}/{password}")
@@ -46,6 +52,7 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.retrieve(userId);
     }
 
+
     @Path("/username/{userName}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -66,5 +73,4 @@ public class UserEndPoint extends ApiEndPoint {
     public List<Painting> getPaintingsForUser(@PathParam("userId") int userId) throws SQLException {
         return paintingDao.retrieveAllForUser(userId);
     }
-
 }

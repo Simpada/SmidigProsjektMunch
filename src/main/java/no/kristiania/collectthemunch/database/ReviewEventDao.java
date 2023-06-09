@@ -17,6 +17,21 @@ public class ReviewEventDao extends AbstractDao {
         super(dataSource);
     }
 
+    public List<Review> retrieveAllEventReviews() throws SQLException {
+        try(var connection = dataSource.getConnection()) {
+            String query = "SELECT ER.review_id, ER.review_text, ER.num_stars, U.username, U.profile_picture FROM Event_Reviews ER JOIN Users U on U.user_id = ER.user_id";
+            try(var statement = connection.prepareStatement(query)) {
+                try (var resultSet = statement.executeQuery()) {
+                    List<Review> resultReviews = new ArrayList<>();
+                    while (resultSet.next()) {
+                        resultReviews.add(mapFromResultSet(resultSet));
+                    }
+                    return resultReviews;
+                }
+            }
+        }
+    }
+
     public void save(Review review, int eventId, int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             var query = "INSERT INTO Event_Reviews(user_id, event_id, review_text, num_stars) VALUES (?,?,?,?)";
@@ -30,7 +45,7 @@ public class ReviewEventDao extends AbstractDao {
 
                 try (var generatedKeys = statement.getGeneratedKeys()) {
                     generatedKeys.next();
-                    review.setId(generatedKeys.getInt(1));
+                    review.setUserId(generatedKeys.getInt(1));
                 }
             }
         }
@@ -93,7 +108,7 @@ public class ReviewEventDao extends AbstractDao {
 
     private Review mapFromResultSet(ResultSet resultSet) throws SQLException {
         Review review = new Review();
-        review.setId(resultSet.getInt("review_id"));
+        review.setUserId(resultSet.getInt("review_id"));
         review.setUserName(resultSet.getString("username"));
         review.setProfilePicture(resultSet.getBytes("profile_picture"));
         review.setReviewText(resultSet.getString("review_text"));
@@ -101,3 +116,4 @@ public class ReviewEventDao extends AbstractDao {
         return review;
     }
 }
+

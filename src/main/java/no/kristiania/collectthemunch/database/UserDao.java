@@ -16,6 +16,8 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
+
+
     public Boolean save(User user) throws SQLException {
         if (validateUniqueUser(user.getUsername(), user.getEmail())) {
             saveUser(user);
@@ -45,6 +47,28 @@ public class UserDao extends AbstractDao {
                     generatedKeys.next();
                     user.setUserId(generatedKeys.getInt(1));
                 }
+            }
+        }
+    }
+
+    public User updateUser(User updatedUser) throws SQLException {
+        updateUserData(updatedUser);
+        return retrieve(updatedUser.getUserId());
+    }
+
+    private void updateUserData(User updatedUser) throws SQLException {
+        try (Connection connection = dataSource.getConnection()) {
+            String query = "UPDATE Users SET username=?, password=?, date_of_birth=?, email=?, profile_picture=? WHERE user_id=?";
+
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, updatedUser.getUsername());
+                statement.setString(2, updatedUser.getPassword());
+                statement.setString(3, updatedUser.getDateOfBirth());
+                statement.setString(4, updatedUser.getEmail());
+                statement.setBytes(5, updatedUser.getProfilePicture());
+                statement.setInt(6, updatedUser.getUserId());
+
+                statement.executeUpdate();
             }
         }
     }
@@ -216,18 +240,6 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    private User mapFromResultSet(ResultSet resultSet) throws SQLException {
-        var user = new User();
-        user.setUserId(resultSet.getInt("user_id"));
-        user.setUsername(resultSet.getString("username"));
-        user.setPassword(resultSet.getString("password"));
-        user.setDateOfBirth(resultSet.getString("date_of_birth"));
-        user.setEmail(resultSet.getString("email"));
-        user.setProfilePicture(resultSet.getBytes("profile_picture"));
-        return user;
-    }
-
-
     public List<String> retrieveUserPreferences(int userId) throws SQLException {
 
         try (var connection = dataSource.getConnection()) {
@@ -254,7 +266,32 @@ public class UserDao extends AbstractDao {
         }
     }
 
+    private void retrievePoints(User user) throws SQLException {
+        try (var connection = dataSource.getConnection()) {
+            String query = "SELECT * FROM Points WHERE user_id = ?";
+            try (var statement = connection.prepareStatement(query)) {
+                statement.setInt(1, user.getUserId());
+                try (var resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        user.setCurrentPoints(resultSet.getInt("current_points"));
+                        user.setWeeklyPoints(resultSet.getInt("weekly_points"));
+                        user.setMonthlyPoints(resultSet.getInt("monthly_points"));
+                        user.setAllTimePoints(resultSet.getInt("alltime_points"));
+                    }
+                }
+            }
+        }
+    }
 
+    private User mapFromResultSet(ResultSet resultSet) throws SQLException {
+        var user = new User();
+        user.setUserId(resultSet.getInt("user_id"));
+        user.setUsername(resultSet.getString("username"));
+        user.setPassword(resultSet.getString("password"));
+        user.setDateOfBirth(resultSet.getString("date_of_birth"));
+        user.setEmail(resultSet.getString("email"));
+        user.setProfilePicture(resultSet.getBytes("profile_picture"));
+        retrievePoints(user);
+        return user;
+    }
 }
-
-

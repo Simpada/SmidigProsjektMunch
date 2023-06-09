@@ -17,7 +17,7 @@ public class ReviewEventDaoTest {
     private final EventDao eventDao = new EventDao(dataSource);
 
     @Test
-    void shouldAddAndGetEventReview() throws SQLException {
+    void shouldAddAndGetEventReview() throws SQLException, ItemNotSavedException {
 
         for (int i = 0; i < 1000; i++) {
             var user = SampleData.sampleUser();

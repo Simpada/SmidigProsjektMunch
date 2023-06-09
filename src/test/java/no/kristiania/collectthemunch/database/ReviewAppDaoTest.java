@@ -23,7 +23,7 @@ public class ReviewAppDaoTest {
     }
 
     @Test
-    void shouldSaveAppReviewInDatabase() throws SQLException {
+    void shouldSaveAppReviewInDatabase() throws SQLException, ItemNotSavedException {
 
         for (int i = 0; i < 1000; i++) {
 
@@ -45,7 +45,7 @@ public class ReviewAppDaoTest {
     }
 
     @Test
-    void shouldRetrieveAllAppReviewsInDatabase() throws SQLException {
+    void shouldRetrieveAllAppReviewsInDatabase() throws SQLException, ItemNotSavedException {
         List<Review> appReviews = new ArrayList<>();
 
         for (int i = 0; i < 30; i++) {
@@ -69,7 +69,7 @@ public class ReviewAppDaoTest {
     }
 
     @Test
-    void shouldRetrieveAllAppReviewsWithSpecificStarsInDatabase() throws SQLException {
+    void shouldRetrieveAllAppReviewsWithSpecificStarsInDatabase() throws SQLException, ItemNotSavedException {
         var review = SampleData.sampleReview();
         var user = SampleData.sampleUser();
         review.setNumOfStars(4);
