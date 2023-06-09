@@ -112,7 +112,6 @@ public class UserDao extends AbstractDao {
         User user = retrieveUserByName(username);
 
         if (user == null || !password.equals(user.getPassword())) {
-            System.out.println("No user or wrong login/password");
             return null;
         } else {
             return user;

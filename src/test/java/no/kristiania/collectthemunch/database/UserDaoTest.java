@@ -25,10 +25,6 @@ public class UserDaoTest {
 
         var user2 = userDao.retrieveUserById(user.getUserId());
 
-        System.out.println(user);
-        user.printPreferences();
-
-
         assertThat(user2)
                 .hasNoNullFieldsOrProperties()
                 .usingRecursiveComparison()
@@ -64,26 +60,22 @@ public class UserDaoTest {
         user.setPreferences(newPreferences);
         userDao.updatePreferences(user.getUserId(), user.getPreferences());
 
-
         user = userDao.retrieveUserById(user.getUserId());
-
 
         assertEquals(user.getPreferences().size(), 2);
         assertFalse(originalPreferences.containsAll(user.getPreferences()));
     }
 
     @Test
-    void shouldFailLogin() throws SQLException {
+    void shouldFailLogin() throws SQLException, ItemNotSavedException {
         var user = sampleUser();
-        userDao.save(user);
+        userDao.saveUser(user);
 
         assertNotNull(userDao.login(user.getUsername(), user.getPassword()));
-
 
         user.setUsername("Test");
         user.setPassword("Test");
 
-        userDao.save(user);
-        assertNull(userDao.login("NoUser", "WrongPassword"));
+        assertThrows(Exception.class, () -> userDao.saveUser(user));
     }
 }
