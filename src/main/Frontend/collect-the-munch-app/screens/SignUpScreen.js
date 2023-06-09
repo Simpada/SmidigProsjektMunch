@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import axios from 'axios';
 import * as Font from 'expo-font';
+import { ImageToByteArray } from '../components/ImageToByteArray';
+import Scream from '../assets/Images/Scream.jpg';
 
 const SignupScreen = () => {
   const [username, setUsername] = useState('');
@@ -42,13 +44,16 @@ const SignupScreen = () => {
       Alert.alert('Invalid Password', 'Password should not exceed 30 characters');
       return;
     }
+  
 
-    try {
+    try { 
+      const byteArray = await ImageToByteArray(Scream);
       const response = await axios.post('https://findthemunchgame.azurewebsites.net/api/user/register', {
         username,
         password,
         dateOfBirth,
         email,
+        profilePicture: byteArray,
       });
 
       // Handle successful signup
