@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import { colors } from '../Styles/theme';
 import HeaderImg from '../assets/Images/munch-museet.avif';
 import { Entypo, Feather, FontAwesome5, AntDesign } from '@expo/vector-icons';
+import Review from '../components/Review';
 import reviewicon1 from "../assets/Images/samuel.png";
 import axios from 'axios';
 
@@ -65,8 +66,8 @@ const HomeScreen = () => {
       console.error('Error fetching reviews:', error);
     }
   };
-  
-  
+
+
   const ReviewItem = ({ item }) => (
     <View style={styles.reviewContainer}>
       <View style={styles.profilePicture}>
@@ -89,8 +90,8 @@ const HomeScreen = () => {
         </View>
       </View>
     </View>
-  );  
-  
+  );
+
 
   return (
     <ScrollView contentContainerStyle={styles.midPageContainer}>
@@ -135,6 +136,9 @@ const HomeScreen = () => {
         ) : (
           <Text style={styles.noReviewsText}>No reviews available</Text>
         )}
+      </View>
+      <View style={styles.leaveReviewContainer}>
+        <Review reviewType="app"/>
       </View>
     </ScrollView>
   );
@@ -193,15 +197,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   playDescription: {
-    backgroundColor: colors.navy,
-    padding: 35,
+    textAlign: 'left',
     marginVertical: 10,
     marginHorizontal: 20,
-    borderRadius: 25,
   },
   playDescriptionText: {
     color: colors.white,
     fontSize: 20,
+    lineHeight: 30,
     fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',
   },

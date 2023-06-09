@@ -9,7 +9,6 @@ const EventsNavigator = () => {
   return (
     <NavigationContainer 
         independent={true}>
-
       <Stack.Navigator>
         <Stack.Screen name='Events' component={EventsScreen} options={{headerShown: false}}/>
         <Stack.Screen name='Event Details' component={EventDetailsScreen} />

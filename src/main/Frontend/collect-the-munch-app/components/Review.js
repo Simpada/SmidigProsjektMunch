@@ -1,8 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, Pressable, Keyboard, Alert } from 'react-native';
 import { Rating } from 'react-native-elements';
-import {colors} from '../Styles/theme';
-const Review = () => {
+import { colors } from '../Styles/theme';
+import axios from 'axios';
+
+const Review = ({ reviewType, eventId }) => {
+  const userId = 19;
+  let endpoint = '';
+
+  if (reviewType === 'event') {
+    endpoint = `https://findthemunchgame.azurewebsites.net/api/review/event/${eventId}/${userId}`;
+  } else if (reviewType === 'app') {
+    endpoint = `https://findthemunchgame.azurewebsites.net/api/review/app/${userId}`;
+  }
+
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
@@ -14,30 +25,35 @@ const Review = () => {
     setComment(text);
   };
 
-    //POST functionality
   const handleSubmit = () => {
-    const endpoint = 'Paste the API endpoint u want to POST to.';
-    const payload = { rating, comment };
+    const payload = {
+      reviewText: comment,
+      numOfStars: rating
+    };
 
-    fetch(endpoint, {
-      method: 'POST',
+    axios.post(endpoint, payload, {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Review submitted:', data);
+      .then((response) => {
+        console.log('Review submitted:', response.data);
+        Alert.alert(`Thank you for reviewing the ${reviewType}`)
       })
       .catch((error) => {
         console.error('Error submitting review:', error);
       });
   };
 
+  const handleKeyPress = ({ nativeEvent }) => {
+    if (nativeEvent.key === 'Enter') {
+      Keyboard.dismiss();
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.reviewText}>Leave your thoughts on the game!</Text>
+      <Text style={styles.reviewText}>Leave your thoughts{reviewType === 'event' ? ' on the event!' : ' on the app!'}</Text>
       <Rating
         showRating
         onFinishRating={handleRatingChange}
@@ -49,31 +65,27 @@ const Review = () => {
         value={comment}
         onChangeText={handleCommentChange}
         placeholder="Write a comment..."
+        onKeyPress={handleKeyPress}
       />
-      <Pressable onPress={handleSubmit} style={styles.button}> 
+      <Pressable onPress={handleSubmit} style={styles.button}>
         <Text style={styles.btnText}>Submit</Text>
       </Pressable>
     </View>
   );
 };
-//Styles
+
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    width: "100%",
+    width: '100%',
     gap: 10,
-    height: 300,
-    alignItems: "center",
+    height: "100%",
+    backgroundColor: colors.white,
+    alignItems: 'center',
   },
   reviewText: {
     fontSize: 20,
-    color: "white"
-  },
-
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+    color: 'white',
   },
   input: {
     height: 40,
@@ -85,20 +97,20 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingTop: 20,
     paddingHorizontal: 20,
-    borderRadius: 20
+    borderRadius: 20,
   },
   button: {
-    width: "100%",
+    width: '100%',
     height: 40,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors.red,
     borderRadius: 20,
   },
   btnText: {
     color: colors.white,
     fontSize: 20,
-  }
+  },
 });
 
 export default Review;

@@ -6,14 +6,12 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static no.kristiania.collectthemunch.SampleData.samplePainting;
 import static no.kristiania.collectthemunch.SampleData.sampleUser;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PaintingDaoTest {
 
@@ -52,13 +50,13 @@ public class PaintingDaoTest {
     }
 
     @Test
-    void shouldRetrieveAllFromUser() throws SQLException {
+    void shouldRetrieveAllFromUser() throws SQLException, ItemNotSavedException {
         var p1 = paintingDao.retrieve(1);
         var p2 = paintingDao.retrieve(2);
         var p3 = paintingDao.retrieve(3);
 
         var user = sampleUser();
-        userdao.save(user);
+        userdao.saveUser(user);
 
         paintingDao.saveToInventory(user.getUserId(), p1.getPaintingId());
         paintingDao.saveToInventory(user.getUserId(), p2.getPaintingId());

@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 
 const MenuModal = ({ visible, closeMenu }) => {
     const navigation = useNavigation();
-    const isUserLoggedIn = true;
+    const isUserLoggedIn = false;
     const animValue = useRef(new Animated.Value(500)).current;
 
     const handleMenuItemPress = useCallback((value) => {

@@ -1,5 +1,6 @@
 package no.kristiania.collectthemunch.entities;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class User {
@@ -11,6 +12,10 @@ public class User {
     private String email;
     private List<String> preferences;
     private byte[] profilePicture;  //temp datatype until we know how to parse
+    private int currentPoints;
+    private int weeklyPoints;
+    private int monthlyPoints;
+    private int allTimePoints;
 
     public User() {
 
@@ -31,7 +36,7 @@ public class User {
                 "password: " + this.password + "\n" +
                 "Date of birth: " + this.dateOfBirth + "\n" +
                 "Mail: " + this.email + "\n" +
-                "Profile picture: " + this.profilePicture;
+                "Profile picture: " + Arrays.toString(this.profilePicture);
     }
 
     public void printPreferences() {
@@ -97,4 +102,38 @@ public class User {
     public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
     }
+
+    public int getCurrentPoints() {
+        return currentPoints;
+    }
+
+    public void setCurrentPoints(int currentPoints) {
+        this.currentPoints = currentPoints;
+    }
+
+    public int getWeeklyPoints() {
+        return weeklyPoints;
+    }
+
+    public void setWeeklyPoints(int weeklyPoints) {
+        this.weeklyPoints = weeklyPoints;
+    }
+
+    public int getMonthlyPoints() {
+        return monthlyPoints;
+    }
+
+    public void setMonthlyPoints(int monthlyPoints) {
+        this.monthlyPoints = monthlyPoints;
+    }
+
+    public int getAllTimePoints() {
+        return allTimePoints;
+    }
+
+    public void setAllTimePoints(int allTimePoints) {
+        this.allTimePoints = allTimePoints;
+    }
+
+
 }

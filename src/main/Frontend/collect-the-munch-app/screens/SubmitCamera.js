@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, TouchableOpacity, Modal, Image } from 'react-native';
+import { View, StyleSheet, Text, TouchableOpacity, Modal, Image, Dimensions } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 const QRScanner = ({ navigation }) => {
@@ -30,13 +30,16 @@ const QRScanner = ({ navigation }) => {
     setScanned(false);
   };
 
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
+
   return (
     <View style={styles.container}>
       {isCameraOpen ? (
-        <View style={styles.cameraContainer}>
+        <View style={[styles.cameraContainer, { width: windowWidth, height: windowHeight }]}>
           <BarCodeScanner
             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            style={styles.scanner}
+            style={[styles.scanner, { width: windowWidth, height: windowHeight }]}
           />
           <TouchableOpacity style={styles.closeButton} onPress={handleCloseScanner}>
             <Text style={styles.buttonText}>Close Scanner</Text>
@@ -74,12 +77,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   cameraContainer: {
-    flex: 0.75,
-    width: '100%',
+    flex: 1,
   },
   scanner: {
-    aspectRatio: 1,
-    width: '100%',
+    flex: 1,
   },
   recordButton: {
     backgroundColor: 'transparent',
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
-    marginTop: 20,
+    marginTop: 0, // Adjust the marginTop value as desired
   },
   buttonText: {
     color: '#fff',

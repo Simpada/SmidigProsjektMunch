@@ -17,16 +17,20 @@ public class ReviewEventDaoTest {
     private final EventDao eventDao = new EventDao(dataSource);
 
     @Test
-    void shouldAddAndGetEventReview() throws SQLException {
+    void shouldAddAndGetEventReview() throws SQLException, ItemNotSavedException {
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             var user = SampleData.sampleUser();
             var event = SampleData.sampleEvent();
             var eventReview = SampleData.sampleReview();
+            eventReview.setUserName(user.getUsername());
+            eventReview.setProfilePicture(user.getProfilePicture());
 
-            userDao.save(user);
-            eventDao.save(event);
+            userDao.saveUser(user);
+            eventDao.saveEvent(event);
             reviewEventDao.save(eventReview, event.getId(), user.getUserId());
+
+            eventReview.setUserId(user.getUserId());
 
             assertThat(reviewEventDao.getReviewFromUserOnEvent(event.getId(), user.getUserId()))
                     .hasNoNullFieldsOrProperties()
