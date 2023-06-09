@@ -23,7 +23,7 @@ public class ReviewAppDaoTest {
     }
 
     @Test
-    void shouldSaveAppReviewInDatabase() throws SQLException {
+    void shouldSaveAppReviewInDatabase() throws SQLException, ItemNotSavedException {
 
         for (int i = 0; i < 1000; i++) {
 
@@ -32,12 +32,8 @@ public class ReviewAppDaoTest {
             review.setUserName(user.getUsername());
             review.setProfilePicture(user.getProfilePicture());
 
-            userDao.save(user);
+            userDao.saveUser(user);
             reviewAppDao.save(review, user.getUserId());
-
-            System.out.println(Arrays.toString(review.getProfilePicture()));
-
-            System.out.println(Arrays.toString(reviewAppDao.retrieveAppReviewById(user.getUserId()).getProfilePicture()));
 
             assertThat(reviewAppDao.retrieveAppReviewById(user.getUserId()))
                     .hasNoNullFieldsOrProperties()
@@ -49,7 +45,7 @@ public class ReviewAppDaoTest {
     }
 
     @Test
-    void shouldRetrieveAllAppReviewsInDatabase() throws SQLException {
+    void shouldRetrieveAllAppReviewsInDatabase() throws SQLException, ItemNotSavedException {
         List<Review> appReviews = new ArrayList<>();
 
         for (int i = 0; i < 30; i++) {
@@ -58,7 +54,7 @@ public class ReviewAppDaoTest {
             review.setUserName(user.getUsername());
             review.setProfilePicture(user.getProfilePicture());
 
-            userDao.save(user);
+            userDao.saveUser(user);
             reviewAppDao.save(review, user.getUserId());
             appReviews.add(review);
         }
@@ -73,14 +69,14 @@ public class ReviewAppDaoTest {
     }
 
     @Test
-    void shouldRetrieveAllAppReviewsWithSpecificStarsInDatabase() throws SQLException {
+    void shouldRetrieveAllAppReviewsWithSpecificStarsInDatabase() throws SQLException, ItemNotSavedException {
         var review = SampleData.sampleReview();
         var user = SampleData.sampleUser();
         review.setNumOfStars(4);
         review.setUserName(user.getUsername());
         review.setProfilePicture(user.getProfilePicture());
 
-        userDao.save(user);
+        userDao.saveUser(user);
         reviewAppDao.save(review, user.getUserId());
 
         assertThat(reviewAppDao.retrieveAppReviewsByStars(4))

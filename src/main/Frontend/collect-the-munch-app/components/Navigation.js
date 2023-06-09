@@ -11,8 +11,10 @@ import EventsScreen from '../screens/EventsScreen';
 import GameScreen from '../screens/GameScreen';
 import EventsNavigator from './EventsNavigator';
 import Header from './Header';
+
 import CreateTeamNavigator from './CreateTeamNavigator';
-import PlayNavigator from './PlayNavigator';
+import QRScanner from '../screens/SubmitCamera';
+
 const Tab = createBottomTabNavigator();
 
 const Navigation = () => {
@@ -46,8 +48,10 @@ const Navigation = () => {
           }}
         >
           <Tab.Screen name="Home" component={HomeScreen} />
+
           <Tab.Screen name="Play Game" component={CreateTeamNavigator} />
-          <Tab.Screen name="Game" component={GameScreen} />
+          <Tab.Screen name="Game" component={QRScanner} />
+
           <Tab.Screen name="Events" component={EventsNavigator} />
           <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
         </Tab.Navigator>

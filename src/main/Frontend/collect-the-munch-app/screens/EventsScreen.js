@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import Filter from '../components/Filter';
 import { colors } from '../Styles/theme';
 import { useNavigation } from '@react-navigation/native';
+import Review from '../components/Review'
 import axios from 'axios';
 
 const EventsScreen = () => {
@@ -35,7 +36,7 @@ const EventsScreen = () => {
 
   const handleSearch = (text) => {
     const filtered = events.filter((event) =>
-      event.title.toLowerCase().includes(text.toLowerCase())
+      event.name.toLowerCase().includes(text.toLowerCase())
     );
     setFilteredEvents(filtered);
   };

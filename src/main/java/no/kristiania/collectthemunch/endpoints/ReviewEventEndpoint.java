@@ -12,7 +12,7 @@ public class ReviewEventEndpoint extends ApiEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Review> getAllEventReviews() throws SQLException {
-        return null;
+        return reviewEventDao.retrieveAllEventReviews();
     }
 
     @Path("/{eventId}/{userId}")
