@@ -81,7 +81,7 @@ const HomeScreen = () => {
             <FontAwesome5
               key={star}
               name="star"
-              size={12}
+              size={25}
               color={star <= item.stars ? colors.yellow : colors.grey}
               solid={star <= item.stars}
               style={styles.starIcon}
@@ -247,10 +247,10 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   reviewContainer: {
-    backgroundColor: colors.grey,
-    width: 200,
+    backgroundColor:"rgba(0,0,0,0.5)",
+    width: 250,
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 10,
     marginRight: 10,
   },
   profilePicture: {
@@ -293,6 +293,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 10,
   },
+  leaveReviewContainer:{
+    marginVertical: 0,
+    width: '100%',
+  }
 });
 
 export default HomeScreen;
