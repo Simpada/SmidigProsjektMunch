@@ -9,6 +9,7 @@ import PlayGameScreen from '../screens/PlayGameScreen';
 import LeaderboardScreen from '../screens/LeaderboardScreen';
 import EventsScreen from '../screens/EventsScreen';
 import GameScreen from '../screens/GameScreen';
+import EventsNavigator from './EventsNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,7 +45,7 @@ const Navigation = () => {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Game Info" component={PlayGameScreen} />
         <Tab.Screen name="Play Game" component={GameScreen} />
-        <Tab.Screen name="Events" component={EventsScreen} />
+        <Tab.Screen name="Events" component={EventsNavigator} />
         <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
       </Tab.Navigator>
     </NavigationContainer>

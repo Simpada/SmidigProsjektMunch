@@ -123,9 +123,6 @@ const HomeScreen = () => {
         <Text style={styles.playButtonText}>Play Collect the MUNCH</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.reviewButton}>
-        <Text style={styles.reviewButtonText}>Review the app!</Text>
-      </TouchableOpacity>
       
       <View style={[styles.reviewsBackground, { width: '100%' }]}>
         <Text style={styles.reviewsTitle}>Reviews</Text>
@@ -196,15 +193,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   playDescription: {
-    backgroundColor: colors.navy,
-    padding: 35,
+    textAlign: 'left',
     marginVertical: 10,
     marginHorizontal: 20,
-    borderRadius: 25,
   },
   playDescriptionText: {
     color: colors.white,
     fontSize: 20,
+    lineHeight: 30,
     fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',
   },

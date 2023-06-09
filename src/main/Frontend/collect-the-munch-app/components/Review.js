@@ -5,7 +5,7 @@ import { colors } from '../Styles/theme';
 import axios from 'axios';
 
 const Review = ({ reviewType, eventId }) => {
-  const userId = 18;
+  const userId = 19;
   let endpoint = '';
 
   if (reviewType === 'event') {
