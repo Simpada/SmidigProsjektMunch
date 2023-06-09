@@ -5,30 +5,17 @@ import * as Font from 'expo-font';
 import {loadImageAndConvertToByteArray} from "../components/ImageToByteArray";
 
 const SignupScreen = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('2e1sd');
+  const [password, setPassword] = useState('sdsfdsf');
+  const [dateOfBirth, setDateOfBirth] = useState('11111111');
+  const [email, setEmail] = useState('fdsff@gofgo.com');
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [profilePicture, setProfilePicture] = useState<Array<Uint8Array>>([]);
-
-
-
-  useEffect(() => {
-    loadCustomFont();
-  }, []);
-
-  const loadCustomFont = async () => {
-    await Font.loadAsync({
-      'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.otf'),
-    });
-    setFontLoaded(true);
-  };
+  const [profilePicture, setProfilePicture] = useState([]);
 
   const handleSignup = async () => {
     try {
-      //const byteArray = await loadImageAndConvertToByteArray('https://i.imgur.com/ZzVx1hk.png');
-      //setProfilePicture(byteArray);
+      const byteArray = await loadImageAndConvertToByteArray('https://i.imgur.com/ZzVx1hk.png');
+      setProfilePicture(byteArray);
       const response = await axios.post('https://findthemunchgame.azurewebsites.net/api/user/register', {
         username,
         password,
@@ -41,10 +28,10 @@ const SignupScreen = () => {
       console.log(response.data);
 
       // Clear the input fields
-      setUsername('');
-      setPassword('');
-      setDateOfBirth('');
-      setEmail('');
+      setUsername('efefefefsdf');
+      setPassword('d12d1d');
+      setDateOfBirth('11111111');
+      setEmail('23fscv@gjf.com');
 
       // Show a success message or navigate to a new screen
       Alert.alert('Signup Successful', 'You have successfully signed up!');
