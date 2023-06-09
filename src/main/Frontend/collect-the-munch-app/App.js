@@ -3,8 +3,9 @@ import { StyleSheet, View } from 'react-native';
 import Navigation from './components/Navigation';
 import SignupScreen from './screens/SignUpScreen';
 import LoginScreen from './screens/LoginScreenJWT';
-import CreateTeam from './screens/CreateTeam';
-import QRScanner from './screens/SubmitCamera';
+
+
+
 
 
 

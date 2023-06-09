@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import * as Font from 'expo-font';
-import { useNavigation } from '@react-navigation/native';
-import MenuModal from '../components/MenuModal';
-
 import popImage from '../assets/Images/pop.jpg';
 import leaderboardImage from '../assets/Images/leaderboard.png';
+import { useNavigation } from '@react-navigation/native';
 
 const PlayGameScreen = () => {
-  const [fontsLoaded, setFontsLoaded] = useState(false);
   const navigation = useNavigation();
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
     loadFonts();
@@ -25,13 +24,18 @@ const PlayGameScreen = () => {
     setFontsLoaded(true);
   };
 
+  const handleOnPress = () => {
+    navigation.navigate('CreateTeamScreen');
+  };
+  
+  const handlePlayPress = () => {
+    navigation.navigate('Play Game');
+    
+  };
+
   if (!fontsLoaded) {
     return null;
   }
-
-  const navigateToCreateTeam = () => {
-    navigation.navigate('CreateTeam');
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -74,14 +78,17 @@ const PlayGameScreen = () => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Play Solo</Text>
+          <TouchableOpacity style={styles.button} onPress={handlePlayPress}>
+            <Text style={styles.buttonText}>Play</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={navigateToCreateTeam}>
-            <Text style={styles.buttonText}>Create A Party</Text>
+          <TouchableOpacity style={styles.button} onPress={handleOnPress}>
+            <Text style={styles.buttonText}>Create a Party</Text>
           </TouchableOpacity>
         </View>
-      </View>
+
+        
+        </View>
+
     </ScrollView>
   );
 };
@@ -113,6 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'GirottMunch-BoldBackslant',
     color: 'red',
+    paddingHorizontal:20,
     marginBottom: 10,
   },
   subText: {
@@ -169,8 +177,11 @@ const styles = StyleSheet.create({
     height: 10,
   },
   buttonContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    flexDirection:"row",
+    marginVertical: 50,
+    gap:20,
   },
   button: {
     backgroundColor: 'red',
