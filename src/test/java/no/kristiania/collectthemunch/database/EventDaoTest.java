@@ -32,7 +32,7 @@ public class EventDaoTest {
 
             eventDao.saveEvent(event);
 
-            var returnedEvent = eventDao.getEventById(event.getId());
+            var returnedEvent = eventDao.retrieveEventById(event.getId());
             System.out.println(returnedEvent.getName());
 
             assertThat(returnedEvent)

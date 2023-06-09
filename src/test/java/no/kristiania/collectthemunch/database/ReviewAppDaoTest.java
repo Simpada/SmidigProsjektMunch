@@ -32,7 +32,7 @@ public class ReviewAppDaoTest {
             review.setUserName(user.getUsername());
             review.setProfilePicture(user.getProfilePicture());
 
-            userDao.save(user);
+            userDao.saveUser(user);
             reviewAppDao.save(review, user.getUserId());
 
             assertThat(reviewAppDao.retrieveAppReviewById(user.getUserId()))
@@ -54,7 +54,7 @@ public class ReviewAppDaoTest {
             review.setUserName(user.getUsername());
             review.setProfilePicture(user.getProfilePicture());
 
-            userDao.save(user);
+            userDao.saveUser(user);
             reviewAppDao.save(review, user.getUserId());
             appReviews.add(review);
         }
@@ -76,7 +76,7 @@ public class ReviewAppDaoTest {
         review.setUserName(user.getUsername());
         review.setProfilePicture(user.getProfilePicture());
 
-        userDao.save(user);
+        userDao.saveUser(user);
         reviewAppDao.save(review, user.getUserId());
 
         assertThat(reviewAppDao.retrieveAppReviewsByStars(4))

@@ -36,28 +36,32 @@ public class EventEndPoint extends ApiEndPoint {
         }
     }
 
-    @Path("/userfilteredevents/{userId}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getFilteredEvents(@PathParam("userId") int userId) throws SQLException {
-        List<String> userPreferences = userDao.retrieveUserPreferences(userId);
-
-
-        return eventDao.testFilteredEvents(userPreferences);
-    }
-
     @Path("/{eventId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Event getEventById(@PathParam("eventId") int eventId) throws SQLException {
-        return eventDao.getEventById(eventId);
+    public Response getEventById(@PathParam("eventId") int eventId) {
+        return handleRequest(() -> eventDao.retrieveEventById(eventId));
+    }
+
+    @Path("/eventsByName/{userSearch}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getEventsByName(@PathParam("userSearch") String userSearch) {
+        return handleRequest(() -> eventDao.retrieveEventsByName(userSearch));
+    }
+
+    @Path("/userFilteredEvents/{userId}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getFilteredEvents(@PathParam("userId") int userId) throws SQLException {
+        List<String> userPreferences = userDao.retrieveUserPreferences(userId);
+        return handleRequest(() -> eventDao.retrieveFilteredEventsByUserPreference(userPreferences));
     }
 
     @Path("/category/{category}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Event> getEventsByCategory(@PathParam("category") String category) throws SQLException {
-
-        return eventDao.retrieveEventsByCategory(category);
+    public Response getEventsByCategory(@PathParam("category") String category) {
+        return handleRequest(() -> eventDao.retrieveEventsByCategory(category));
     }
 }
