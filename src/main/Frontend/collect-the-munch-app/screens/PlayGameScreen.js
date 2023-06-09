@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
 import * as Font from 'expo-font';
-import NavigationComponent from '../components/NavigationComponent';
 import popImage from '../assets/Images/pop.jpg';
 import leaderboardImage from '../assets/Images/leaderboard.png';
+import { useNavigation } from '@react-navigation/native';
 
-const PlayGameScreen = ({ navigation }) => {
+const PlayGameScreen = () => {
+  const navigation = useNavigation();
+
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
@@ -22,8 +24,13 @@ const PlayGameScreen = ({ navigation }) => {
     setFontsLoaded(true);
   };
 
-  const navigateToCreateTeam = () => {
-    navigation.navigate('CreateTeam');
+  const handleOnPress = () => {
+    navigation.navigate('CreateTeamScreen');
+  };
+  
+  const handlePlayPress = () => {
+    navigation.navigate('Play Game');
+    
   };
 
   if (!fontsLoaded) {
@@ -71,12 +78,17 @@ const PlayGameScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={navigateToCreateTeam}>
+          <TouchableOpacity style={styles.button} onPress={handlePlayPress}>
+            <Text style={styles.buttonText}>Play</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={handleOnPress}>
             <Text style={styles.buttonText}>Create a Party</Text>
           </TouchableOpacity>
-          <NavigationComponent navigation={navigation} />
         </View>
-      </View>
+
+        
+        </View>
+
     </ScrollView>
   );
 };
@@ -108,6 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'GirottMunch-BoldBackslant',
     color: 'red',
+    paddingHorizontal:20,
     marginBottom: 10,
   },
   subText: {
@@ -164,8 +177,11 @@ const styles = StyleSheet.create({
     height: 10,
   },
   buttonContainer: {
+    justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    flexDirection:"row",
+    marginVertical: 50,
+    gap:20,
   },
   button: {
     backgroundColor: 'red',
