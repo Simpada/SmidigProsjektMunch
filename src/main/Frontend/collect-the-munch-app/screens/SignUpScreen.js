@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } from 'react-native';
 import axios from 'axios';
 import * as Font from 'expo-font';
-import { ImageToByteArray } from '../components/ImageToByteArray';
-import Scream from '../assets/Images/Scream.jpg';
+import {loadImageAndConvertToByteArray} from "../components/ImageToByteArray";
 
 const SignupScreen = () => {
   const [username, setUsername] = useState('');
@@ -11,6 +10,9 @@ const SignupScreen = () => {
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [email, setEmail] = useState('');
   const [fontLoaded, setFontLoaded] = useState(false);
+  const [profilePicture, setProfilePicture] = useState<Array<Uint8Array>>([]);
+
+
 
   useEffect(() => {
     loadCustomFont();
@@ -24,36 +26,15 @@ const SignupScreen = () => {
   };
 
   const handleSignup = async () => {
-    // Validate input values
-    if (!validateEmail(email)) {
-      Alert.alert('Invalid Email', 'Please enter a valid email address');
-      return;
-    }
-
-    if (!validateBirthDate(dateOfBirth)) {
-      Alert.alert('Invalid Birth Date', 'Please enter a valid birth date');
-      return;
-    }
-
-    if (!validateUsername(username)) {
-      Alert.alert('Invalid Username', 'Username should not exceed 20 characters');
-      return;
-    }
-
-    if (!validatePassword(password)) {
-      Alert.alert('Invalid Password', 'Password should not exceed 30 characters');
-      return;
-    }
-  
-
-    try { 
-      const byteArray = await ImageToByteArray(Scream);
+    try {
+      //const byteArray = await loadImageAndConvertToByteArray('https://i.imgur.com/ZzVx1hk.png');
+      //setProfilePicture(byteArray);
       const response = await axios.post('https://findthemunchgame.azurewebsites.net/api/user/register', {
         username,
         password,
         dateOfBirth,
         email,
-        profilePicture: byteArray,
+        profilePicture,
       });
 
       // Handle successful signup
@@ -74,31 +55,6 @@ const SignupScreen = () => {
     }
   };
 
-  const validateEmail = (email) => {
-    // Simple email validation using regex
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateBirthDate = (birthDate) => {
-    // Birth date validation: should only contain numbers
-    const birthDateRegex = /^[0-9]+$/;
-    return birthDateRegex.test(birthDate);
-  };
-
-  const validateUsername = (username) => {
-    // Username validation: should not exceed 20 characters
-    return username.length <= 20;
-  };
-
-  const validatePassword = (password) => {
-    // Password validation: should not exceed 30 characters
-    return password.length <= 30;
-  };
-
-  if (!fontLoaded) {
-    return null; // Render nothing until the custom font is loaded
-  }
 
   return (
     <View style={styles.container}>

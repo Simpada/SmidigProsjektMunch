@@ -1,18 +1,22 @@
-import { Image } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 
-export const ImageToByteArray = async (imagePath) => {
+export const loadImageAndConvertToByteArray = async (imageUri) => {
   try {
-    const fileUri = Image.resolveAssetSource(imagePath).uri;
-    const base64Image = await FileSystem.readAsStringAsync(fileUri, {
-      encoding: FileSystem.EncodingType.Base64,
+    const response = await fetch(imageUri);
+    const imageBlob = await response.blob();
+    const reader = new FileReader();
+    const bytePromise = new Promise((resolve, reject) => {
+      reader.onloadend = () => {
+        const arrayBuffer = reader.result;
+        const byteArray = new Uint8Array(arrayBuffer);
+        resolve(byteArray);
+      };
+      reader.onerror = reject;
     });
-
-    const byteArray = Uint8Array.from(atob(base64Image), (c) => c.charCodeAt(0));
-    return byteArray;
+    reader.readAsArrayBuffer(imageBlob);
+    return bytePromise;
   } catch (error) {
-    console.error('Error converting image to byte array:', error);
-    return null;
+    console.log('Error loading image:', error);
+    throw new Error('Error loading image: ' + error.message);
   }
 };
-
