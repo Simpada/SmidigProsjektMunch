@@ -3,11 +3,10 @@ import { View, TextInput, Button, StyleSheet, Alert, TouchableOpacity, Text } fr
 import axios from 'axios';
 import * as Font from 'expo-font';
 
-const LoginScreen = () => {
+const LoginScreen = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [fontLoaded, setFontLoaded] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     loadCustomFont();
@@ -30,59 +29,40 @@ const LoginScreen = () => {
       // Perform any necessary actions with the user data
       console.log('User:', user);
 
-      // Update the login state
-      setIsLoggedIn(true);
+      // Call the onLogin function to update the login state in the ProfileScreen
+      onLogin();
     } catch (error) {
       // Handle login error
       Alert.alert('Login Failed', error.message);
     }
   };
 
-  const renderContent = () => {
-    if (isLoggedIn) {
-      return (
-        <View style={styles.container}>
-          {/* Content for logged-in user */}
-          <Text style={styles.loggedInText}>You are logged in!</Text>
-          <Button title="Logout" onPress={() => setIsLoggedIn(false)} />
-        </View>
-      );
-    } else {
-      return (
-        <View style={styles.container}>
-          {/* Content for login screen */}
-          <View style={styles.headline}>
-            <Text style={styles.headlineText}>MUNCH</Text>
-          </View>
-          <TextInput
-            style={[styles.input, { color: 'white' }]}
-            placeholder="Username"
-            placeholderTextColor={'white'}
-            value={username}
-            onChangeText={setUsername}
-            autoCapitalize="none"
-          />
-          <TextInput
-            style={[styles.input, { color: 'white' }]}
-            placeholder="Password"
-            placeholderTextColor={'white'}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-          <TouchableOpacity style={styles.button} onPress={handleLogin}>
-            <Text style={styles.buttonText}>Login</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    }
-  };
-
-  if (!fontLoaded) {
-    return null; // Render nothing until the custom font is loaded
-  }
-
-  return renderContent();
+  return (
+    <View style={styles.container}>
+      <View style={styles.headline}>
+        <Text style={styles.headlineText}>MUNCH</Text>
+      </View>
+      <TextInput
+        style={[styles.input, { color: 'white' }]}
+        placeholder="Username"
+        placeholderTextColor={'white'}
+        value={username}
+        onChangeText={setUsername}
+        autoCapitalize="none"
+      />
+      <TextInput
+        style={[styles.input, { color: 'white' }]}
+        placeholder="Password"
+        placeholderTextColor={'white'}
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -92,6 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 16,
     backgroundColor: '#0F2335',
+    width: '100%',
   },
   headline: {
     backgroundColor: '#FE390F',
@@ -131,12 +112,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     fontFamily: 'GirottMunch-BoldBackslant',
-  },
-  loggedInText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 16,
   },
 });
 
