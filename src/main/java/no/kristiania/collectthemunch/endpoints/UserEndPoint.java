@@ -3,6 +3,7 @@ package no.kristiania.collectthemunch.endpoints;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import no.kristiania.collectthemunch.database.ItemNotSavedException;
 import no.kristiania.collectthemunch.entities.Painting;
 import no.kristiania.collectthemunch.entities.User;
 
@@ -15,8 +16,8 @@ public class UserEndPoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getAllUsers() throws SQLException {
-        return userDao.retrieveAll();
+    public Response getAllUsers() {
+        return handleRequest(() -> userDao.retrieveAllUsers());
     }
 
     @PUT
@@ -26,38 +27,37 @@ public class UserEndPoint extends ApiEndPoint {
         return userDao.updateUser(updatedUser);
     }
 
-    @Path("/login/{username}/{password}")
+    @Path("/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public User login(@PathParam("username") String username, @PathParam("password") String password) throws SQLException {
-        return userDao.login(username, password);
+    public Response retrieveUserById(@PathParam("userId") int userId) {
+        return handleRequest(() -> userDao.retrieveUserById(userId));
     }
 
     @Path("/register")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addUser(User user) throws SQLException {
-        if (userDao.save(user)) {
-            return Response.status(201).build();
-        } else {
-            return Response.status(400).build();
+    public Response addUser(User user) {
+        try {
+            userDao.saveUser(user);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (ItemNotSavedException insE) {
+            insE.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(insE.getMessage())
+                    .build();
+        } catch (SQLException sqlE) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                    .entity(sqlE.getMessage())
+                    .build();
         }
-
     }
-
-    @Path("/{userId}")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public User retrieveUserById(@PathParam("userId") int userId) throws SQLException {
-        return userDao.retrieve(userId);
-    }
-
 
     @Path("/username/{userName}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public User retrieveUserByUsername(@PathParam("userName") String username) throws SQLException {
-        return userDao.retrieve(username);
+    public Response retrieveUserByUsername(@PathParam("userName") String username) {
+        return handleRequest(() -> userDao.retrieveUserByName(username));
     }
 
     @Path("/{userId}/preferences")
@@ -72,5 +72,12 @@ public class UserEndPoint extends ApiEndPoint {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Painting> getPaintingsForUser(@PathParam("userId") int userId) throws SQLException {
         return paintingDao.retrieveAllForUser(userId);
+    }
+
+    @Path("/login/{username}/{password}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public User login(@PathParam("username") String username, @PathParam("password") String password) throws SQLException {
+        return userDao.login(username, password);
     }
 }

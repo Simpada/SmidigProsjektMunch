@@ -18,7 +18,7 @@ public class ReviewAppDao extends AbstractDao{
         super(dataSource);
     }
 
-    public void save(Review review, int userId) throws SQLException {
+    public void save(Review review, int userId) throws SQLException, ItemNotSavedException {
         try(var connection = dataSource.getConnection()) {
             String query = "INSERT INTO App_Reviews (user_id, review_text, num_stars) VALUES(?, ?, ?)";
             try(var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -28,7 +28,9 @@ public class ReviewAppDao extends AbstractDao{
                 statement.executeUpdate();
                 try(var generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        review.setId(generatedKeys.getInt(1));
+                        review.setUserId(generatedKeys.getInt(1));
+                    } else {
+                        throw new ItemNotSavedException("Review for user with id: " + userId + " not saved");
                     }
                 }
             }
@@ -40,15 +42,14 @@ public class ReviewAppDao extends AbstractDao{
             String query = "SELECT * FROM App_Reviews JOIN Users U on U.user_id = App_Reviews.user_id";
             try(var statement = connection.prepareStatement(query)){
                 try(var resultSet = statement.executeQuery()) {
-                    List<Review> resultReviews = new ArrayList<>();
-                    if (resultSet.next()) {
-                        do {
-                            resultReviews.add(mapFromResultSet(resultSet));
-                        } while (resultSet.next());
-                        return resultReviews;
-                    } else {
+                    List<Review> result = new ArrayList<>();
+                    while (resultSet.next()) {
+                        result.add(mapFromResultSet(resultSet));
+                    }
+                    if (result.isEmpty()) {
                         throw new NotFoundException("No reviews registered for this app");
                     }
+                    return result;
                 }
             }
         }
@@ -77,15 +78,14 @@ public class ReviewAppDao extends AbstractDao{
             try(var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, numStars);
                 try(var resultSet = statement.executeQuery()) {
-                    List<Review> resultReviews = new ArrayList<>();
-                    if (resultSet.next()) {
-                        do {
-                            resultReviews.add(mapFromResultSet(resultSet));
-                        } while (resultSet.next());
-                        return resultReviews;
-                    } else {
+                    List<Review> result = new ArrayList<>();
+                    while (resultSet.next()) {
+                        result.add(mapFromResultSet(resultSet));
+                    }
+                    if (result.isEmpty()) {
                         throw new NotFoundException("No reviews with " + numStars + " stars found.");
                     }
+                    return result;
                 }
             }
         }
@@ -93,12 +93,11 @@ public class ReviewAppDao extends AbstractDao{
 
     private Review mapFromResultSet(ResultSet resultSet) throws SQLException {
         var review = new Review();
-        review.setId(resultSet.getInt("user_id"));
+        review.setUserId(resultSet.getInt("user_id"));
         review.setUserName(resultSet.getString("username"));
         review.setProfilePicture(resultSet.getBytes("profile_picture"));
         review.setReviewText(resultSet.getString("review_text"));
         review.setNumOfStars(resultSet.getInt("num_stars"));
         return review;
     }
-
 }
