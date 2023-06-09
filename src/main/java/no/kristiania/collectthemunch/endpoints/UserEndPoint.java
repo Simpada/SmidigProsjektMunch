@@ -3,6 +3,7 @@ package no.kristiania.collectthemunch.endpoints;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import no.kristiania.collectthemunch.database.ItemNotSavedException;
 import no.kristiania.collectthemunch.entities.Painting;
 import no.kristiania.collectthemunch.entities.User;
 
@@ -36,11 +37,19 @@ public class UserEndPoint extends ApiEndPoint {
     @Path("/register")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addUser(User user) throws SQLException {
-        if (userDao.save(user)) {
-            return Response.status(201).build();
-        } else {
-            return Response.status(400).build();
+    public Response addUser(User user) {
+        try {
+            userDao.saveUser(user);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (ItemNotSavedException insE) {
+            insE.printStackTrace();
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(insE.getMessage())
+                    .build();
+        } catch (SQLException sqlE) {
+            return Response.status(Response.Status.SERVICE_UNAVAILABLE)
+                    .entity(sqlE.getMessage())
+                    .build();
         }
     }
 

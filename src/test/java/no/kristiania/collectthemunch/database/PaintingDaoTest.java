@@ -50,13 +50,13 @@ public class PaintingDaoTest {
     }
 
     @Test
-    void shouldRetrieveAllFromUser() throws SQLException {
+    void shouldRetrieveAllFromUser() throws SQLException, ItemNotSavedException {
         var p1 = paintingDao.retrieve(1);
         var p2 = paintingDao.retrieve(2);
         var p3 = paintingDao.retrieve(3);
 
         var user = sampleUser();
-        userdao.save(user);
+        userdao.saveUser(user);
 
         paintingDao.saveToInventory(user.getUserId(), p1.getPaintingId());
         paintingDao.saveToInventory(user.getUserId(), p2.getPaintingId());

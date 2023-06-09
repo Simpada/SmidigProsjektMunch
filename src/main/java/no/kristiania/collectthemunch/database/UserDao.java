@@ -17,16 +17,7 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
-    public Boolean save(User user) throws SQLException {
-        if (validateUniqueUser(user.getUsername(), user.getEmail())) {
-            saveUser(user);
-            saveUserPreferences(user);
-            return true;
-        }
-        return false;
-    }
-
-    private void saveUser(User user) throws SQLException {
+    private void save(User user) throws SQLException {
         if (user.getProfilePicture() == null) {
             user.setProfilePicture(new byte[1]);
         }
@@ -48,11 +39,6 @@ public class UserDao extends AbstractDao {
                 }
             }
         }
-    }
-
-    public User updateUser(User updatedUser) throws SQLException {
-        updateUserData(updatedUser);
-        return retrieveUserById(updatedUser.getUserId());
     }
 
     private void updateUserData(User updatedUser) throws SQLException {
@@ -90,54 +76,33 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public Boolean validateUniqueUser(String username, String email) throws SQLException {
-        List<String> existingUsernames = retrieveUsernames();
-        List<String> existingEmails = retrieveEmails();
-
-        for (String s : existingUsernames) {
-            if (username.equals(s)) {
-                return false;
-            }
-        }
-
-        for (String s : existingEmails) {
-            if (email.equals(s)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public List<String> retrieveUsernames() throws SQLException {
+    private void validateUniqueUsername(String username) throws SQLException, ItemNotSavedException {
         try (var connection = dataSource.getConnection()) {
-            String query = "SELECT username FROM users";
-
+            String query = "SELECT COUNT(*) FROM Users WHERE username = ?";
             try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, username);
                 try (var resultSet = statement.executeQuery()) {
-                    List<String> usernames = new ArrayList<>();
-
-                    while (resultSet.next()) {
-                        usernames.add(resultSet.getString("username"));
+                    if (resultSet.next()) {
+                        if (resultSet.getInt(1) > 0) {
+                            throw new ItemNotSavedException("Username " + username + " already exists in database");
+                        }
                     }
-                    return usernames;
                 }
             }
         }
     }
 
-    public List<String> retrieveEmails() throws SQLException {
+    private void validateUniqueEmail(String email) throws SQLException, ItemNotSavedException {
         try (var connection = dataSource.getConnection()) {
-            String query = "SELECT email FROM users";
-
+            String query = "SELECT COUNT(*) FROM Users WHERE email = ?";
             try (var statement = connection.prepareStatement(query)) {
+                statement.setString(1, email);
                 try (var resultSet = statement.executeQuery()) {
-                    List<String> emails = new ArrayList<>();
-
-                    while (resultSet.next()) {
-                        emails.add(resultSet.getString("email"));
+                    if (resultSet.next()) {
+                        if (resultSet.getInt(1) > 0) {
+                            throw new ItemNotSavedException("User with email " + email + " already exists in database");
+                        }
                     }
-                    return emails;
                 }
             }
         }
@@ -275,6 +240,18 @@ public class UserDao extends AbstractDao {
                 }
             }
         }
+    }
+
+    public User updateUser(User updatedUser) throws SQLException {
+        updateUserData(updatedUser);
+        return retrieveUserById(updatedUser.getUserId());
+    }
+
+    public void saveUser(User user) throws SQLException, ItemNotSavedException {
+        validateUniqueUsername(user.getUsername());
+        validateUniqueEmail(user.getEmail());
+        save(user);
+        saveUserPreferences(user);
     }
 
     private User mapFromResultSet(ResultSet resultSet) throws SQLException {

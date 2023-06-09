@@ -19,9 +19,9 @@ public class UserDaoTest {
 
 
     @Test
-    void shouldSaveAndRetrieveUser() throws SQLException {
+    void shouldSaveAndRetrieveUser() throws SQLException, ItemNotSavedException {
         var user = sampleUser();
-        userDao.save(user);
+        userDao.saveUser(user);
 
         var user2 = userDao.retrieveUserById(user.getUserId());
 
@@ -38,9 +38,9 @@ public class UserDaoTest {
     }
 
     @Test
-    void shouldRemoveUserPreferences() throws SQLException {
+    void shouldRemoveUserPreferences() throws SQLException, ItemNotSavedException {
         var user = sampleUser();
-        userDao.save(user);
+        userDao.saveUser(user);
 
         for (String s : user.getPreferences()) {
             assertNotNull(s);
@@ -53,12 +53,12 @@ public class UserDaoTest {
     }
 
     @Test
-    void shouldChangeUserPreferences() throws SQLException {
+    void shouldChangeUserPreferences() throws SQLException, ItemNotSavedException {
         var user = sampleUser();
 
         List<String> originalPreferences = Arrays.asList("KIDS", "PARTY");
         user.setPreferences(originalPreferences);
-        userDao.save(user);
+        userDao.saveUser(user);
 
         List<String> newPreferences = Arrays.asList("NEW", "GAMES");
         user.setPreferences(newPreferences);
