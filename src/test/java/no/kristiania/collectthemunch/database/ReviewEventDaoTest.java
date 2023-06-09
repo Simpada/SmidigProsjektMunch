@@ -27,6 +27,7 @@ public class ReviewEventDaoTest {
             eventReview.setProfilePicture(user.getProfilePicture());
 
             userDao.saveUser(user);
+            eventReview.setUserId(user.getUserId());
             eventDao.saveEvent(event);
             reviewEventDao.save(eventReview, event.getId(), user.getUserId());
 

@@ -6,6 +6,7 @@ import no.kristiania.collectthemunch.entities.Review;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,12 +44,10 @@ public class ReviewEventDao extends AbstractDao {
                 statement.setString(3, review.getReviewText());
                 statement.setInt(4, review.getNumOfStars());
                 statement.executeUpdate();
-                try (var generatedKeys = statement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        review.setUserId(generatedKeys.getInt(1));
-                    } else {
-                        throw new ItemNotSavedException("Could not save review from user id " + userId +  " for event id " + eventId);
-                    }
+
+                int affectedRows = statement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new ItemNotSavedException("Could not save review from user id " + userId + " for event id " + eventId);
                 }
             }
         }
@@ -81,7 +80,7 @@ public class ReviewEventDao extends AbstractDao {
                 try (var response = statement.executeQuery()) {
                     List<Review> result = new ArrayList<>();
                     while (response.next()) {
-                        result.add(mapFromResultSet(response));
+                        result.add(ReviewResultMapping.mapReviews(response));
                     }
                     if (result.isEmpty()) {
                         throw new NotFoundException("No reviews found for event id " + eventId);
@@ -100,7 +99,7 @@ public class ReviewEventDao extends AbstractDao {
                 try (var resultSet = statement.executeQuery()) {
                     List<Review> result = new ArrayList<>();
                     while (resultSet.next()) {
-                        reviews.add(ReviewResultMapping.mapReviews(response));
+                        result.add(ReviewResultMapping.mapReviews(resultSet));
                     }
                     if (result.isEmpty()) {
                         throw new NotFoundException("No reviews found for user id " + userId);
