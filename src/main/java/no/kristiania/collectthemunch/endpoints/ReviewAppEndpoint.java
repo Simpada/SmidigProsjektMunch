@@ -7,7 +7,6 @@ import no.kristiania.collectthemunch.database.ItemNotSavedException;
 import no.kristiania.collectthemunch.entities.Review;
 
 import java.sql.SQLException;
-import java.util.concurrent.Callable;
 
 /**
  Test if using a response works better for exception handling

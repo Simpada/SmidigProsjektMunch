@@ -30,6 +30,8 @@ public class ReviewEventDaoTest {
             eventDao.saveEvent(event);
             reviewEventDao.save(eventReview, event.getId(), user.getUserId());
 
+            eventReview.setUserId(user.getUserId());
+
             assertThat(reviewEventDao.getReviewFromUserOnEvent(event.getId(), user.getUserId()))
                     .hasNoNullFieldsOrProperties()
                     .usingRecursiveComparison()
