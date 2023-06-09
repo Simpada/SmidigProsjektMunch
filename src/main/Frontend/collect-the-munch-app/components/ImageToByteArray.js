@@ -1,24 +1,25 @@
-import * as FileSystem from 'expo-file-system';
-import test from "../assets/Images/test.png";
-
 export const loadImageAndConvertToByteArray = async () => {
     try {
-        const imageUri = test; // Update with the correct image path
+        const imageUri = "../assets/Images/test.jpg"; // Update with the correct image path
 
-        const fileUri = FileSystem.cacheDirectory + imageUri;
-        await FileSystem.downloadAsync(imageUri, fileUri);
+        const response = await fetch(imageUri);
 
-        const fileContent = await FileSystem.readAsStringAsync(fileUri, {
-            encoding: FileSystem.EncodingType.Base64,
-        });
+        const arrayBuffer = await response.arrayBuffer();
 
-        const byteCharacters = atob(fileContent);
-        const byteNumbers = new Uint8Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
+        const byteNumbers = new Uint8Array(arrayBuffer);
 
-        return byteNumbers;
+
+
+        const byteArray = Array.from(byteNumbers);
+
+
+        console.log(byteArray)
+
+        // for (let i = 0; i < byteArray.length; i++) {
+        //     console.log(byteNumbers[i]);
+        // }
+
+        return byteArray;
     } catch (error) {
         console.log('Error loading image:', error);
         throw new Error('Error loading image: ' + error.message);
