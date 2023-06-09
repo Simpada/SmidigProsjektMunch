@@ -1,9 +1,35 @@
-export const convertToImage = async (byteArray) => {
+export const loadImageAndConvertToByteArray = async () => {
     try {
-        console.log("From db: " + byteArray);
+        const imageUri = "../assets/Images/test.jpg"; // Update with the correct image path
 
-        if (!Array.isArray(byteArray)) {
-            throw new Error('byteArray must be an array');
+        const response = await fetch(imageUri);
+
+        const arrayBuffer = await response.arrayBuffer();
+
+        const byteNumbers = new Uint8Array(arrayBuffer);
+
+        const byteArray = Array.from(byteNumbers);
+
+        console.log(byteArray)
+
+
+        return byteArray;
+    } catch (error) {
+        console.log('Error loading image:', error);
+        throw new Error('Error loading image: ' + error.message);
+    }
+};
+
+export const convertToImage = async (stringVal) => {
+    try {
+        console.log("From db: " + stringVal);
+
+        const byteStrings = stringVal.split(",");
+        const byteNumbers = byteStrings.map((byteString) => parseInt(byteString.trim(), 10));
+        const byteArray = new Uint8Array(byteNumbers);
+
+        if (!Array.isArray(byteNumbers)) {
+            throw new Error('byteNumbers must be an array');
         }
 
         const uint8Array = new Uint8Array(byteArray);
@@ -31,3 +57,4 @@ export const convertToImage = async (byteArray) => {
         throw new Error('Error loading image: ' + error.message);
     }
 };
+
