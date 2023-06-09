@@ -42,18 +42,6 @@ public class ReviewAppEndpoint extends ApiEndPoint {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAppReview(Review review, @PathParam("userId") int userId){
-        try {
-            reviewAppDao.save(review, userId);
-            return Response.status(Response.Status.CREATED).build();
-        } catch (ItemNotSavedException insE) {
-            insE.printStackTrace();
-            return Response.status(Response.Status.BAD_REQUEST)
-                    .entity(insE.getMessage())
-                    .build();
-        } catch (SQLException sqlE) {
-            return Response.status(Response.Status.SERVICE_UNAVAILABLE)
-                .entity(sqlE.getMessage())
-                .build();
-        }
+        return handleSubmit(() -> reviewAppDao.save(review, userId));
     }
 }

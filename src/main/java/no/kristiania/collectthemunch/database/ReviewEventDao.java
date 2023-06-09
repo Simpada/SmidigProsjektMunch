@@ -1,6 +1,7 @@
 package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import no.kristiania.collectthemunch.entities.Review;
 
 import javax.sql.DataSource;
@@ -26,13 +27,16 @@ public class ReviewEventDao extends AbstractDao {
                     while (resultSet.next()) {
                         resultReviews.add(mapFromResultSet(resultSet));
                     }
+                    if (resultReviews.isEmpty()) {
+                        throw new NotFoundException("No reviews found in database");
+                    }
                     return resultReviews;
                 }
             }
         }
     }
 
-    public void save(Review review, int eventId, int userId) throws SQLException {
+    public void save(Review review, int eventId, int userId) throws SQLException, ItemNotSavedException {
         try (var connection = dataSource.getConnection()) {
             var query = "INSERT INTO Event_Reviews(user_id, event_id, review_text, num_stars) VALUES (?,?,?,?)";
             try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
@@ -40,70 +44,73 @@ public class ReviewEventDao extends AbstractDao {
                 statement.setInt(2, eventId);
                 statement.setString(3, review.getReviewText());
                 statement.setInt(4, review.getNumOfStars());
-
                 statement.executeUpdate();
-
                 try (var generatedKeys = statement.getGeneratedKeys()) {
-                    generatedKeys.next();
-                    review.setUserId(generatedKeys.getInt(1));
+                    if (generatedKeys.next()) {
+                        review.setUserId(generatedKeys.getInt(1));
+                    } else {
+                        throw new ItemNotSavedException("Could not save review from user id " + userId +  " for event id " + eventId);
+                    }
                 }
             }
         }
     }
 
-    public Review getReviewFromUserOnEvent(int eventId, int userId) throws SQLException {
-        Review review = new Review();
-
+    public Review retrieveReviewFromUserOnEvent(int eventId, int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             var query = "SELECT * FROM Event_Reviews JOIN Users on Users.user_id = Event_Reviews.user_id JOIN Events on Events.event_id = Event_Reviews.event_id WHERE Users.user_id = ? AND Events.event_id = ?";
             try (var statement = connection.prepareStatement(query))  {
                 statement.setInt(1, userId);
                 statement.setInt(2, eventId);
                 try (var response = statement.executeQuery()) {
-                    while (response.next()) {
+                    var review = new Review();
+                    if (response.next()) {
                         review = mapFromResultSet(response);
+                    } else {
+                        throw new NotFoundException("No review found from user with id " + userId + " on event id " + eventId);
                     }
-
+                    return review;
                 }
             }
         }
-        return review;
     }
 
-    public List<Review> getAllReviewsFromEvent(int eventId) throws SQLException {
-        List<Review> reviews = new ArrayList<>();
-
+    public List<Review> retrieveAllReviewsFromEvent(int eventId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             var query = "SELECT * FROM Event_Reviews JOIN Users U on U.user_id = Event_Reviews.user_id WHERE event_id = ?";
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, eventId);
                 try (var response = statement.executeQuery()) {
+                    List<Review> result = new ArrayList<>();
                     while (response.next()) {
-                        reviews.add(mapFromResultSet(response));
+                        result.add(mapFromResultSet(response));
                     }
+                    if (result.isEmpty()) {
+                        throw new NotFoundException("No reviews found for event id " + eventId);
+                    }
+                    return result;
                 }
-
             }
         }
-        return reviews;
     }
 
-    public List<Review> getAllEventReviewsFromUser(int userId) throws SQLException {
-        List<Review> reviews = new ArrayList<>();
-
+    public List<Review> retrieveAllEventReviewsFromUser(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             var query = "SELECT * FROM Event_Reviews JOIN Users U on U.user_id = Event_Reviews.user_id WHERE U.user_id = ?";
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
-                try (var response = statement.executeQuery()) {
-                    while (response.next()) {
-                        reviews.add(mapFromResultSet(response));
+                try (var resultSet = statement.executeQuery()) {
+                    List<Review> result = new ArrayList<>();
+                    while (resultSet.next()) {
+                        result.add(mapFromResultSet(resultSet));
                     }
+                    if (result.isEmpty()) {
+                        throw new NotFoundException("No reviews found for user id " + userId);
+                    }
+                    return result;
                 }
-
             }
         }
-        return reviews;
     }
 
     private Review mapFromResultSet(ResultSet resultSet) throws SQLException {
