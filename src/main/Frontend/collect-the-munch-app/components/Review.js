@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Button, TextInput, Pressable, Keyboard } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, Pressable, Keyboard, Alert } from 'react-native';
 import { Rating } from 'react-native-elements';
 import { colors } from '../Styles/theme';
+import axios from 'axios';
 
-const Review = () => {
+const Review = ({ reviewType, eventId }) => {
+  const userId = 17;
+  let endpoint = '';
+
+  if (reviewType === 'event') {
+    endpoint = `https://findthemunchgame.azurewebsites.net/api/review/event/${eventId}/${userId}`;
+  } else if (reviewType === 'app') {
+    endpoint = `https://findthemunchgame.azurewebsites.net/api/review/app/${userId}`;
+  }
+
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
@@ -16,19 +26,19 @@ const Review = () => {
   };
 
   const handleSubmit = () => {
-    const endpoint = 'Paste the API endpoint you want to POST to.';
-    const payload = { rating, comment };
+    const payload = {
+      reviewText: comment,
+      numOfStars: rating
+    };
 
-    fetch(endpoint, {
-      method: 'POST',
+    axios.post(endpoint, payload, {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
     })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Review submitted:', data);
+      .then((response) => {
+        console.log('Review submitted:', response.data);
+        Alert.alert(`Thank you for reviewing the ${reviewType}`)
       })
       .catch((error) => {
         console.error('Error submitting review:', error);
@@ -43,7 +53,7 @@ const Review = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.reviewText}>Leave your thoughts on the event!</Text>
+      <Text style={styles.reviewText}>Leave your thoughts{reviewType === 'event' ? ' on the event!' : ' on the app!'}</Text>
       <Rating
         showRating
         onFinishRating={handleRatingChange}
