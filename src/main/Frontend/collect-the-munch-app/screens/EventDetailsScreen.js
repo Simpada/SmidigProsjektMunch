@@ -6,7 +6,6 @@ import placeHolderImg from '../assets/Images/samuel.png'
 const EventDetailsScreen = ({ route }) => {
   const { event } = route.params;
 
-
   return (
 
     <ScrollView>
@@ -31,7 +30,7 @@ const EventDetailsScreen = ({ route }) => {
             </Text>
           </View>
         </View>
-        <Review />
+        <Review reviewType="event" eventId={event.id}/>
       </View>
     </ScrollView>
   );
