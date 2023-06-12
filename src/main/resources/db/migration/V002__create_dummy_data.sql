@@ -1,47 +1,49 @@
 INSERT INTO Users (username, password, date_of_birth, email)
-VALUES ('user1', 'password1', '19900101', 'user1@example.com');
+VALUES ('johnsmith', 'password123', 10091985, 'johnsmith@example.com');
 
 INSERT INTO Users (username, password, date_of_birth, email)
-VALUES ('user2', 'password2', '19900202', 'user2@example.com');
+VALUES ('janedoe', 'pass456', 18031992, 'janedoe@example.com');
 
 INSERT INTO Users (username, password, date_of_birth, email)
-VALUES ('user3', 'password3', '19900303', 'user3@example.com');
+VALUES ('michaelbrown', 'secret789', 22071989, 'michaelbrown@example.com');
 
 INSERT INTO Users (username, password, date_of_birth, email)
-VALUES ('user4', 'password4', '19900404', 'user4@example.com');
+VALUES ('emilywilson', 'p@ssw0rd', 05121997, 'emilywilson@example.com');
 
 INSERT INTO Users (username, password, date_of_birth, email)
-VALUES ('user5', 'password5', '19900505', 'user5@example.com');
+VALUES ('davidlee', 'david123', 28111983, 'davidlee@example.com');
 
+
+
+-- Paintings
+INSERT INTO Paintings (name, author, painting_image, rarity, points, art_information)
+VALUES ('The Starry Night', 'Vincent van Gogh', 0x010203, 'EPIC', 500, 'The Starry Night is an oil on canvas painting...');
 
 INSERT INTO Paintings (name, author, painting_image, rarity, points, art_information)
-VALUES ('Painting 1', 'Author 1', 0x0102030405, 'EPIC', 100, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.');
+VALUES ('Mona Lisa', 'Leonardo da Vinci', 0x040506, 'LEGENDARY', 1000, 'Mona Lisa is a half-length portrait...');
 
 INSERT INTO Paintings (name, author, painting_image, rarity, points, art_information)
-VALUES ('Painting 2', 'Author 2', 0x060708090A, 'RARE', 250, 'Nullam vel accumsan metus, in feugiat dolor.');
+VALUES ('The Scream', 'Edvard Munch', 0x070809, 'LEGENDARY', 800, 'The Scream is the popular name...');
 
 INSERT INTO Paintings (name, author, painting_image, rarity, points, art_information)
-VALUES ('Painting 3', 'Author 3', 0x0B0C0D0E0F, 'EPIC', 150, 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.');
+VALUES ('Girl with a Pearl Earring', 'Johannes Vermeer', 0x0A0B0C, 'RARE', 700, 'Girl with a Pearl Earring is an oil painting...');
 
 INSERT INTO Paintings (name, author, painting_image, rarity, points, art_information)
-VALUES ('Painting 4', 'Author 4', 0x1011121314, 'LEGENDARY', 500, 'Sed in sem mauris. Aliquam bibendum justo sit amet enim dignissim ultricies.');
+VALUES ('The Persistence of Memory', 'Salvador Dalí', 0x0D0E0F, 'COMMON', 600, 'The Persistence of Memory is a surrealist painting...');
 
-INSERT INTO Paintings (name, author, painting_image, rarity, points, art_information)
-VALUES ('Painting 5', 'Author 5', 0x1516171819, 'COMMON', 200, 'Fusce tristique lectus vitae arcu laoreet, ac efficitur ligula feugiat.');
 
+-- Events
+INSERT INTO Events (name, description, poster)
+VALUES ('Art Jam: Express Yourself', 'Join us for an interactive art jam session where you can unleash your creativity...', 0x040506);
 
 INSERT INTO Events (name, description, poster)
-VALUES ('Event 1', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 0x0102030405);
+VALUES ('Street Art Workshop: Spray & Stencil', 'Learn the techniques of street art and create your own vibrant graffiti masterpiece...', 0x040506);
 
 INSERT INTO Events (name, description, poster)
-VALUES ('Event 2', 'Nullam vel accumsan metus, in feugiat dolor.', 0x060708090A);
+VALUES ('Glow-in-the-Dark Paint Party', 'Experience the ultimate glow-in-the-dark paint party with neon colors, blacklights, and live music...', 0x040506);
 
 INSERT INTO Events (name, description, poster)
-VALUES ('Event 3', 'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.', 0x0B0C0D0E0F);
+VALUES ('Digital Art Masterclass', 'Discover the world of digital art and learn how to create stunning artworks using digital tools...', 0x040506);
 
 INSERT INTO Events (name, description, poster)
-VALUES ('Event 4', 'Sed in sem mauris. Aliquam bibendum justo sit amet enim dignissim ultricies.', 0x1011121314);
-
-INSERT INTO Events (name, description, poster)
-VALUES ('Event 5', 'Fusce tristique lectus vitae arcu laoreet, ac efficitur ligula feugiat.', 0x1516171819);
-
+VALUES ('Art Battle: Live Painting Competition', 'Witness an exciting live painting competition where artists compete against the clock to create captivating artworks...', 0x040506);
