@@ -103,8 +103,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#333',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    borderRadius: 5,
     marginTop: 0, // Adjust the marginTop value as desired
+    overflow: 'hidden'
   },
   buttonText: {
     color: '#fff',
