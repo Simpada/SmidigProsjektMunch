@@ -24,11 +24,7 @@ function MonthlyScreen() {
           points: user[pointsType],
           
         }))
-        .sort((a, b) => b.points - a.points)
-        .map((item, index) => ({
-          ...item,
-          profileImage: index < 3 ? item.profileImage : undefined,
-        }));
+        .sort((a, b) => b.points - a.points);
 
       const topThreeData = [
         leaderboardData[1], // Second becomes first
@@ -180,7 +176,7 @@ borderWidth: 1.5,
 },
 circleTopThreeText: {
   position: 'absolute',
-  transform: "rotate(-45deg)",
+  transform: [{ rotate: '-45deg' }],
   fontWeight: 'bold',
   color:colors.navy,
 },
@@ -238,9 +234,9 @@ numberLabelBackground: {
   position: 'absolute',
 },
 numberLabelText: {
-  transform: "rotate(-45deg)",
+  transform: [{ rotate: '-45deg' }],
   fontWeight: 'bold',
-  fontSize:'9px',
+  fontSize: 9,
   color: colors.navy,
 },
 profileImageSmall: {
@@ -256,9 +252,8 @@ fullName: {
 userName: {
   alignItems:'center',
   fontSize: 10,
-  color: 'grey',
-  fontStyle: '',
-},
+  color: 'grey'
+}
 
 });
 

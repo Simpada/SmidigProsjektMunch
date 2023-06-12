@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
-import { colors } from '../../Styles/theme';
+import { colors } from '../../Styles/theme.js';
 
 function AllTimeScreen() {
-  const [selectedImage, setSelectedImage] = useState({ uri: 'http://placeholder.com/placeholder.png' });
+  const [selectedImage, setSelectedImage] = useState('http://placeholder.com/placeholder.png');
   const [pointsType] = useState('allTimePoints');
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,19 +20,15 @@ function AllTimeScreen() {
           id: user.userId,
          
           userName: user.username,
-          points: user[pointsType],
+          points: user[pointsType]
           
         }))
-        .sort((a, b) => b.points - a.points)
-        .map((item, index) => ({
-          ...item,
-          profileImage: index < 3 ? item.profileImage : undefined,
-        }));
+        .sort((a, b) => b.points - a.points);
 
       const topThreeData = [
         leaderboardData[1], // Second becomes first
         leaderboardData[0], // First becomes second
-        leaderboardData[2], // Third stays the same
+        leaderboardData[2] // Third stays the same
       ];
 
       setTopThree(topThreeData);
@@ -179,7 +175,7 @@ borderWidth: 1.5,
 },
 circleTopThreeText: {
   position: 'absolute',
-  transform: "rotate(-45deg)",
+  transform: [{ rotate: '-45deg' }],
   fontWeight: 'bold',
   color:colors.navy,
 },
@@ -232,12 +228,12 @@ numberLabelBackground: {
   borderRadius: 2,
   justifyContent: 'center',
   alignItems: 'center',
-  transform: "rotate(45deg)",
+  transform: 'rotate(45deg)',
   borderWidth: 1.5,
   position: 'absolute',
 },
 numberLabelText: {
-  transform: "rotate(-45deg)",
+  transform: [{ rotate: '-45deg' }],
   fontWeight: 'bold',
   fontSize:9,
   color: colors.navy,
