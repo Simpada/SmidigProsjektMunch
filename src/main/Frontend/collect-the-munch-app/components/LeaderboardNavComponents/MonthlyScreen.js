@@ -88,7 +88,7 @@ function MonthlyScreen() {
               renderItem={({ item, index }) => (
                 <View style={styles.item}>
                   <View style={styles.profileImageContainerSmall}>
-                    <Image source={item.profileImage ? {uri: item.profileImage} : selectedImage} style={styles.profileImageSmall} />
+                    <Image style={styles.profileImageSmall} />
                     <Text style={styles.numberLabel}>
                       <View style={styles.numberLabelBackground}>
                         <Text style={styles.numberLabelText}>{index + 4}</Text>
@@ -229,7 +229,7 @@ numberLabelBackground: {
   borderRadius: 2,
   justifyContent: 'center',
   alignItems: 'center',
-  transform: "rotate(45deg)",
+  transform: [{ rotate: '45deg' }],
   borderWidth: 1.5,
   position: 'absolute',
 },

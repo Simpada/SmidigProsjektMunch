@@ -15,13 +15,13 @@ function LeaderboardScreen() {
     <Header />
     <View style={{ flex: 1 }}>
       <Tab.Navigator
-        tabBarOptions={{
-          activeTintColor: colors.red,
-          inactiveTintColor: colors.grey,
-          style: { backgroundColor: colors.white },
-          indicatorStyle: { backgroundColor: colors.red },
+        screenOptions={{
+          tabBarActiveTintColor: colors.red,
+          tabBarInactiveTintColor: colors.grey,
+          tabBarStyle: { backgroundColor: colors.white },
+          tabBarIndicatorStyle: { backgroundColor: colors.red },
         }}
-        >
+      >
         <Tab.Screen name="Latest Score" component={WeeklyScreen} />
         <Tab.Screen name="Monthly" component={MonthlyScreen} />
         <Tab.Screen name="All Time" component={AllTimeScreen} />

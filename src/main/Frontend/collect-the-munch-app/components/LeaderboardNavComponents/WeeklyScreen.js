@@ -62,8 +62,6 @@ function WeeklyScreen() {
                   index === 2 && styles.bronze,
                 ]}
               >
-                <Image source={item.profileImage ? {uri: item.profileImage} : selectedImage} style={styles.profileImage} />
-
                 <View style={styles.circleTopThree}>
                   <Text style={styles.circleTopThreeText}>{index === 1 ? '1' : (index === 0 ? '2' : '3')}</Text>
                 </View>
@@ -88,7 +86,7 @@ function WeeklyScreen() {
               renderItem={({ item, index }) => (
                 <View style={styles.item}>
                   <View style={styles.profileImageContainerSmall}>
-                    <Image source={item.profileImage ? {uri: item.profileImage} : selectedImage} style={styles.profileImageSmall} />
+                    <Image style={styles.profileImageSmall} />
                     <Text style={styles.numberLabel}>
                       <View style={styles.numberLabelBackground}>
                         <Text style={styles.numberLabelText}>{index + 4}</Text>
@@ -170,7 +168,7 @@ function WeeklyScreen() {
     justifyContent: 'center',
     alignItems: 'center',
     bottom: -5,
-    transform: "rotate(45deg)",
+    transform: [{ rotate: '45deg' }],
     borderWidth: 1.5,
     },
     circleTopThreeText: {

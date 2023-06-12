@@ -5,7 +5,7 @@ import { colors } from '../Styles/theme';
 import HeaderImg from '../assets/Images/munch-museet.avif';
 import { Entypo, Feather, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import Review from '../components/Review';
-import reviewicon1 from "../assets/Images/samuel.png";
+import reviewicon1 from "../assets/Images/profile1.png";
 import axios from 'axios';
 import Header from '../components/Header';
 

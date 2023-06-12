@@ -20,6 +20,8 @@ const Navigation = () => {
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={({ route }) => ({
+          activeTintColor: '#FE390F',
+          inactiveTintColor: 'gray',
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -40,17 +42,14 @@ const Navigation = () => {
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}
-        tabBarOptions={{
-          activeTintColor: '#FE390F',
-          inactiveTintColor: 'gray',
-        }}
+
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Game Info" component={CreateTeamNavigator} />
-        <Tab.Screen name="Play Game" component={GameScreen} />
-        <Tab.Screen name="Events" component={EventsNavigator} />
-        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen} />
+        <Tab.Screen name="Home" component={HomeScreen} options={{headerShown: false}}/>
+        <Tab.Screen name="Game Info" component={CreateTeamNavigator} options={{headerShown: false}}/>
+        <Tab.Screen name="Play Game" component={GameScreen} options={{headerShown: false}}/>
+        <Tab.Screen name="Events" component={EventsNavigator} options={{headerShown: false}}/>
+        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} options={{headerShown: false}}/>
+        <Tab.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
       </Tab.Navigator>
     </NavigationContainer>
   );
