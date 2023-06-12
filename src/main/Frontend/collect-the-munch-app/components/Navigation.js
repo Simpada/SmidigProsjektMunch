@@ -7,10 +7,9 @@ import { Ionicons } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import PlayGameScreen from '../screens/PlayGameScreen';
 import LeaderboardScreen from '../screens/LeaderboardScreen';
-import EventsScreen from '../screens/EventsScreen';
 import GameScreen from '../screens/GameScreen';
-import ProfileScreen from '../screens/ProfileScreen';
 import EventsNavigator from './EventsNavigator';
+import CreateTeamNavigator from './CreateTeamNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -33,8 +32,6 @@ const Navigation = () => {
               iconName = focused ? 'calendar' : 'calendar-outline';
             } else if (route.name === 'Leaderboard') {
               iconName = focused ? 'trophy' : 'trophy-outline';
-            }else if (route.name === 'Profile') {
-              iconName = focused ? 'person' : 'person-outline';
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -45,12 +42,11 @@ const Navigation = () => {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
-        <Tab.Screen name="Game Info" component={PlayGameScreen} options={{headerShown:false}}/>
-        <Tab.Screen name="Play Game" component={GameScreen} options={{headerShown:false}}/>
-        <Tab.Screen name="Events" component={EventsNavigator} options={{headerShown:false}}/>
-        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} options={{headerShown:false}} />
-        <Tab.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
+        <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Screen name="Game Info" component={CreateTeamNavigator} />
+        <Tab.Screen name="Play Game" component={GameScreen} />
+        <Tab.Screen name="Events" component={EventsNavigator} />
+        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
