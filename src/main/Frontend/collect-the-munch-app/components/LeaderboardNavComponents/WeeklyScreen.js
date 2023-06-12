@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import { colors } from '../../Styles/theme';
-import ImagePicker from 'react-native-image-picker';
+
 
 function WeeklyScreen() {
   const [selectedImage, setSelectedImage] = useState({ uri: 'http://placeholder.com/placeholder.png' });
