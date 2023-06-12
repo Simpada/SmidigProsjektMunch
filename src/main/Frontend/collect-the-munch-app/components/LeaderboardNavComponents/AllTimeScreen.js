@@ -112,6 +112,9 @@ function AllTimeScreen() {
       </View>
     );
   }
+
+  export default AllTimeScreen;
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
