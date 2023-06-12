@@ -4,6 +4,7 @@ import * as Font from 'expo-font';
 import popImage from '../assets/Images/pop.jpg';
 import leaderboardImage from '../assets/Images/leaderboard.png';
 import { useNavigation } from '@react-navigation/native';
+import Header from '../components/Header';
 
 const PlayGameScreen = () => {
   const navigation = useNavigation();
@@ -38,6 +39,8 @@ const PlayGameScreen = () => {
   }
 
   return (
+    <>
+    <Header />
     <ScrollView style={styles.container}>
       <View style={styles.imageContainer}>
         <Image source={require('../assets/Images/Dalle.png')} style={styles.image} />
@@ -90,6 +93,7 @@ const PlayGameScreen = () => {
         </View>
 
     </ScrollView>
+    </>
   );
 };
 

@@ -7,6 +7,7 @@ import { Entypo, Feather, FontAwesome5, AntDesign } from '@expo/vector-icons';
 import Review from '../components/Review';
 import reviewicon1 from "../assets/Images/samuel.png";
 import axios from 'axios';
+import Header from '../components/Header';
 
 const HomeScreen = () => {
   useEffect(() => {
@@ -25,32 +26,6 @@ const HomeScreen = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState('Option 1');
   const [reviews, setReviews] = useState([]);
-
-  const handleOptionChange = (value) => {
-    setSelectedOption(value);
-    setMenuOpen(false);
-  };
-
-  const toggleMenu = () => {
-    setMenuOpen(!isMenuOpen);
-  };
-
-  const renderIcon = (option) => {
-    switch (option) {
-      case 'User':
-        return <AntDesign name="user" size={16} color={colors.white} />;
-      case 'The Collection':
-        return <Feather name="archive" size={16} color={colors.white} />;
-      case 'Inventory':
-        return <FontAwesome5 name="box-open" size={16} color={colors.white} />;
-      case 'Leaderboards':
-        return <FontAwesome5 name="trophy" size={16} color={colors.white} />;
-      case 'Settings':
-        return <AntDesign name="setting" size={16} color={colors.white} />;
-      default:
-        return null;
-    }
-  };
 
   const fetchReviews = async () => {
     try {
@@ -94,6 +69,8 @@ const HomeScreen = () => {
 
 
   return (
+  <>
+      <Header />
     <ScrollView contentContainerStyle={styles.midPageContainer}>
       <View style={styles.munchImageContainer}>
         <Image style={styles.munchImage} source={HeaderImg} resizeMode="cover" />
@@ -115,32 +92,25 @@ const HomeScreen = () => {
         </Text>
       </View>
 
-      <TouchableOpacity style={styles.playButton}>
-        <Text style={styles.playButtonText}>Play Collect the MUNCH</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.reviewButton}>
-        <Text style={styles.reviewButtonText}>Review the app!</Text>
-      </TouchableOpacity>
-
       <View style={[styles.reviewsBackground, { width: '100%' }]}>
         <Text style={styles.reviewsTitle}>Reviews</Text>
         {reviews.length > 0 ? (
           <FlatList
-            data={reviews}
-            renderItem={({ item }) => <ReviewItem item={item} />}
-            keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
-            horizontal
-            showsHorizontalScrollIndicator={false}
+          data={reviews}
+          renderItem={({ item }) => <ReviewItem item={item} />}
+          keyExtractor={(item, index) => (item.id ? item.id.toString() : index.toString())}
+          horizontal
+          showsHorizontalScrollIndicator={false}
           />
-        ) : (
-          <Text style={styles.noReviewsText}>No reviews available</Text>
-        )}
+          ) : (
+            <Text style={styles.noReviewsText}>No reviews available</Text>
+            )}
       </View>
       <View style={styles.leaveReviewContainer}>
         <Review reviewType="app"/>
       </View>
     </ScrollView>
+</>
   );
 };
 
@@ -204,6 +174,7 @@ const styles = StyleSheet.create({
   playDescriptionText: {
     color: colors.white,
     fontSize: 20,
+    paddingVertical: 100,
     lineHeight: 30,
     fontFamily: 'GirottMunch-Bold',
     textAlign: 'center',

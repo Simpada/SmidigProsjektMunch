@@ -45,12 +45,12 @@ const Navigation = () => {
           inactiveTintColor: 'gray',
         }}
       >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Game Info" component={PlayGameScreen} />
-        <Tab.Screen name="Play Game" component={GameScreen} />
-        <Tab.Screen name="Events" component={EventsNavigator} />
-        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
-        <Tab.Screen name="Profile" component={ProfileScreen}/>
+        <Tab.Screen name="Home" component={HomeScreen} options={{headerShown:false}}/>
+        <Tab.Screen name="Game Info" component={PlayGameScreen} options={{headerShown:false}}/>
+        <Tab.Screen name="Play Game" component={GameScreen} options={{headerShown:false}}/>
+        <Tab.Screen name="Events" component={EventsNavigator} options={{headerShown:false}}/>
+        <Tab.Screen name="Leaderboard" component={LeaderboardScreen} options={{headerShown:false}} />
+        <Tab.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}/>
       </Tab.Navigator>
     </NavigationContainer>
   );

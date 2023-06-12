@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import LoginScreen from '../screens/LoginScreenJWT';
+import Header from '../components/Header';
 
 const ProfileScreen = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   return (
+    <>
+    <Header />
     <View style={styles.container}>
       {isLoggedIn ? (
         <View>
@@ -16,8 +19,9 @@ const ProfileScreen = () => {
         </View>
       ) : (
         <LoginScreen onLogin={() => setIsLoggedIn(true)} />
-      )}
+        )}
     </View>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, Image, Touchable, TouchableOpacity } from 'react-native';
-import PlaceholderImg from '../assets/Images/PlaceholderImage.jpg';
+import PlaceholderImg from '../assets/Images/worm.png';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Review from './Review';

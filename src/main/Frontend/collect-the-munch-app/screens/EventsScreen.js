@@ -42,6 +42,8 @@ const EventsScreen = () => {
   };
 
   return (
+    <>
+    <Header />
     <View style={styles.container}>
       <Filter style={styles.filter} onSearch={handleSearch} />
       <View style={styles.eventsContainer}>
@@ -53,9 +55,10 @@ const EventsScreen = () => {
           style={styles.list}
           events={filteredEvents}
           handleEventPress={handleEventPress}
-        />
+          />
       </View>
     </View>
+    </>
   );
 };
 
