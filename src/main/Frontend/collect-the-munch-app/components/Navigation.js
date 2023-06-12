@@ -9,6 +9,7 @@ import PlayGameScreen from '../screens/PlayGameScreen';
 import LeaderboardScreen from '../screens/LeaderboardScreen';
 import EventsScreen from '../screens/EventsScreen';
 import GameScreen from '../screens/GameScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 import EventsNavigator from './EventsNavigator';
 
 const Tab = createBottomTabNavigator();
@@ -32,6 +33,8 @@ const Navigation = () => {
               iconName = focused ? 'calendar' : 'calendar-outline';
             } else if (route.name === 'Leaderboard') {
               iconName = focused ? 'trophy' : 'trophy-outline';
+            }else if (route.name === 'Profile') {
+              iconName = focused ? 'person' : 'person-outline';
             }
 
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -47,6 +50,7 @@ const Navigation = () => {
         <Tab.Screen name="Play Game" component={GameScreen} />
         <Tab.Screen name="Events" component={EventsNavigator} />
         <Tab.Screen name="Leaderboard" component={LeaderboardScreen} />
+        <Tab.Screen name="Profile" component={ProfileScreen}/>
       </Tab.Navigator>
     </NavigationContainer>
   );

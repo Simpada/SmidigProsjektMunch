@@ -6,7 +6,6 @@ import no.kristiania.collectthemunch.entities.Review;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class ReviewEventDao extends AbstractDao {
 
     public List<Review> retrieveAllEventReviews() throws SQLException {
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT ER.review_id, ER.review_text, ER.num_stars, U.username, U.profile_picture FROM Event_Reviews ER JOIN Users U on U.user_id = ER.user_id";
+            String query = "SELECT ER.review_text, ER.num_stars, U.username, U.profile_picture FROM Event_Reviews ER JOIN Users U on U.user_id = ER.user_id";
             try(var statement = connection.prepareStatement(query)) {
                 try (var resultSet = statement.executeQuery()) {
                     List<Review> resultReviews = new ArrayList<>();
@@ -43,7 +42,6 @@ public class ReviewEventDao extends AbstractDao {
                 statement.setInt(2, eventId);
                 statement.setString(3, review.getReviewText());
                 statement.setInt(4, review.getNumOfStars());
-                statement.executeUpdate();
 
                 int affectedRows = statement.executeUpdate();
                 if (affectedRows == 0) {
