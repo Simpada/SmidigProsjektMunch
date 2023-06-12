@@ -11,6 +11,7 @@ import GameScreen from '../screens/GameScreen';
 import EventsNavigator from './EventsNavigator';
 import CreateTeamNavigator from './CreateTeamNavigator';
 import ProfileScreen from '../screens/ProfileScreen';
+import { colors } from '../Styles/theme';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,8 +21,8 @@ const Navigation = () => {
       <Tab.Navigator
         initialRouteName="Home"
         screenOptions={({ route }) => ({
-          activeTintColor: '#FE390F',
-          inactiveTintColor: 'gray',
+          tabBarActiveTintColor: colors.red,
+          tabBarInactiveTintColor: colors.grey,
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
 
@@ -41,6 +42,7 @@ const Navigation = () => {
 
             return <Ionicons name={iconName} size={size} color={color} />;
           },
+
         })}
 
       >
