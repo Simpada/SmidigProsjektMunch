@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import { colors } from '../../Styles/theme';
-import ImagePicker from 'react-native-image-picker';
+
 
 function MonthlyScreen() {
   const [selectedImage, setSelectedImage] = useState({ uri: 'http://placeholder.com/placeholder.png' });
@@ -19,16 +19,12 @@ function MonthlyScreen() {
       const leaderboardData = response.data
         .map(user => ({
           id: user.userId,
-          fullName: user.username,
+          
           userName: user.username,
           points: user[pointsType],
-          profileImage: {uri: user.profileImageUrl},
+          
         }))
-        .sort((a, b) => b.points - a.points)
-        .map((item, index) => ({
-          ...item,
-          profileImage: index < 3 ? item.profileImage : undefined,
-        }));
+        .sort((a, b) => b.points - a.points);
 
       const topThreeData = [
         leaderboardData[1], // Second becomes first
@@ -66,7 +62,7 @@ function MonthlyScreen() {
                   index === 2 && styles.bronze,
                 ]}
               >
-                <Image source={item.profileImage ? {uri: item.profileImage} : selectedImage} style={styles.profileImage} />
+                
 
                 <View style={styles.circleTopThree}>
                   <Text style={styles.circleTopThreeText}>{index === 1 ? '1' : (index === 0 ? '2' : '3')}</Text>
@@ -180,7 +176,7 @@ borderWidth: 1.5,
 },
 circleTopThreeText: {
   position: 'absolute',
-  transform: "rotate(-45deg)",
+  transform: [{ rotate: '-45deg' }],
   fontWeight: 'bold',
   color:colors.navy,
 },
@@ -238,9 +234,9 @@ numberLabelBackground: {
   position: 'absolute',
 },
 numberLabelText: {
-  transform: "rotate(-45deg)",
+  transform: [{ rotate: '-45deg' }],
   fontWeight: 'bold',
-  fontSize:'9px',
+  fontSize: 9,
   color: colors.navy,
 },
 profileImageSmall: {
@@ -256,9 +252,8 @@ fullName: {
 userName: {
   alignItems:'center',
   fontSize: 10,
-  color: 'grey',
-  fontStyle: '',
-},
+  color: 'grey'
+}
 
 });
 

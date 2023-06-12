@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
 import { colors } from '../Styles/theme';
 import Review from '../components/Review';
-import placeHolderImg from '../assets/Images/samuel.png' 
+import placeHolderImg from '../assets/Images/munch-museet.avif' 
 const EventDetailsScreen = ({ route }) => {
   const { event } = route.params;
 

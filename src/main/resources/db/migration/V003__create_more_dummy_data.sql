@@ -1,3 +1,4 @@
+
 INSERT INTO Categories (event_id, category)
 VALUES (1, 'PARTY'),
        (1, 'EXHIBITION');
@@ -6,7 +7,8 @@ INSERT INTO Categories (event_id, category)
 VALUES (2, 'KIDS');
 
 INSERT INTO Categories (event_id, category)
-VALUES (3, 'FAMILY'),
+VALUES (3, 'PARTY'),
+       (3, 'FAMILY'),
        (3, 'NEW');
 
 INSERT INTO Categories (event_id, category)
@@ -14,8 +16,8 @@ VALUES (4, 'GAMES');
 
 INSERT INTO Categories (event_id, category)
 VALUES (5, 'PARTY'),
-       (5, 'EXHIBITION'),
-       (5, 'KIDS');
+       (5, 'EXHIBITION');
+
 
 
 INSERT INTO Event_Reviews (user_id, event_id, review_text, num_stars)

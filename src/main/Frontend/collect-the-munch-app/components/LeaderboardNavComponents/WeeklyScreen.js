@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import { colors } from '../../Styles/theme';
-import ImagePicker from 'react-native-image-picker';
+
 
 function WeeklyScreen() {
   const [selectedImage, setSelectedImage] = useState({ uri: 'http://placeholder.com/placeholder.png' });
@@ -19,16 +19,12 @@ function WeeklyScreen() {
       const leaderboardData = response.data
         .map(user => ({
           id: user.userId,
-          fullName: user.username,
+          
           userName: user.username,
           points: user[pointsType],
-          profileImage: {uri: user.profileImageUrl},
+          
         }))
-        .sort((a, b) => b.points - a.points)
-        .map((item, index) => ({
-          ...item,
-          profileImage: index < 3 ? item.profileImage : undefined,
-        }));
+        .sort((a, b) => b.points - a.points);
 
       const topThreeData = [
         leaderboardData[1], // Second becomes first
@@ -144,123 +140,119 @@ function WeeklyScreen() {
       justifyContent: 'center',
       alignItems: 'center',
     },
-    
-profileImage: {
-width: 70,
-height: 70,
-borderRadius: 35,
-},
-winnerName: {
-  fontWeight: 'bold',
-  marginTop: 20,
-},
-winnerPoints: {
-  fontWeight: 'bold',
-},
-goldText: {
-  color: 'gold',
-},
-silverText: {
-  color: 'silver',
-},
-bronzeText: {
-  color: '#946110',
-},
-circleTopThree: {
-position: 'absolute',
-width: 20,
-height: 20,
-borderRadius: 2,
-backgroundColor: 'white',
-justifyContent: 'center',
-alignItems: 'center',
-bottom: -5,
-transform: "rotate(45deg)",
-borderWidth: 1.5,
-},
-circleTopThreeText: {
-  position: 'absolute',
-  transform: "rotate(-45deg)",
-fontWeight: 'bold',
-color:colors.navy,
-},
-gold: {
-backgroundColor: 'gold',
-marginTop:0,
-},
-silver: {
-backgroundColor: 'silver',
-marginTop:45,
-},
-bronze: {
-backgroundColor: '#946110',
-marginTop:45,
-},
-item: {
-  flexDirection: 'row',
-  justifyContent: 'space-between',
-  alignItems: 'center',
-  padding: 10,
-  borderBottomWidth: 0.5,
-  borderBottomColor: '#d6d7da',
-},
-listText: {
-  color: colors.white,
-  fontSize: 16,
-  },
+    profileImage: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    },
+    winnerName: {
+      fontWeight: 'bold',
+      marginTop: 20,
+    },
+    winnerPoints: {
+      fontWeight: 'bold',
+    },
+    goldText: {
+      color: 'gold',
+    },
+    silverText: {
+      color: 'silver',
+    },
+    bronzeText: {
+      color: '#946110',
+    },
+    circleTopThree: {
+    position: 'absolute',
+    width: 20,
+    height: 20,
+    borderRadius: 2,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: -5,
+    transform: "rotate(45deg)",
+    borderWidth: 1.5,
+    },
+    circleTopThreeText: {
+      position: 'absolute',
+      transform: [{ rotate: '-45deg' }],
+    fontWeight: 'bold',
+    color:colors.navy,
+    },
+    gold: {
+    backgroundColor: 'gold',
+    marginTop:0,
+    },
+    silver: {
+    backgroundColor: 'silver',
+    marginTop:45,
+    },
+    bronze: {
+    backgroundColor: '#946110',
+    marginTop:45,
+    },
+    item: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      padding: 10,
+      borderBottomWidth: 0.5,
+      borderBottomColor: '#d6d7da',
+    },
+    listText: {
+      color: colors.white,
+      fontSize: 16,
+      },
 
-userInfoContainer: {
-  flex: 1,
-},
-profileImageContainerSmall: {
-  borderRadius: 40,
-  backgroundColor: 'white',
-  justifyContent: 'center',
-  alignItems: 'center',
-  marginRight: 10,
-  position:'relative',
-  overflow: '',
-},
-numberLabel: {
-  position: 'absolute',
-  left: 16,
-  top: 33,
-},
-numberLabelBackground: {
-  backgroundColor: 'white',
-  width: 16,
-  height: 16,
-  borderRadius: 2,
-  justifyContent: 'center',
-  alignItems: 'center',
-  ransform: "rotate(45deg)",
-  borderWidth: 1.5,
-  position: 'absolute',
-},
-numberLabelText: {
-  ransform: "rotate(-45deg)",
-  
-  fontWeight: 'bold',
-  fontSize:'9px',
-  color: colors.navy,
-},
-profileImageSmall: {
-  width: 50,
-  height: 50,
-  borderRadius: 25,
-},
-fullName: {
-  fontSize:20,
-  color: 'white',
-  fontWeight: 'bold',
-},
-userName: {
-  alignItems:'center',
-  fontSize: 10,
-  color: 'grey',
-  fontStyle: '',
-},
-
+    userInfoContainer: {
+      flex: 1,
+    },
+    profileImageContainerSmall: {
+      borderRadius: 40,
+      backgroundColor: 'white',
+      justifyContent: 'center',
+      alignItems: 'center',
+      marginRight: 10,
+      position:'relative',
+      overflow: '',
+    },
+    numberLabel: {
+      position: 'absolute',
+      left: 16,
+      top: 33,
+    },
+    numberLabelBackground: {
+      backgroundColor: 'white',
+      width: 16,
+      height: 16,
+      borderRadius: 2,
+      justifyContent: 'center',
+      alignItems: 'center',
+      transform: "rotate(45deg)",
+      borderWidth: 1.5,
+      position: 'absolute',
+    },
+    numberLabelText: {
+      transform: [{ rotate: '-45deg' }],
+      fontWeight: 'bold',
+      fontSize: 9,
+      color: colors.navy,
+    },
+    profileImageSmall: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+    },
+    fullName: {
+      fontSize:20,
+      color: 'white',
+      fontWeight: 'bold',
+    },
+    userName: {
+      alignItems:'center',
+      fontSize: 10,
+      color: 'grey',
+    }
 });
 
 export default WeeklyScreen;
