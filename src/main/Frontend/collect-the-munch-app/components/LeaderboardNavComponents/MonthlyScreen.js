@@ -19,10 +19,10 @@ function MonthlyScreen() {
       const leaderboardData = response.data
         .map(user => ({
           id: user.userId,
-          fullName: user.username,
+          
           userName: user.username,
           points: user[pointsType],
-          profileImage: {uri: user.profileImageUrl},
+          
         }))
         .sort((a, b) => b.points - a.points)
         .map((item, index) => ({
@@ -66,7 +66,7 @@ function MonthlyScreen() {
                   index === 2 && styles.bronze,
                 ]}
               >
-                <Image source={item.profileImage ? {uri: item.profileImage} : selectedImage} style={styles.profileImage} />
+                
 
                 <View style={styles.circleTopThree}>
                   <Text style={styles.circleTopThreeText}>{index === 1 ? '1' : (index === 0 ? '2' : '3')}</Text>
