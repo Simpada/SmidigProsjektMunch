@@ -216,8 +216,7 @@ profileImageContainerSmall: {
   justifyContent: 'center',
   alignItems: 'center',
   marginRight: 10,
-  position:'relative',
-  overflow: '',
+  position:'relative'
 },
 numberLabel: {
   position: 'absolute',
@@ -231,7 +230,7 @@ numberLabelBackground: {
   borderRadius: 2,
   justifyContent: 'center',
   alignItems: 'center',
-  transform: 'rotate(45deg)',
+  transform: [{ rotate: '-45deg' }],
   borderWidth: 1.5,
   position: 'absolute',
 },
@@ -257,6 +256,8 @@ userName: {
   color: 'grey',
 },
 
+
+
 });
 
-export default AllTimeScreen;
+
