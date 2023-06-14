@@ -6,49 +6,41 @@ import jakarta.ws.rs.core.Response;
 import no.kristiania.collectthemunch.entities.Painting;
 
 import java.sql.SQLException;
-import java.util.List;
 
 @Path("/painting")
 public class PaintingEndPoint extends ApiEndPoint {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Painting> getAllPainting() throws SQLException {
-        return paintingDao.retrieveAll();
+    public Response getAllPainting() {
+        return handleRequest(() -> paintingDao.retrieveAllPaintings());
     }
 
     @Path("/new")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(Painting painting) throws SQLException {
-        if (paintingDao.save(painting)) {
-            return Response.status(201).build();
-        } else {
-            return Response.status(400).build();
-        }
+    public Response save(Painting painting) {
+        return handleSubmit(() -> paintingDao.save(painting));
     }
 
     @Path("/{paintingId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Painting retrieve(@PathParam("paintingId") int paintingId) throws SQLException {
-        return paintingDao.retrieve(paintingId);
+    public Response getPaintingByPaintingId(@PathParam("paintingId") int paintingId) {
+        return handleRequest(() -> paintingDao.retrievePaintingById(paintingId));
     }
 
     @Path("/name/{title}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Painting retrieve(@PathParam("title") String title) throws SQLException {
-        return paintingDao.retrieve(title);
+    public Response getPaintingByPaintingName(@PathParam("title") String name) {
+        return handleRequest(() -> paintingDao.retrievePaintingByName(name));
     }
-
-
 
     @Path("/{userId}/{paintingId}")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void collectPainting(@PathParam("userId") int userId, @PathParam("paintingId") int paintingId) throws SQLException {
-        paintingDao.saveToInventory(userId, paintingId);
+    public Response savePaintingToInventory(@PathParam("userId") int userId, @PathParam("paintingId") int paintingId) {
+        return handleSubmit(() -> paintingDao.saveToInventory(userId, paintingId));
     }
-
 }

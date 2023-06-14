@@ -58,7 +58,7 @@ public class UserEndPoint extends ApiEndPoint {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Painting> getPaintingsForUser(@PathParam("userId") int userId) throws SQLException {
-        return paintingDao.retrieveAllForUser(userId);
+        return paintingDao.retrieveAllPaintingsByUserId(userId);
     }
 
     @Path("/login/{username}/{password}")
