@@ -155,9 +155,11 @@ function AllTimeScreen() {
     winnerName: {
       fontWeight: 'bold',
       marginTop: 20,
+      fontFamily: 'GirottMunch-Bold',
     },
     winnerPoints: {
       fontWeight: 'bold',
+      fontFamily: 'GirottMunch-Bold',
     },
     goldText: {
       color: 'gold',
@@ -209,6 +211,7 @@ function AllTimeScreen() {
     listText: {
       color: colors.white,
       fontSize: 16,
+      fontFamily: 'GirottMunch-Bold',
     },
 
     userInfoContainer: {
