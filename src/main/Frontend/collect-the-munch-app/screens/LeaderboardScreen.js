@@ -20,6 +20,7 @@ function LeaderboardScreen() {
           tabBarInactiveTintColor: colors.grey,
           tabBarStyle: { backgroundColor: colors.white },
           tabBarIndicatorStyle: { backgroundColor: colors.red },
+          tabBarLabelStyle: { fontFamily: 'GirottMunch-BoldBackslant' },
         }}
       >
         <Tab.Screen name="Latest Score" component={WeeklyScreen} />
