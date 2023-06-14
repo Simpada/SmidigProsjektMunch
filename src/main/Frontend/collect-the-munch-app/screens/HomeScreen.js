@@ -10,22 +10,25 @@ import axios from 'axios';
 import Header from '../components/Header';
 
 const HomeScreen = () => {
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [isMenuOpen, setMenuOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState('Option 1');
+  const [reviews, setReviews] = useState([]);
+
   useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync({
+        'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.ttf'),
+        'GirottMunch-Bold': require('../assets/fonts/GirottMunch-Bold.ttf'),
+        'GirottMunch-BoldSlant': require('../assets/fonts/GirottMunch-BoldSlant.ttf'),
+      });
+      setFontsLoaded(true);
+    };
+
     loadFonts();
     fetchReviews();
   }, []);
 
-  const loadFonts = async () => {
-    await Font.loadAsync({
-      'GirottMunch-BoldBackslant': require('../assets/fonts/GirottMunch-BoldBackslant.ttf'),
-      'GirottMunch-Bold': require('../assets/fonts/GirottMunch-Bold.ttf'),
-      'GirottMunch-BoldSlant': require('../assets/fonts/GirottMunch-BoldSlant.ttf'),
-    });
-  };
-
-  const [isMenuOpen, setMenuOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('Option 1');
-  const [reviews, setReviews] = useState([]);
 
   const fetchReviews = async () => {
     try {
@@ -66,6 +69,10 @@ const HomeScreen = () => {
       </View>
     </View>
   );
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
 
   return (

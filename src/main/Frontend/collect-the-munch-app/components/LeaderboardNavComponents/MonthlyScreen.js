@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import { colors } from '../../Styles/theme';
-
+import { LogBox } from 'react-native';
 
 function MonthlyScreen() {
   const [selectedImage, setSelectedImage] = useState({ uri: 'http://placeholder.com/placeholder.png' });
@@ -46,6 +46,9 @@ function MonthlyScreen() {
   function loadMore() {
     setCurrentPage(currentPage + 1);
   }
+
+  LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
+
 
   return (
     <View style={styles.container}>

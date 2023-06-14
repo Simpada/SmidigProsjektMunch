@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import { colors } from '../../Styles/theme.js';
+import { LogBox } from 'react-native';
+
 
 function AllTimeScreen() {
   const [selectedImage, setSelectedImage] = useState('http://placeholder.com/placeholder.png');
@@ -45,6 +47,8 @@ function AllTimeScreen() {
   function loadMore() {
     setCurrentPage(currentPage + 1);
   }
+
+  LogBox.ignoreLogs(['Sending `onAnimatedValueUpdate` with no listeners registered.']);
 
   return (
     <View style={styles.container}>
