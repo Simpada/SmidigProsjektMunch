@@ -1,6 +1,7 @@
 package no.kristiania.collectthemunch.database;
 
 import jakarta.inject.Inject;
+import jakarta.ws.rs.NotFoundException;
 import no.kristiania.collectthemunch.entities.Painting;
 
 import javax.sql.DataSource;
@@ -18,10 +19,9 @@ public class PaintingDao extends AbstractDao {
         super(dataSource);
     }
 
-    public Boolean save(Painting painting) throws SQLException {
+    public void save(Painting painting) throws SQLException, ItemNotSavedException {
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Paintings (name, author, painting_image, art_information, rarity, points) VALUES (?, ?, ?, ?, ?, ?)";
-
             try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, painting.getName());
                 statement.setString(2, painting.getAuthor());
@@ -29,14 +29,14 @@ public class PaintingDao extends AbstractDao {
                 statement.setString(4, painting.getArtInformation());
                 statement.setString(5, painting.getRarity());
                 statement.setInt(6, painting.getPoints());
-
-
                 statement.executeUpdate();
                 try (var generatedKeys = statement.getGeneratedKeys()) {
-                    generatedKeys.next();
-                    painting.setPaintingId(generatedKeys.getInt(1));
+                    if (generatedKeys.next()) {
+                        painting.setPaintingId(generatedKeys.getInt(1));
+                    } else {
+                        throw new ItemNotSavedException("Could not save painting id " + painting.getPaintingId());
+                    }
                 }
-                return true;
             }
         }
     }
@@ -45,25 +45,25 @@ public class PaintingDao extends AbstractDao {
 
     }
 
-    public List<Painting> retrieveAll() throws SQLException {
+    public List<Painting> retrieveAllPaintings() throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Paintings";
-
             try (var statement = connection.prepareStatement(query)) {
                 try (var resultSet = statement.executeQuery()) {
-                    List<Painting> paintings = new ArrayList<>();
-
+                    List<Painting> result = new ArrayList<>();
                     while (resultSet.next()) {
-                        var painting = mapFromResultSet(resultSet);
-                        paintings.add(painting);
+                        result.add(mapFromResultSet(resultSet));
                     }
-                    return paintings;
+                    if(result.isEmpty()) {
+                        throw new NotFoundException("No paintings found in database");
+                    }
+                    return result;
                 }
             }
         }
     }
 
-    public List<Painting> retrieveAllForUser(int userId) throws SQLException {
+    public List<Painting> retrieveAllPaintingsByUserId(int userId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = """
                     SELECT *
@@ -74,54 +74,52 @@ public class PaintingDao extends AbstractDao {
                         ON Users.user_id = Paintings_Collected.user_id
                     WHERE Users.user_id = ?
                     """;
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
-
                 try (var resultSet = statement.executeQuery()) {
-                    List<Painting> paintings = new ArrayList<>();
-
+                    List<Painting> result = new ArrayList<>();
                     while (resultSet.next()) {
-                        var painting = mapFromResultSet(resultSet);
-                        paintings.add(painting);
+                        result.add(mapFromResultSet(resultSet));
                     }
-                    return paintings;
+                    if (result.isEmpty()) {
+                        throw new NotFoundException("No paintings found for user id " + userId);
+                    }
+                    return result;
                 }
             }
         }
     }
 
-    public void saveToInventory(int userId, int paintingId) throws SQLException {
+    public void saveToInventory(int userId, int paintingId) throws SQLException, ItemNotSavedException {
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Paintings_Collected (user_id, painting_id) VALUES (?, ?)";
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
                 statement.setInt(2, paintingId);
-                statement.executeUpdate();
+
+                int affectedRows = statement.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new ItemNotSavedException("Could not save painting id " + paintingId + " to inventory of user id " + userId);
+                }
             }
         }
     }
 
-    public Painting retrieve(int paintingId) throws SQLException {
+    public Painting retrievePaintingById(int paintingId) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Paintings WHERE painting_id = ?";
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, paintingId);
-
                 return getPainting(statement);
             }
         }
     }
 
-    public Painting retrieve(String name) throws SQLException {
+    public Painting retrievePaintingByName(String name) throws SQLException {
         try (var connection = dataSource.getConnection()) {
             String query = "SELECT * FROM Paintings WHERE name = ?";
-
             try (var statement = connection.prepareStatement(query)) {
                 statement.setString(1, name);
-
                 return getPainting(statement);
             }
         }
@@ -132,14 +130,13 @@ public class PaintingDao extends AbstractDao {
             if (resultSet.next()) {
                 return mapFromResultSet(resultSet);
             } else {
-                return null;
+                throw new NotFoundException("Could not find painting in database");
             }
         }
     }
 
     private Painting mapFromResultSet(ResultSet resultSet) throws SQLException {
         var painting = new Painting();
-
         painting.setPaintingId(resultSet.getInt("painting_id"));
         painting.setName(resultSet.getString("name"));
         painting.setAuthor(resultSet.getString("author"));
@@ -147,8 +144,6 @@ public class PaintingDao extends AbstractDao {
         painting.setArtInformation(resultSet.getString("art_information"));
         painting.setRarity(resultSet.getString("rarity"));
         painting.setPoints(resultSet.getInt("points"));
-
         return painting;
     }
-
 }

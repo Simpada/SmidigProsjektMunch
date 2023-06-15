@@ -17,25 +17,30 @@ public class UserDao extends AbstractDao {
         super(dataSource);
     }
 
-    private void save(User user) throws SQLException {
+    private void save(User user) throws SQLException, ItemNotSavedException {
         if (user.getProfilePicture() == null) {
             user.setProfilePicture(new byte[1]);
         }
 
         try (var connection = dataSource.getConnection()) {
-            String query = "INSERT INTO Users (username, password, date_of_birth, email, profile_picture) VALUES (?, ?, ?, ?, ?)";
-
+            String query = """
+                        INSERT INTO Users
+                        (username, password, date_of_birth, email, profile_picture)
+                        VALUES (?, ?, ?, ?, ?)
+                        """;
             try (var statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, user.getUsername());
                 statement.setString(2, user.getPassword());
                 statement.setString(3, user.getDateOfBirth());
                 statement.setString(4, user.getEmail());
                 statement.setBytes(5, user.getProfilePicture());
-
                 statement.executeUpdate();
                 try (var generatedKeys = statement.getGeneratedKeys()) {
-                    generatedKeys.next();
-                    user.setUserId(generatedKeys.getInt(1));
+                    if (generatedKeys.next()) {
+                        user.setUserId(generatedKeys.getInt(1));
+                    } else {
+                        throw new ItemNotSavedException("Could not update user " + user.getUsername());
+                    }
                 }
             }
         }
@@ -43,8 +48,11 @@ public class UserDao extends AbstractDao {
 
     private void updateUserData(User updatedUser) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "UPDATE Users SET username=?, password=?, date_of_birth=?, email=?, profile_picture=? WHERE user_id=?";
-
+            String query = """
+                    UPDATE Users
+                    SET username = ?, password = ?, date_of_birth = ?, email = ?, profile_picture = ?
+                    WHERE user_id = ?
+                    """;
             try (var statement = connection.prepareStatement(query)) {
                 statement.setString(1, updatedUser.getUsername());
                 statement.setString(2, updatedUser.getPassword());
@@ -52,7 +60,6 @@ public class UserDao extends AbstractDao {
                 statement.setString(4, updatedUser.getEmail());
                 statement.setBytes(5, updatedUser.getProfilePicture());
                 statement.setInt(6, updatedUser.getUserId());
-
                 statement.executeUpdate();
             }
         }
@@ -65,7 +72,6 @@ public class UserDao extends AbstractDao {
 
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Preferences (user_id, preference) VALUES (?, ?)";
-
             for (String c : user.getPreferences()) {
                 try (var statement = connection.prepareStatement(query)) {
                     statement.setInt(1, user.getUserId());
@@ -174,17 +180,19 @@ public class UserDao extends AbstractDao {
         }
     }
 
-    public void updatePreferences(int userId, List<String> preferences) throws SQLException {
+    public void updatePreferences(int userId, List<String> preferences) throws SQLException, ItemNotSavedException {
         removeUserPreferences(userId);
 
         try (var connection = dataSource.getConnection()) {
             String query = "INSERT INTO Preferences (user_id, preference) VALUES (?,?)";
-
             for (String c : preferences) {
                 try (var statement = connection.prepareStatement(query)) {
                     statement.setInt(1, userId);
                     statement.setString(2, String.valueOf(c));
-                    statement.executeUpdate();
+                    int rowsAffected = statement.executeUpdate();
+                    if (rowsAffected == 0) {
+                        throw new ItemNotSavedException("Could not save users preferences");
+                    }
                 }
             }
         }

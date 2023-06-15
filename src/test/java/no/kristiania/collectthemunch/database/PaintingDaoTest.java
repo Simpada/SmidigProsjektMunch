@@ -21,12 +21,12 @@ public class PaintingDaoTest {
 
 
     @Test
-    void shouldSaveAndRetrieveUser() throws SQLException {
+    void shouldSaveAndRetrieveUser() throws SQLException, ItemNotSavedException {
         var painting = samplePainting();
         painting.setPaintingImage(new byte[]{1,2});
         paintingDao.save(painting);
 
-        var painting2 = paintingDao.retrieve(painting.getPaintingId());
+        var painting2 = paintingDao.retrievePaintingById(painting.getPaintingId());
 
         assertThat(painting2)
                 .hasNoNullFieldsOrProperties()
@@ -36,7 +36,7 @@ public class PaintingDaoTest {
     }
 
     @Test
-    void shouldRetrieveAll() throws SQLException {
+    void shouldRetrieveAll() throws SQLException, ItemNotSavedException {
         int numOfPaintings = 10;
         int flywayData = 5;
 
@@ -44,16 +44,16 @@ public class PaintingDaoTest {
            paintingDao.save(samplePainting());
         }
 
-        List<Painting> paintings = paintingDao.retrieveAll();
+        List<Painting> paintings = paintingDao.retrieveAllPaintings();
 
         assertEquals(numOfPaintings + flywayData, paintings.size());
     }
 
     @Test
     void shouldRetrieveAllFromUser() throws SQLException, ItemNotSavedException {
-        var p1 = paintingDao.retrieve(1);
-        var p2 = paintingDao.retrieve(2);
-        var p3 = paintingDao.retrieve(3);
+        var p1 = paintingDao.retrievePaintingById(1);
+        var p2 = paintingDao.retrievePaintingById(2);
+        var p3 = paintingDao.retrievePaintingById(3);
 
         var user = sampleUser();
         userdao.saveUser(user);
@@ -63,7 +63,7 @@ public class PaintingDaoTest {
         paintingDao.saveToInventory(user.getUserId(), p3.getPaintingId());
 
 
-        List<Painting> paintingsInventory = paintingDao.retrieveAllForUser(user.getUserId());
+        List<Painting> paintingsInventory = paintingDao.retrieveAllPaintingsByUserId(user.getUserId());
 
         assertEquals(3, paintingsInventory.size());
 

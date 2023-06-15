@@ -22,8 +22,8 @@ public class UserEndPoint extends ApiEndPoint {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public User updateUser(User updatedUser) throws SQLException {
-        return userDao.updateUser(updatedUser);
+    public Response updateUser(User updatedUser) throws SQLException {
+        return handleSubmit(() -> userDao.updateUser(updatedUser));
     }
 
     @Path("/{userId}")
@@ -50,15 +50,15 @@ public class UserEndPoint extends ApiEndPoint {
     @Path("/{userId}/preferences")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void updateUserPreferences(@PathParam("userId") int userId, ArrayList<String> preferences) throws SQLException {
-        userDao.updatePreferences(userId, preferences);
+    public Response updateUserPreferences(@PathParam("userId") int userId, ArrayList<String> preferences) {
+        return handleSubmit(() -> userDao.updatePreferences(userId, preferences));
     }
 
     @Path("/inventory/{userId}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Painting> getPaintingsForUser(@PathParam("userId") int userId) throws SQLException {
-        return paintingDao.retrieveAllForUser(userId);
+    public Response getPaintingsForUser(@PathParam("userId") int userId) {
+        return handleRequest(() -> paintingDao.retrieveAllPaintingsByUserId(userId));
     }
 
     @Path("/login/{username}/{password}")

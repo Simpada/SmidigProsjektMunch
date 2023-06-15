@@ -4,8 +4,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import no.kristiania.collectthemunch.entities.Review;
-import java.sql.SQLException;
-import java.util.List;
 
 @Path("/review/event")
 public class ReviewEventEndpoint extends ApiEndPoint {

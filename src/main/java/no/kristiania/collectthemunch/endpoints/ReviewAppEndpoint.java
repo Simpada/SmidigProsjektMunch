@@ -3,10 +3,7 @@ package no.kristiania.collectthemunch.endpoints;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import no.kristiania.collectthemunch.database.ItemNotSavedException;
 import no.kristiania.collectthemunch.entities.Review;
-
-import java.sql.SQLException;
 
 /**
  Test if using a response works better for exception handling
