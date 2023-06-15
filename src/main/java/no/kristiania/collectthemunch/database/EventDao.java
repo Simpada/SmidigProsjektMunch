@@ -153,11 +153,13 @@ public class EventDao extends AbstractDao{
         String stringPreferences = "(" + preferences.stream()
                 .map(s -> "'" + s + "'")
                 .collect(Collectors.joining(", ")) + ")";
-                System.out.println(stringPreferences);
         try(var connection = dataSource.getConnection()) {
-            String query = "SELECT Distinct E.* FROM Events E join Categories C on E.event_id = C.event_id WHERE category IN " + stringPreferences;
+            String query = """
+                    SELECT Distinct E.*
+                    FROM Events E join Categories C on E.event_id = C.event_id
+                    WHERE category IN
+                    """ + stringPreferences;
             try(var statement = connection.prepareStatement(query)) {
-                //statement.setString(1, stringPreferences);
                 try (var resultSet = statement.executeQuery()) {
                     List<Event> result = new ArrayList<>();
                     while (resultSet.next()) {

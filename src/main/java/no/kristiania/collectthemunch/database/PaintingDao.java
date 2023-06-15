@@ -96,11 +96,10 @@ public class PaintingDao extends AbstractDao {
             try (var statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
                 statement.setInt(2, paintingId);
-                statement.executeUpdate();
 
                 int affectedRows = statement.executeUpdate();
                 if (affectedRows == 0) {
-                    throw new ItemNotSavedException("Could not save paiting id " + paintingId + " to inventory of user id " + userId);
+                    throw new ItemNotSavedException("Could not save painting id " + paintingId + " to inventory of user id " + userId);
                 }
             }
         }
